@@ -4,22 +4,41 @@ import { gsap } from 'gsap';
 const Preloader = ({ onComplete }) => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [currentPhase, setCurrentPhase] = useState('Initializing');
   
   const preloaderRef = useRef(null);
-  const textRef = useRef(null);
-  const logoRef = useRef(null);
-  const circleRef = useRef(null);
+  const globeRef = useRef(null);
   const particlesRef = useRef(null);
   const scanlineRef = useRef(null);
+  const circuitRef = useRef(null);
   
-  // Generate particles
-  const particles = Array.from({ length: 50 }, (_, i) => ({
+  const phases = [
+    'Initializing Global Network',
+    'Connecting Asian Markets',
+    'Establishing Trade Routes',
+    'Analyzing Consumer Data',
+    'Synchronizing Partnerships',
+    'Launching Market Expansion'
+  ];
+  
+  // Generate connection lines between continents
+  const connections = Array.from({ length: 8 }, (_, i) => ({
+    id: i,
+    startX: Math.random() * 80 + 10,
+    startY: Math.random() * 60 + 20,
+    endX: Math.random() * 80 + 10,
+    endY: Math.random() * 60 + 20,
+    delay: Math.random() * 2
+  }));
+  
+  // Generate floating data particles
+  const particles = Array.from({ length: 40 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: Math.random() * 3 + 1,
-    speed: Math.random() * 2 + 0.5,
-    opacity: Math.random() * 0.8 + 0.2
+    size: Math.random() * 4 + 2,
+    speed: Math.random() * 1 + 0.5,
+    type: Math.random() > 0.5 ? 'data' : 'trade'
   }));
   
   useEffect(() => {
@@ -28,46 +47,50 @@ const Preloader = ({ onComplete }) => {
     
     const animate = () => {
       const elapsed = Date.now() - startTime;
-      const duration = 4000; // 4 seconds
+      const duration = 5000; // 5 seconds
       const currentProgress = Math.min(elapsed / duration, 1);
       
       setProgress(Math.floor(currentProgress * 100));
+      
+      // Update phase based on progress
+      const phaseIndex = Math.floor(currentProgress * phases.length);
+      if (phaseIndex < phases.length) {
+        setCurrentPhase(phases[phaseIndex]);
+      }
       
       // Animate particles
       if (particlesRef.current) {
         const particleElements = particlesRef.current.children;
         Array.from(particleElements).forEach((particle, i) => {
           const data = particles[i];
-          const newY = (data.y + data.speed * elapsed * 0.01) % 100;
-          particle.style.transform = `translate(${data.x}vw, ${newY}vh)`;
-          particle.style.opacity = Math.sin(elapsed * 0.001 + i) * 0.5 + 0.5;
+          const newX = (data.x + data.speed * elapsed * 0.01) % 100;
+          const newY = (data.y + Math.sin(elapsed * 0.001 + i) * 10) % 100;
+          particle.style.transform = `translate(${newX}vw, ${newY}vh)`;
+          particle.style.opacity = Math.sin(elapsed * 0.002 + i) * 0.5 + 0.5;
         });
       }
       
-      // Animate scanline
-      if (scanlineRef.current) {
-        const scanY = (elapsed * 0.1) % 100;
-        scanlineRef.current.style.top = `${scanY}%`;
+      // Animate globe rotation
+      if (globeRef.current) {
+        const rotation = (elapsed * 0.05) % 360;
+        globeRef.current.style.transform = `rotate(${rotation}deg)`;
       }
       
-      // Animate progress circle
-      if (circleRef.current) {
-        const circumference = 2 * Math.PI * 40;
-        const offset = circumference - (currentProgress * circumference);
-        circleRef.current.style.strokeDashoffset = offset;
+      // Animate scanning effect
+      if (scanlineRef.current) {
+        const scanY = (elapsed * 0.08) % 100;
+        scanlineRef.current.style.top = `${scanY}%`;
       }
       
       if (currentProgress < 1) {
         animationId = requestAnimationFrame(animate);
       } else {
-        // Completion sequence
         setTimeout(() => {
           setLoading(false);
-        }, 800);
+        }, 1000);
       }
     };
     
-    // Start animation after initial delay
     setTimeout(() => {
       animate();
     }, 500);
@@ -81,16 +104,15 @@ const Preloader = ({ onComplete }) => {
   
   useEffect(() => {
     if (!loading && preloaderRef.current) {
-      // Exit animation with scale and fade
       const preloader = preloaderRef.current;
-      preloader.style.transition = 'all 1.5s cubic-bezier(0.77, 0, 0.175, 1)';
-      preloader.style.transform = 'scale(1.1)';
+      preloader.style.transition = 'all 1.8s cubic-bezier(0.77, 0, 0.175, 1)';
+      preloader.style.transform = 'scale(1.2)';
       preloader.style.opacity = '0';
-      preloader.style.filter = 'blur(10px)';
+      preloader.style.filter = 'blur(15px)';
       
       setTimeout(() => {
         onComplete?.();
-      }, 1500);
+      }, 1800);
     }
   }, [loading, onComplete]);
   
@@ -99,286 +121,289 @@ const Preloader = ({ onComplete }) => {
       ref={preloaderRef}
       className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 30%, #0f3460 70%, #0a0a0a 100%)',
       }}
     >
-      {/* Animated background grid */}
+      {/* Animated circuit board background */}
       <div 
-        className="absolute inset-0 opacity-20"
+        ref={circuitRef}
+        className="absolute inset-0 opacity-10"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(5, 247, 70, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(5, 247, 70, 0.1) 1px, transparent 1px)
+            linear-gradient(90deg, rgba(5, 247, 70, 0.3) 1px, transparent 1px),
+            linear-gradient(rgba(5, 247, 70, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(5, 5, 247, 0.2) 1px, transparent 1px),
+            linear-gradient(rgba(5, 5, 247, 0.2) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px',
-          animation: 'gridMove 10s linear infinite'
+          backgroundSize: '100px 100px, 100px 100px, 50px 50px, 50px 50px',
+          animation: 'circuitFlow 20s linear infinite'
         }}
       />
       
-      {/* Floating particles */}
+   
+      
+      {/* Floating data particles */}
       <div ref={particlesRef} className="absolute inset-0 pointer-events-none">
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute w-1 h-1 rounded-full"
+            className="absolute flex items-center justify-center"
             style={{
-              background: 'linear-gradient(45deg, #05f746, #0505f7)',
-              boxShadow: '0 0 10px rgba(5, 247, 70, 0.5)',
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
+              width: `${particle.size * 2}px`,
+              height: `${particle.size * 2}px`,
               left: 0,
               top: 0,
             }}
-          />
+          >
+            {particle.type === 'data' ? (
+              <div
+                className="w-full h-full rounded-sm"
+                style={{
+                  background: 'linear-gradient(45deg, #05f746, transparent)',
+                  boxShadow: '0 0 8px rgba(5, 247, 70, 0.6)',
+                  animation: 'dataFloat 3s ease-in-out infinite'
+                }}
+              />
+            ) : (
+              <div
+                className="w-full h-full rounded-full border"
+                style={{
+                  borderColor: '#0505f7',
+                  boxShadow: '0 0 6px rgba(5, 5, 247, 0.6)',
+                  animation: 'tradeOrbit 4s ease-in-out infinite'
+                }}
+              />
+            )}
+          </div>
         ))}
       </div>
       
-      {/* Scanning line effect */}
-      <div 
-        ref={scanlineRef}
-        className="absolute left-0 w-full h-0.5 opacity-60 pointer-events-none"
-        style={{
-          background: 'linear-gradient(90deg, transparent, #05f746, transparent)',
-          boxShadow: '0 0 20px rgba(5, 247, 70, 0.8)',
-        }}
-      />
-      
+ 
       {/* Main content container */}
-      <div className="relative z-10 flex flex-col items-center justify-center space-y-12">
+      <div className="relative z-20 flex flex-col items-center justify-center space-y-16">
         
-        {/* Logo with hologram effect */}
+        {/* Company logo with holographic effect */}
         <div 
-          ref={logoRef}
           className="text-center"
           style={{
-            animation: 'fadeInUp 1s ease-out 0.2s both'
+            animation: 'fadeInUp 1.5s ease-out 0.3s both'
           }}
         >
           <div 
-            className="text-6xl font-bold tracking-wider mb-4 relative"
+            className="text-7xl font-bold tracking-wider mb-4 relative"
             style={{
               background: 'linear-gradient(45deg, #05f746, #0505f7, #05f746)',
-              backgroundSize: '200% 200%',
+              backgroundSize: '300% 300%',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
-              animation: 'gradientShift 2s ease-in-out infinite alternate, textGlow 2s ease-in-out infinite alternate',
+              animation: 'logoShimmer 3s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate',
               fontFamily: 'system-ui, -apple-system, sans-serif',
-              textShadow: '0 0 30px rgba(5, 247, 70, 0.5)'
+              filter: 'drop-shadow(0 0 30px rgba(5, 247, 70, 0.5))'
             }}
           >
             BeYOUT
-            {/* Hologram scan effect */}
+            {/* Holographic scanner */}
             <div 
-              className="absolute inset-0 opacity-30"
+              className="absolute inset-0 opacity-20"
               style={{
-                background: 'linear-gradient(180deg, transparent 0%, rgba(5, 247, 70, 0.2) 50%, transparent 100%)',
-                animation: 'hologramScan 3s ease-in-out infinite'
+                background: 'linear-gradient(180deg, transparent 0%, rgba(5, 247, 70, 0.4) 50%, transparent 100%)',
+                animation: 'hologramScan 4s ease-in-out infinite'
               }}
             />
           </div>
           
-          {/* Subtitle */}
           <div 
-            className="text-sm tracking-widest uppercase font-light opacity-80"
+            className="text-lg tracking-widest uppercase font-light mb-2"
             style={{
               color: '#05f746',
-              animation: 'fadeIn 1s ease-out 0.8s both'
+              animation: 'fadeIn 1s ease-out 1s both',
+              textShadow: '0 0 15px rgba(5, 247, 70, 0.5)'
             }}
           >
-            Initializing System
+            Global Market Expansion
+          </div>
+          
+          <div 
+            className="text-sm opacity-80"
+            style={{
+              color: '#ffffff',
+              animation: 'fadeIn 1s ease-out 1.5s both'
+            }}
+          >
+            Connecting Chinese Brands to the World Since 2004
           </div>
         </div>
         
-        {/* Progress section */}
-        <div className="flex items-center space-x-8">
+        {/* Central globe visualization */}
+        <div className="relative flex items-center justify-center">
           
-          {/* Circular progress indicator */}
-          <div className="relative w-24 h-24">
-            <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
-              {/* Background circle */}
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="rgba(5, 247, 70, 0.1)"
-                strokeWidth="2"
-              />
-              {/* Progress circle */}
-              <circle
-                ref={circleRef}
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="url(#progressGradient)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                style={{
-                  strokeDasharray: `${2 * Math.PI * 40}`,
-                  strokeDashoffset: `${2 * Math.PI * 40}`,
-                  transition: 'stroke-dashoffset 0.3s ease',
-                  filter: 'drop-shadow(0 0 10px rgba(5, 247, 70, 0.8))'
-                }}
-              />
-              {/* Gradient definition */}
-              <defs>
-                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#05f746" />
-                  <stop offset="100%" stopColor="#0505f7" />
-                </linearGradient>
-              </defs>
-            </svg>
+          {/* Rotating globe wireframe */}
+          <div 
+            ref={globeRef}
+            className="relative w-32 h-32"
+          >
+            <div 
+              className="absolute inset-0 rounded-full border-2 opacity-60"
+              style={{
+                borderColor: '#05f746',
+                boxShadow: '0 0 40px rgba(5, 247, 70, 0.3)',
+                animation: 'globePulse 3s ease-in-out infinite'
+              }}
+            />
+            <div 
+              className="absolute inset-2 rounded-full border opacity-40"
+              style={{
+                borderColor: '#0505f7',
+                borderStyle: 'dashed',
+                animation: 'globePulse 3s ease-in-out infinite 0.5s'
+              }}
+            />
+            <div 
+              className="absolute inset-4 rounded-full border opacity-30"
+              style={{
+                borderColor: '#ffffff',
+                borderStyle: 'dotted',
+                animation: 'globePulse 3s ease-in-out infinite 1s'
+              }}
+            />
             
-            {/* Center progress text */}
+            {/* Center core */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <span 
-                className="text-xl font-light"
+              <div 
+                className="w-8 h-8 rounded-full"
                 style={{
-                  color: '#05f746',
-                  textShadow: '0 0 10px rgba(5, 247, 70, 0.8)'
+                  background: 'radial-gradient(circle, #05f746, #0505f7)',
+                  boxShadow: '0 0 20px rgba(5, 247, 70, 0.8)',
+                  animation: 'coreGlow 2s ease-in-out infinite alternate'
                 }}
-              >
-                {progress}%
-              </span>
+              />
             </div>
           </div>
           
-          {/* Progress bar */}
-          <div className="flex flex-col space-y-3">
-            <div 
-              className="text-3xl font-light tracking-wider"
-              ref={textRef}
-              style={{
-                color: '#ffffff',
-                textShadow: '0 0 20px rgba(255, 255, 255, 0.5)',
-                animation: 'numberGlow 1s ease-in-out infinite alternate'
-              }}
-            >
-              {progress < 100 ? 'LOADING' : 'COMPLETE'}
-            </div>
+          {/* Progress info panel */}
+          <div className="ml-16 flex flex-col space-y-6">
             
-            {/* Animated progress bar */}
-            <div 
-              className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden"
-              style={{
-                boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.5)'
-              }}
-            >
+            {/* Progress percentage */}
+            <div className="text-center">
               <div 
-                className="h-full rounded-full transition-all duration-300 ease-out"
+                className="text-5xl font-light mb-2"
                 style={{
-                  width: `${progress}%`,
-                  background: 'linear-gradient(90deg, #05f746, #0505f7)',
-                  boxShadow: '0 0 20px rgba(5, 247, 70, 0.8)',
-                  animation: 'progressGlow 2s ease-in-out infinite alternate'
+                  color: '#ffffff',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.5)',
+                  animation: 'numberGlow 1s ease-in-out infinite alternate'
                 }}
-              />
+              >
+                {progress}%
+              </div>
+              
+              <div 
+                className="text-sm tracking-wider uppercase"
+                style={{
+                  color: '#05f746',
+                  animation: 'fadeIn 1s ease-out 2s both'
+                }}
+              >
+                {progress < 100 ? 'EXPANDING' : 'READY'}
+              </div>
             </div>
             
-            {/* Status indicators */}
-            <div className="flex space-x-4 text-xs">
-              {['SYSTEM', 'NETWORK', 'DATABASE', 'UI'].map((system, i) => (
+            {/* Dynamic progress bar */}
+            <div className="w-80">
+              <div 
+                className="h-1 bg-gray-800 rounded-full overflow-hidden mb-3"
+                style={{
+                  boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.5)'
+                }}
+              >
                 <div 
-                  key={system}
+                  className="h-full rounded-full transition-all duration-500 ease-out"
+                  style={{
+                    width: `${progress}%`,
+                    background: 'linear-gradient(90deg, #05f746, #0505f7)',
+                    boxShadow: '0 0 20px rgba(5, 247, 70, 0.8)',
+                    animation: 'progressGlow 2s ease-in-out infinite alternate'
+                  }}
+                />
+              </div>
+              
+              {/* Current phase indicator */}
+              <div 
+                className="text-center text-sm font-light tracking-wide"
+                style={{
+                  color: '#ffffff',
+                  minHeight: '20px',
+                  transition: 'all 0.5s ease-in-out'
+                }}
+              >
+                {currentPhase}
+              </div>
+            </div>
+            
+            {/* Market indicators */}
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              {[
+                { region: 'China Base', status: progress > 10 },
+                { region: 'North America', status: progress > 30 },
+                { region: 'Europe', status: progress > 60 },
+                { region: 'Global Network', status: progress > 90 }
+              ].map((market) => (
+                <div 
+                  key={market.region}
                   className="flex items-center space-x-2"
                   style={{
-                    opacity: progress > i * 25 ? 1 : 0.3,
-                    transition: 'opacity 0.3s ease'
+                    opacity: market.status ? 1 : 0.3,
+                    transition: 'opacity 0.5s ease'
                   }}
                 >
                   <div 
                     className="w-2 h-2 rounded-full"
                     style={{
-                      background: progress > i * 25 ? '#05f746' : '#333',
-                      boxShadow: progress > i * 25 ? '0 0 10px rgba(5, 247, 70, 0.8)' : 'none'
+                      background: market.status ? '#05f746' : '#333',
+                      boxShadow: market.status ? '0 0 8px rgba(5, 247, 70, 0.8)' : 'none',
+                      animation: market.status ? 'pulse 2s ease-in-out infinite' : 'none'
                     }}
                   />
-                  <span style={{ color: '#888' }}>{system}</span>
+                  <span style={{ color: '#888' }}>{market.region}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        
       </div>
       
-      {/* Corner elements */}
+      {/* Corner UI elements */}
       <div className="absolute top-8 left-8">
         <div 
-          className="w-16 h-16 border-l-2 border-t-2"
+          className="w-20 h-20 border-l-2 border-t-2"
           style={{ borderColor: '#05f746', opacity: 0.6 }}
         />
+        <div className="text-xs mt-2" style={{ color: '#05f746' }}>EST. 2004</div>
       </div>
       <div className="absolute top-8 right-8">
         <div 
-          className="w-16 h-16 border-r-2 border-t-2"
-          style={{ borderColor: '#05f746', opacity: 0.6 }}
+          className="w-20 h-20 border-r-2 border-t-2"
+          style={{ borderColor: '#0505f7', opacity: 0.6 }}
         />
+        <div className="text-xs mt-2 text-right" style={{ color: '#0505f7' }}>GUANGZHOU</div>
       </div>
       <div className="absolute bottom-8 left-8">
         <div 
-          className="w-16 h-16 border-l-2 border-b-2"
+          className="w-20 h-20 border-l-2 border-b-2"
           style={{ borderColor: '#05f746', opacity: 0.6 }}
         />
+        <div className="text-xs" style={{ color: '#05f746' }}>20+ YEARS</div>
       </div>
       <div className="absolute bottom-8 right-8">
         <div 
-          className="w-16 h-16 border-r-2 border-b-2"
-          style={{ borderColor: '#05f746', opacity: 0.6 }}
+          className="w-20 h-20 border-r-2 border-b-2"
+          style={{ borderColor: '#0505f7', opacity: 0.6 }}
         />
+        <div className="text-xs text-right" style={{ color: '#0505f7' }}>GLOBAL</div>
       </div>
       
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 100% 50%; }
-        }
-        
-        @keyframes textGlow {
-          0% { filter: drop-shadow(0 0 20px rgba(5, 247, 70, 0.8)); }
-          100% { filter: drop-shadow(0 0 40px rgba(5, 247, 70, 1)); }
-        }
-        
-        @keyframes hologramScan {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(200%); }
-        }
-        
-        @keyframes gridMove {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(50px, 50px); }
-        }
-        
-        @keyframes numberGlow {
-          0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
-          100% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 40px rgba(5, 247, 70, 0.5); }
-        }
-        
-        @keyframes progressGlow {
-          0% { box-shadow: 0 0 20px rgba(5, 247, 70, 0.8); }
-          100% { box-shadow: 0 0 30px rgba(5, 247, 70, 1), 0 0 40px rgba(5, 5, 247, 0.8); }
-        }
-      `}</style>
+
     </div>
   );
 };
-
 export default Preloader;
