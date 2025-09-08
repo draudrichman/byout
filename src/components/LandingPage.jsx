@@ -9,7 +9,7 @@ const World = lazy(() => import("../components/ui/globe").then((m) => ({ default
 const LandingPage = () => {
   const { hexPolygonColor, chinaHexPolygonColor, targetingCountriesColor, globeColor, globeOpacity, pointOpacity, metallicIntensity, glowIntensity } = useControls({
     hexPolygonColor: {
-      value: "#757575",
+      value: "#414141",
       label: "Other Countries Color",
     },
     chinaHexPolygonColor: {

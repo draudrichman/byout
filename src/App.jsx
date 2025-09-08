@@ -11,6 +11,7 @@ import CoreServices from './components/CoreServices'
 import { ReactLenis, useLenis } from '@studio-freight/react-lenis'
 
 import { AestheticFluidBg } from "./components/js/AestheticFluidBg.module.js"
+import { Leva } from 'leva'
 
 
 
@@ -84,6 +85,8 @@ function App() {
   // }}
 >
 
+
+<Leva  hidden />
 
         <AuroraBackground>
           <LandingPage key="landing" />
