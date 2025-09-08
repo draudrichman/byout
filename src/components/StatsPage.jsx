@@ -4,7 +4,7 @@ import { BorderBeam } from './ui/border-beam';
 
 const StatsPage = () => {
     const [stats, setStats] = useState([
-        { value: 0, target: 1500, label: 'Happy Customers', description: 'Satisfied clients worldwide' },
+        { value: 0, target: 250, label: 'Happy Customers', description: 'Satisfied clients worldwide' },
         { value: 0, target: 500, label: 'Projects Completed', description: 'Successful deliveries on time' },
         { value: 0, target: 99, label: 'Success Rate', description: 'Exceeding expectations consistently' },
         { value: 0, target: 24, label: 'Years Experience', description: 'Building trust and excellence' }
@@ -28,18 +28,18 @@ const StatsPage = () => {
             className="py-20 relative w-full overflow-hidden"
             style={{
                 background: `
-                    radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
-                    linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgb(191, 191, 189) 30%, #000000f0 70%)
+                 radial-gradient(circle at bottom, rgb(0, 0, 0) 0px, #01010100 100%),
+    linear-gradient(180deg, rgb(191, 191, 189), #000000f0 70%);
                 `
             }}
         >
             {/* Top gradient overlay for smooth transition from previous section */}
-            <div 
+            {/* <div 
                 className="absolute top-0 left-0 w-full h-32 pointer-events-none z-10"
                 style={{
                     background: `linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%)`
                 }}
-            />
+            /> */}
             <div className="container mx-auto px-4 relative z-10">
                 {/* Section Title */}
                 <div className="text-center mb-16">
@@ -59,12 +59,23 @@ const StatsPage = () => {
                 </div>
 
                 {/* Horizontal Stats Cards */}
+
+<div className='w-full p-10 rounded-lg border 0'
+style={{
+    background: 'radial-gradient(100% 120% at 85% 0px, rgb(140 140 140), transparent 70%)'
+}}
+
+>
+
+
+
+
                 <div className="flex flex-col md:flex-row gap-32 max-w-screen mx-auto">
                     {stats.map((stat, index) => (
                         <div 
-                            key={index}
-                            className="group relative flex-1"
-                            style={{ animationDelay: `${index * 200}ms` }}
+                        key={index}
+                        className="group relative flex-1"
+                        style={{ animationDelay: `${index * 200}ms` }}
                         >
                             {/* Animated border */}
                             <div className="absolute inset-0 bg-gradient-to-r from-[#aea9b4] to-[#232324] rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -77,7 +88,7 @@ const StatsPage = () => {
                                         value={stat.value} 
                                         format="d"
                                         className="text-4xl md:text-5xl font-bold text-white"
-                                    />
+                                        />
                                 </div>
                                 
                                 {/* Stat Label */}
@@ -99,12 +110,21 @@ const StatsPage = () => {
                                     size={400}
                                     borderWidth={1}
                                     className="from-transparent via-white to-transparent"
-                                />
+                                    />
                             </div>
                         </div>
                     ))}
+                    </div>
+
+
+            
                 </div>
+
+
+                
             </div>
+
+            
         </section>
     );
 };

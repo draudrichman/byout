@@ -92,7 +92,7 @@ function App() {
         <Timeline/>
         <GlobalPresence/>
         <CoreServices/>
-        <GlobalPresence/>
+        {/* <GlobalPresence/> */}
 </div>
         {/* <CompaniesIntro /> */}
       </div>

@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { Color, Scene, Fog, PerspectiveCamera, Vector3, MeshStandardMaterial, MeshPhysicalMaterial, SphereGeometry, Mesh, Group } from "three";
+import { Color, Scene, Fog, PerspectiveCamera, Vector3, MeshStandardMaterial, MeshPhysicalMaterial, SphereGeometry, Mesh, Group, QuadraticBezierCurve3, TubeGeometry, DoubleSide, AdditiveBlending } from "three";
+import * as THREE from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+// Post-processing effects temporarily disabled due to version compatibility
+// import { EffectComposer, Bloom, ChromaticAberration, Vignette } from "@react-three/postprocessing";
+// import { BlendFunction } from "postprocessing";
 import countries from "../../data/globe.json";
 
 extend({ ThreeGlobe: ThreeGlobe });
@@ -215,7 +219,7 @@ export function Globe({ globeConfig, data }) {
         .atmosphereAltitude(defaultProps.atmosphereAltitude)
         .hexPolygonColor(getHexPolygonColor);
 
-      // Enhanced arcs setup with better error handling
+      // Enhanced arcs setup with glassy, glowy, metallic materials
       globeRef.current
         .arcsData(data)
         .arcStartLat((d) => Number(d?.startLat) || 0)
@@ -224,11 +228,103 @@ export function Globe({ globeConfig, data }) {
         .arcEndLng((d) => Number(d?.endLng) || 0)
         .arcColor((e) => e?.color || "#ffffff")
         .arcAltitude((e) => Number(e?.arcAlt) || 0.1)
-        .arcStroke(getArcStroke)
+        .arcStroke(() => 0.8) // Thicker arcs for better metallic effect
         .arcDashLength(defaultProps.arcLength)
         .arcDashInitialGap((e) => Number(e?.order) || 0)
         .arcDashGap(2)
-        .arcDashAnimateTime(() => defaultProps.arcTime);
+        .arcDashAnimateTime(() => defaultProps.arcTime)
+        // Custom arc material function for glassy, glowy, metallic effect
+        .arcThreeObject((d) => {
+          // Create custom arc geometry and material
+          const startCoords = globeRef.current.getCoords(d.startLat, d.startLng, 0.1);
+          const endCoords = globeRef.current.getCoords(d.endLat, d.endLng, 0.1);
+          const midCoords = globeRef.current.getCoords(
+            (d.startLat + d.endLat) / 2,
+            (d.startLng + d.endLng) / 2,
+            (Number(d?.arcAlt) || 0.1) + 0.05
+          );
+          
+          // Create curve for the arc
+          const curve = new QuadraticBezierCurve3(
+            new Vector3(startCoords.x, startCoords.y, startCoords.z),
+            new Vector3(midCoords.x, midCoords.y, midCoords.z),
+            new Vector3(endCoords.x, endCoords.y, endCoords.z)
+          );
+          
+          // Create tube geometry for thicker, more visible arcs
+          const tubeGeometry = new TubeGeometry(curve, 64, 1.2, 8, false);
+          
+          // Create glassy, glowy, metallic material with enhanced properties
+          const arcMaterial = new MeshPhysicalMaterial({
+            color: new Color(d?.color || "#ffffff"),
+            metalness: 0.9, // Very high metallic property for mirror-like shine
+            roughness: 0.05, // Ultra-low roughness for perfect reflection
+            clearcoat: 1.0, // Full clearcoat for glass effect
+            clearcoatRoughness: 0.02, // Extremely smooth clearcoat
+            transmission: 0.4, // Enhanced glass-like transmission
+            transparent: true,
+            opacity: 0.95, // Slightly more opaque for better visibility
+            emissive: new Color(d?.color || "#ffffff"),
+            emissiveIntensity: 0.8, // Stronger glow for better visibility
+            envMapIntensity: 3.0, // Very strong environment reflections
+            reflectivity: 1.0,
+            refractionRatio: 0.92, // Adjusted for better glass effect
+            // Enhanced iridescence for premium metallic shine
+            iridescence: 1.0,
+            iridescenceIOR: 1.5, // Stronger iridescence
+            iridescenceThicknessRange: [50, 1000], // Wider range for more color variation
+            // Enhanced subsurface scattering for premium glass effect
+            thickness: 0.8, // Thicker for more pronounced glass effect
+            attenuationDistance: 0.3, // Shorter distance for more intense effect
+            attenuationColor: new Color(d?.color || "#ffffff"),
+            // Additional properties for premium appearance
+            sheenColor: new Color(d?.color || "#ffffff"),
+            sheen: 0.8, // Add sheen for fabric-like metallic reflection
+            sheenRoughness: 0.1,
+            specularIntensity: 1.0, // Maximum specular intensity
+            specularColor: new Color("#ffffff"), // White specular highlights
+          });
+          
+          const arcMesh = new Mesh(tubeGeometry, arcMaterial);
+          
+          // Add outer glow shell for enhanced glow effect
+          const glowGeometry = new TubeGeometry(curve, 32, 3.0, 6, false);
+          const glowMaterial = new MeshStandardMaterial({
+            color: new Color(d?.color || "#ffffff"),
+            emissive: new Color(d?.color || "#ffffff"),
+            emissiveIntensity: 1.2, // Stronger glow intensity
+            transparent: true,
+            opacity: 0.4, // Slightly more visible glow
+            side: DoubleSide,
+            blending: AdditiveBlending,
+            depthWrite: false, // Prevent depth conflicts
+            depthTest: true,
+          });
+          
+          // Add additional inner glow for layered effect
+          const innerGlowGeometry = new TubeGeometry(curve, 48, 1.8, 8, false);
+          const innerGlowMaterial = new MeshStandardMaterial({
+            color: new Color(d?.color || "#ffffff"),
+            emissive: new Color(d?.color || "#ffffff"),
+            emissiveIntensity: 0.6,
+            transparent: true,
+            opacity: 0.6,
+            side: DoubleSide,
+            blending: AdditiveBlending,
+            depthWrite: false,
+          });
+          
+          const glowMesh = new Mesh(glowGeometry, glowMaterial);
+          const innerGlowMesh = new Mesh(innerGlowGeometry, innerGlowMaterial);
+          
+          // Create a group to contain the main arc and all glow layers
+          const arcGroup = new Group();
+          arcGroup.add(arcMesh); // Main metallic arc
+          arcGroup.add(innerGlowMesh); // Inner glow layer
+          arcGroup.add(glowMesh); // Outer glow layer
+          
+          return arcGroup;
+        });
 
       // Disable default points since we're using custom metallic ones
       globeRef.current
@@ -329,16 +425,27 @@ export function WebGLRendererConfig() {
       gl.shadowMap.type = gl.PCFSoftShadowMap;
       gl.shadowMap.autoUpdate = true;
       
-      // Enhanced rendering for glass effects
+      // Enhanced rendering for metallic and glass effects
       gl.toneMapping = gl.ACESFilmicToneMapping;
-      gl.toneMappingExposure = 1.4; // Increased for better glass visibility
+      gl.toneMappingExposure = 1.8; // Increased for better metallic visibility
       gl.outputEncoding = gl.sRGBEncoding;
       
-      // Enhanced environment mapping for glass reflections
+      // Enhanced environment mapping for metallic reflections and glass
       gl.physicallyCorrectLights = true;
       
       // Enable antialiasing for smoother metallic surfaces
       gl.antialias = true;
+      
+      // Enhanced rendering settings for premium metallic/glass effects
+      gl.gammaFactor = 2.2;
+      gl.gammaInput = true;
+      gl.gammaOutput = true;
+      
+      // Enable logarithmic depth buffer for better precision with transparent materials
+      gl.logarithmicDepthBuffer = true;
+      
+      // Enhanced precision for metallic materials
+      gl.precision = "highp";
       
     } catch (error) {
       console.error("Failed to configure WebGL renderer:", error);
@@ -379,91 +486,137 @@ export function World(props) {
     <Canvas scene={scene} camera={camera}>
       <WebGLRendererConfig />
       
-      {/* Enhanced lighting setup for glass globe */}
+      {/* Enhanced lighting setup for metallic and glassy arcs */}
       <ambientLight 
         color={globeConfig.ambientLight || "#ffffff"} 
-        intensity={0.6} // Increased for better glass visibility
+        intensity={0.8} // Increased for better metallic visibility
       />
       
-      {/* Main key light for glass reflections */}
+      {/* Main key light for metallic reflections */}
       <directionalLight
         color={globeConfig.directionalLeftLight || "#ffffff"}
         position={lightPositions.directionalLeft}
-        intensity={3.0} // Increased for stronger reflections
+        intensity={4.5} // Increased for stronger metallic reflections
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={4096} // Higher resolution shadows for metallic arcs
+        shadow-mapSize-height={4096}
         shadow-camera-far={2000}
         shadow-camera-left={-500}
         shadow-camera-right={500}
         shadow-camera-top={500}
         shadow-camera-bottom={-500}
+        shadow-bias={-0.0001}
       />
       
-      {/* Fill light for softer shadows */}
+      {/* Fill light for softer metallic highlights */}
       <directionalLight
         color={globeConfig.directionalLeftLight || "#ffffff"}
         position={lightPositions.directionalRight}
-        intensity={2.2} // Increased for better glass illumination
+        intensity={3.5} // Increased for better metallic illumination
         castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
       />
       
-      {/* Rim light for edge definition */}
+      {/* Rim light for metallic edge definition */}
       <directionalLight
         color={globeConfig.directionalTopLight || "#ffffff"}
         position={lightPositions.directionalTop}
-        intensity={1.8} // Increased for glass highlights
+        intensity={2.8} // Increased for metallic highlights
       />
       
-      {/* Additional directional light for glass refraction */}
+      {/* Additional directional light for glass refraction and metallic shine */}
       <directionalLight
         color="#ffffff"
         position={[0, 0, 400]}
-        intensity={1.5}
+        intensity={2.5} // Increased for stronger glass effects
+      />
+      
+      {/* Backlight for rim lighting on metallic arcs */}
+      <directionalLight
+        color="#ffffff"
+        position={[0, 0, -400]}
+        intensity={1.8}
       />
       
       {/* Main point light for metallic highlights */}
       <pointLight
         color={globeConfig.pointLight || "#ffffff"}
         position={lightPositions.pointMain}
-        intensity={2.0}
-        distance={1200}
-        decay={0.05}
+        intensity={3.5} // Increased for stronger metallic highlights
+        distance={1500}
+        decay={0.03}
         castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
       />
       
-      {/* Accent lights for color variation */}
+      {/* Accent lights for metallic color variation */}
       <pointLight
         color="#ff6b35"
         position={lightPositions.pointAccent1}
-        intensity={1.2}
-        distance={1000}
-        decay={0.1}
+        intensity={2.0} // Increased for better metallic interaction
+        distance={1200}
+        decay={0.08}
       />
       
       <pointLight
         color="#4ecdc4"
         position={lightPositions.pointAccent2}
-        intensity={1.0}
-        distance={800}
-        decay={0.15}
+        intensity={1.8} // Increased for better metallic interaction
+        distance={1000}
+        decay={0.12}
       />
 
-      {/* Additional rim lights for HDR effect */}
+      {/* Additional rim lights for HDR metallic effect */}
       <pointLight
         color="#f7b731"
         position={[300, 200, -300]}
-        intensity={0.8}
-        distance={600}
-        decay={0.2}
+        intensity={1.5} // Increased for metallic shine
+        distance={800}
+        decay={0.15}
       />
       
       <pointLight
         color="#a55eea"
         position={[-300, -200, 300]}
-        intensity={0.6}
-        distance={500}
-        decay={0.25}
+        intensity={1.2} // Increased for metallic shine
+        distance={700}
+        decay={0.18}
+      />
+      
+      {/* Additional lights specifically for arc enhancement */}
+      <pointLight
+        color="#ffffff"
+        position={[0, 400, 0]}
+        intensity={2.5}
+        distance={1000}
+        decay={0.1}
+      />
+      
+      <pointLight
+        color="#ffffff"
+        position={[0, -400, 0]}
+        intensity={2.0}
+        distance={1000}
+        decay={0.1}
+      />
+      
+      {/* Colored accent lights for iridescent metallic effects */}
+      <pointLight
+        color="#ff0080"
+        position={[400, 0, 400]}
+        intensity={1.0}
+        distance={600}
+        decay={0.2}
+      />
+      
+      <pointLight
+        color="#00ff88"
+        position={[-400, 0, 400]}
+        intensity={1.0}
+        distance={600}
+        decay={0.2}
       />
       
       <Globe {...props} />
@@ -480,6 +633,33 @@ export function World(props) {
         autoRotate={true}
         autoRotateSpeed={globeConfig.autoRotateSpeed}
       />
+      
+      {/* Post-processing effects temporarily disabled due to version compatibility issues */}
+      {/* 
+      <EffectComposer>
+        <Bloom
+          intensity={1.5}
+          luminanceThreshold={0.2}
+          luminanceSmoothing={0.9}
+          height={300}
+          opacity={1.0}
+          blendFunction={BlendFunction.SCREEN}
+        />
+        
+        <ChromaticAberration
+          offset={[0.002, 0.002]}
+          radialModulation={true}
+          modulationOffset={0.3}
+        />
+        
+        <Vignette
+          offset={0.3}
+          darkness={0.5}
+          eskil={false}
+          blendFunction={BlendFunction.NORMAL}
+        />
+      </EffectComposer>
+      */}
     </Canvas>
   );
 }

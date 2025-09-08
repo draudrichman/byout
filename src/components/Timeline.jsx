@@ -241,7 +241,7 @@ const Timeline = () => {
                     </div>
                 </div>
              {/* Timeline Container */}
-                <div  className="relative w-full h-[600px] overflow-hidden">
+                <div  className="relative w-full md:h-[400px] lg:h-[600px] overflow-hidden">
                     {/* Enhanced Diagonal Line */}
                     <div className="absolute inset-0">
                         <svg 

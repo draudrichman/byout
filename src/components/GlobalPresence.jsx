@@ -45,57 +45,57 @@ const GlobalPresence = () => {
   };
 
   const cities = [
-    'SHANGHAI',
-    'GREATER BAY AREA',
-    'BEIJING',
-    'SHANDONG',
-    'FUJIAN',
-    'NEW YORK',
-    'KUALA LUMPUR'
+    'China',
+    'US',
+    'Canada',
+    'Australia',
+    'Cambodia',
+    'New Zealand',
+    'Japan'
   ];
 
   const officeLocations = [
     {
       id: 1,
       image: 'https://images.unsplash.com/photo-1538428494232-9c0d8a3ab403?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      titleChinese: 'BY&LM 上海总部',
+      titleChinese: 'China',
       titleEnglish: 'BY&LM Shanghai Headquarters',
-      location: 'Shanghai'
+      location: 'China'
     },
     {
       id: 2,
       image: 'https://lp-cms-production.imgix.net/2023-02/GettyImages-1162611090.jpg?auto=format,compress&q=72&w=1095&fit=crop&crop=faces,edges',
-      titleChinese: 'BY派驻 上海办事',
+      titleChinese: 'US',
       titleEnglish: 'BY with Shanghai Pudong',
-      location: 'Shanghai'
+      location: 'USA'
     },
     {
       id: 3,
       image: 'https://cdn-imgix.headout.com/media/images/e3df4ea66b17c3f9303171ff7f64678d-24206-TokyoHelicopterTour-005.jpg?auto=format&q=90&crop=faces&fit=crop',
-      titleChinese: 'BY&LM 东京中国区',
-      titleEnglish: 'BY&LM Tokyo China',
-      location: 'Tokyo'
+      titleChinese: 'Canada',
+      titleEnglish: 'Canada',
+      location: 'Canada'
     },
     {
       id: 4,
       image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Lights_of_Rockefeller_Center_during_sunset.jpg/1200px-Lights_of_Rockefeller_Center_during_sunset.jpg',
-      titleChinese: 'BY 纽约总',
-      titleEnglish: 'BY New York center',
-      location: 'New York'
+      titleChinese: 'New Zealand',
+      titleEnglish: 'Australia',
+      location: 'Australia'
     },
     {
       id: 5,
       image: 'https://lp-cms-production.imgix.net/2025-08/shutterstock2364334921.jpg?auto=format,compress&q=72&w=1440&h=810&fit=crop',
-      titleChinese: 'BY&LM 天津启鲁奥美集团商中',
-      titleEnglish: 'BY&LM General International Tianjin Expo Plaza',
-      location: 'Tianjin'
+      titleChinese: 'Cambodia',
+      titleEnglish: 'Cambodia',
+      location: 'Cambodia'
     },
     {
       id: 6,
       image: 'https://www.o-city.com/hubfs/Shenzhen-smartcity02.jpg',
-      titleChinese: 'BY&LM 深圳办事处',
-      titleEnglish: 'BY&LM Shenzhen Office',
-      location: 'Shenzhen'
+      titleChinese: 'New Zealand',
+      titleEnglish: 'New Zealand',
+      location: 'New Zealand'
     }
   ];
 
