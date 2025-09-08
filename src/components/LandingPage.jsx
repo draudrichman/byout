@@ -1,177 +1,288 @@
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import React, { lazy, Suspense } from 'react';
+import Navbar from './ui/Navbar';
+import { useControls } from 'leva';
+
+const World = lazy(() => import("../components/ui/globe").then((m) => ({ default: m.World })));
+
+
 
 const LandingPage = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const { hexPolygonColor, chinaHexPolygonColor, targetingCountriesColor, globeColor, globeOpacity, pointOpacity, metallicIntensity, glowIntensity } = useControls({
+    hexPolygonColor: {
+      value: "#757575",
+      label: "Other Countries Color",
+    },
+    chinaHexPolygonColor: {
+      value: "#ffffff",
+      label: "China Color",
+    },
+    targetingCountriesColor: {
+      value: "#ffffff",
+      label: "Targeting Countries Color",
+    },
+    globeColor: {
+      value: "#ffffff",
+      label: "Globe Color",
+    },
+    globeOpacity: {
+      value: 0,
+      min: 0,
+      max: 1,
+      step: 0.1,
+      label: "Globe Opacity",
+    },
+    pointOpacity: {
+      value: 1,
+      min: 0,
+      max: 1,
+      step: 0.1,
+      label: "Point Opacity",
+    },
+    metallicIntensity: {
+      value: 0.9,
+      min: 0,
+      max: 1,
+      step: 0.1,
+      label: "Metallic Intensity",
+    },
+    glowIntensity: {
+      value: 0.8,
+      min: 0,
+      max: 2,
+      step: 0.1,
+      label: "Glow Intensity",
+    },
+  });
+  const globeConfig = {
+    pointSize: 5,
+    pointStyle: "dot",
+    pointOpacity,
+    particlesSize: 2,
+    hexPolygonColor,
+    chinaHexPolygonColor,
+    targetingCountriesColor,
+    globeColor,
+    globeOpacity,
+    showAtmosphere: false,
+    atmosphereColor: "#ffffff",
+    atmosphereAltitude: 0.2,
+    emissive: globeColor,
+    emissiveIntensity: 0.1,
+    shininess: 0.9,
+    polygonColor: "rgba(0, 121, 145,0.7)",
+    ambientLight: "#ffffff",
+    directionalLeftLight: "#ffffff",
+    directionalTopLight: "#ffffff",
+    pointLight: "#ffffff",
+    arcTime: 2000,
+    arcLength: 0.9,
+    rings: 1,
+    maxRings: 3,
+    initialPosition: { lat: 22.3193, lng: 114.1694 },
+    autoRotate: true,
+    autoRotateSpeed: 1,
+    metallicIntensity,
+    glowIntensity,
+  };
+
+  const colors = [
+    "#ff0080", // Hot pink
+    "#00ff88", // Bright green
+    "#0080ff", // Bright blue
+    "#ff8000", // Bright orange
+    "#8000ff", // Purple
+    "#ff0088", // Magenta
+    "#00ffff", // Cyan
+    "#ffff00", // Yellow
+    "#ff4000", // Red-orange
+    "#40ff00", // Lime green
+    "#0040ff", // Royal blue
+    "#ff0040"  // Rose red
+  ];
+
+  // Country coordinates (approximate centers)
+  const chinaLat = 35.8617;
+  const chinaLng = 104.1954;
   
-  useEffect(() => {
-    // Trigger entrance animation
-    setTimeout(() => setIsVisible(true), 100);
-  }, []);
+  const usaLat = 39.8283; // USA center
+  const usaLng = -98.5795;
   
+  const canadaLat = 56.1304; // Canada center
+  const canadaLng = -106.3468;
+  
+  const cambodiaLat = 12.5657; // Cambodia center
+  const cambodiaLng = 104.9910;
+  
+  const japanLat = 36.2048; // Japan center
+  const japanLng = 138.2529;
+  
+  const australiaLat = -25.2744; // Australia center
+  const australiaLng = 133.7751;
+  
+  const newZealandLat = -40.9006; // New Zealand center
+  const newZealandLng = 174.8860;
+
+  const sampleArcs = [
+    // China to USA
+    {
+      order: 1,
+      startLat: chinaLat,
+      startLng: chinaLng,
+      endLat: usaLat,
+      endLng: usaLng,
+      arcAlt: 0.3,
+      color: colors[0],
+    },
+    // China to Canada
+    {
+      order: 1,
+      startLat: chinaLat,
+      startLng: chinaLng,
+      endLat: canadaLat,
+      endLng: canadaLng,
+      arcAlt: 0.3,
+      color: colors[1],
+    },
+    // China to Cambodia
+    {
+      order: 1,
+      startLat: chinaLat,
+      startLng: chinaLng,
+      endLat: cambodiaLat,
+      endLng: cambodiaLng,
+      arcAlt: 0.3,
+      color: colors[2],
+    },
+    // China to Japan
+    {
+      order: 1,
+      startLat: chinaLat,
+      startLng: chinaLng,
+      endLat: japanLat,
+      endLng: japanLng,
+      arcAlt: 0.3,
+      color: colors[3],
+    },
+    // China to Australia
+    {
+      order: 1,
+      startLat: chinaLat,
+      startLng: chinaLng,
+      endLat: australiaLat,
+      endLng: australiaLng,
+      arcAlt: 0.3,
+      color: colors[4],
+    },
+    // China to New Zealand
+    {
+      order: 1,
+      startLat: chinaLat,
+      startLng: chinaLng,
+      endLat: newZealandLat,
+      endLng: newZealandLng,
+      arcAlt: 0.3,
+      color: colors[5],
+    }
+  ];
+
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
-        transform: isVisible ? 'scale(1)' : 'scale(1.1)',
-        opacity: isVisible ? 1 : 0,
-        filter: isVisible ? 'blur(0px)' : 'blur(20px)',
-        transition: 'all 2s cubic-bezier(0.23, 1, 0.32, 1)'
-      }}
-    >
-      {/* Animated background particles */}
-      <div className="absolute inset-0">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              background: i % 2 === 0 ? '#05f746' : '#0505f7',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              boxShadow: `0 0 10px ${i % 2 === 0 ? 'rgba(5, 247, 70, 0.5)' : 'rgba(5, 5, 247, 0.5)'}`,
-              animation: `float ${3 + Math.random() * 4}s ease-in-out infinite ${Math.random() * 2}s`,
-              animationDirection: Math.random() > 0.5 ? 'normal' : 'reverse'
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Main content */}
-      <div className="text-center z-10 space-y-8 px-8">
-        <div
-          style={{
-            transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
-            opacity: isVisible ? 1 : 0,
-            transition: 'all 1s ease-out 0.5s'
-          }}
-        >
-          <h1 
-            className="text-7xl font-bold tracking-wider mb-6"
-            style={{
-              background: 'linear-gradient(45deg, #05f746, #0505f7, #05f746)',
-              backgroundSize: '200% 200%',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              animation: 'gradientShift 3s ease-in-out infinite alternate',
-              textShadow: '0 0 40px rgba(5, 247, 70, 0.5)'
-            }}
-          >
-            BeYOUT
-          </h1>
-          
-          <p 
-            className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed"
-            style={{
-              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-              opacity: isVisible ? 1 : 0,
-              transition: 'all 1s ease-out 1s'
-            }}
-          >
-            Welcome to the future of digital experiences. Where innovation meets imagination and possibilities become reality.
-          </p>
-          
-          <div 
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-            style={{
-              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-              opacity: isVisible ? 1 : 0,
-              transition: 'all 1s ease-out 1.5s'
-            }}
-          >
-            <button 
-              className="px-8 py-4 rounded-full font-semibold tracking-wide transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
-              style={{
-                background: 'linear-gradient(45deg, #05f746, #0505f7)',
-                color: 'white',
-                border: 'none',
-                boxShadow: '0 0 30px rgba(5, 247, 70, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.boxShadow = '0 0 40px rgba(5, 247, 70, 0.8), 0 0 60px rgba(5, 5, 247, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.boxShadow = '0 0 30px rgba(5, 247, 70, 0.3)';
-              }}
-            >
-              Get Started
-            </button>
-            
-            <button 
-              className="px-8 py-4 rounded-full font-semibold tracking-wide transition-all duration-300 transform hover:scale-105"
-              style={{
-                background: 'transparent',
-                color: '#05f746',
-                border: '2px solid #05f746',
-                boxShadow: '0 0 20px rgba(5, 247, 70, 0.2)',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(5, 247, 70, 0.1)';
-                e.target.style.boxShadow = '0 0 30px rgba(5, 247, 70, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'transparent';
-                e.target.style.boxShadow = '0 0 20px rgba(5, 247, 70, 0.2)';
-              }}
-            >
-              Learn More
-            </button>
+    <div className='w-screen flex h-screen '>
+      <Navbar />
+      <div 
+        className="h-full  w-full overflow-hidden"
+        style={{
+          background: `
+            radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
+            linear-gradient(0deg, rgb(191, 191, 189), #000000f0 70%)
+          `
+        }}
+      >
+        <div className="flex flex-col lg:flex-row min-h-screen">
+          {/* Content Section */}
+          <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 lg:px-16 xl:pl-36 py-8 lg:py-0">
+            <div className="mb-8 lg:mb-12">
+              {/* Main Title */}
+              <h1 className="text-6xl sm:text-8xl md:text-9xl lg:text-[6vw]  font-extralight tracking-widest text-white mb-4 lg:mb-6 leading-tight">
+              PRISM 瓴境
+              </h1>
+              
+              {/* Subtitle */}
+              <div className="text-gray-300 text-lg sm:text-2xl md:text-3xl lg:text-[5vh]  mb-6 lg:mb-8 max-w-lg leading-relaxed">
+                <div className="block">品牌全球化重构</div>
+                <div className="block pl-4 sm:pl-6 lg:pl-12">纳米技术赋能</div>
+                <div className="block pl-8 sm:pl-12 lg:pl-24">全球渠道落地</div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 sm:space-x-4 sm:space-y-0">
+                <button className="bg-white text-black px-6 sm:px-8 py-3 rounded-full font-medium text-sm sm:text-base hover:bg-opacity-90 transition-all">
+                  Speak to an Expert
+                </button>
+                <button className="border border-white text-white px-6 sm:px-8 py-3 rounded-full font-medium text-sm sm:text-base hover:bg-white hover:text-black transition-colors">
+                  Our Platform
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Globe Section */}
+          <div className="w-full lg:w-1/2  h-screen  flex items-center justify-center relative">
+            <div className="w-full h-full max-w-md lg:max-w-full">
+              <Suspense fallback={
+                <div className="flex items-center justify-center h-full text-white text-sm sm:text-base">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
+                  Loading Globe...
+                </div>
+              }>
+                <World data={sampleArcs} globeConfig={globeConfig} />          </Suspense>
+            </div>
           </div>
         </div>
-        
-        {/* Feature cards */}
-        <div 
-          className="grid md:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto"
-          style={{
-            transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
-            opacity: isVisible ? 1 : 0,
-            transition: 'all 1s ease-out 2s'
-          }}
-        >
-          {[
-            { title: 'Innovation', desc: 'Cutting-edge technology meets creative vision' },
-            { title: 'Performance', desc: 'Lightning-fast experiences that captivate' },
-            { title: 'Design', desc: 'Beautiful interfaces that inspire and engage' }
-          ].map((feature, i) => (
-            <div 
-              key={feature.title}
-              className="p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 hover:transform hover:scale-105"
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(5, 247, 70, 0.2)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.borderColor = '#05f746';
-                e.target.style.boxShadow = '0 8px 32px rgba(5, 247, 70, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.borderColor = 'rgba(5, 247, 70, 0.2)';
-                e.target.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
-              }}
-            >
-              <h3 className="text-2xl font-bold mb-4" style={{ color: '#05f746' }}>
-                {feature.title}
-              </h3>
-              <p className="text-gray-400">{feature.desc}</p>
-            </div>
-          ))}
-        </div>
       </div>
-      
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 100% 50%; }
-        }
-      `}</style>
+
+
+{/* <svg xmlns="http://www.w3.org/2000/svg" className=' absolute  w-full h-full'  fill="none">
+  <mask id="a" width="1729" height="1802" x="0" y="0" maskUnits="userSpaceOnUse" style={{maskType: 'alpha'}}>
+    <path fill="#D9D9D9" d="M0 0h1728v1800.83H0z" style={{fill: '#d9d9d9', fillOpacity: 1}} transform="matrix(-1 0 0 1 1728.71 .863)"/>
+  </mask>
+  <g mask="url(#a)">
+    <g filter="url(#b)">
+      <path fill="#FF7300" d="M243.146 442.489C56.421 296.6-247.47 322.512-376.076 353.704l179.126 923.906H851.931l944.119 33.15 265.09-728.258c5.7-7.723-39.35-65.812-265.09-236.39-282.19-213.223-705.48-75.755-838.158 97.211-132.674 172.966-481.339 181.526-714.746-.834Z" style={{fill: '#ff7300', fillOpacity: 1}}/>
+    </g>
+    <g filter="url(#c)">
+      <path stroke="red" strokeWidth="71" d="M2061.14 582.5c5.7-7.723-39.35-65.812-265.1-236.39-282.18-213.223-705.47-75.755-838.149 97.211-132.674 172.966-481.339 181.526-714.745-.834C56.42 296.599-247.472 322.51-376.077 353.701" style={{stroke: 'red', strokeOpacity: 1}}/>
+    </g>
+    <g filter="url(#d)" opacity="0.5">
+      <path stroke="red" strokeWidth="71" d="M2061.13 531.531c5.7-7.722-39.35-65.812-265.09-236.39-282.18-213.223-705.48-75.755-838.156 97.211-229.419 299.09-481.34 181.526-714.746-.834C56.412 245.63-247.479 271.541-376.085 302.732" style={{stroke: 'red', strokeOpacity: 1}}/>
+    </g>
+    <g filter="url(#e)">
+      <path fill="#fff" d="M-478.381 1420.69c0 2117.34 655.442 1664.27 1382.846 1664.27 727.405 0 1251.315 143.55 1251.315-1664.27 0-267.57-589.68-484.482-1317.08-484.482-727.404 0-1317.081 216.912-1317.081 484.482Z" style={{fill: '#fff', fillOpacity: 1}}/>
+    </g>
+  </g>
+  <defs>
+    <filter id="b" width="2845.68" height="1481.29" x="-580.078" y="33.467" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="102"/>
+    </filter>
+    <filter id="c" width="2889.54" height="817.69" x="-588.445" y="-2.023" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="102"/>
+    </filter>
+    <filter id="d" width="2889.54" height="867.63" x="-588.453" y="-52.992" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="102"/>
+    </filter>
+    <filter id="e" width="3202.16" height="2757.44" x="-762.383" y="652.208" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="142"/>
+    </filter>
+  </defs>
+</svg> */}
+
     </div>
   );
 };

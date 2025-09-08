@@ -20,6 +20,8 @@ const Preloader = ({ onComplete }) => {
     'Synchronizing Partnerships',
     'Launching Market Expansion'
   ];
+
+  // radial-gradient(circle, rgb(128 128 128) 0px, rgb(0 0 0) 100%), linear-gradient(0deg, rgb(187 180 180), rgb(0 0 0 / 94%) 70%);
   
   // Generate connection lines between continents
   const connections = Array.from({ length: 8 }, (_, i) => ({

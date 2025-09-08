@@ -4,9 +4,9 @@
   min-height: 100vh;
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling - Disabled for React Lenis */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 /* Custom scrollbar */
@@ -38,5 +38,77 @@ button:focus,
 a:focus {
   outline: 2px solid #00ff5e;
   outline-offset: 2px;
+}
+
+/* Scroll-triggered animations for companies section */
+.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Enhanced hover effects for interactive elements */
+.group:hover .group-hover\:scale-150 {
+  transform: scale(1.5);
+}
+
+/* Smooth transitions for all animated elements */
+* {
+  transition-property: opacity, transform, background-color, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom animation delays */
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-500 {
+  transition-delay: 500ms;
+}
+
+.delay-1000 {
+  transition-delay: 1000ms;
+}
+
+/* Enhanced scroll animations for companies section */
+@keyframes slideInFromLeft {
+  0% { 
+    opacity: 0; 
+    transform: translateX(-60px) scale(0.95); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateX(0) scale(1); 
+  }
+}
+
+@keyframes textShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes floatUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(40px) rotateX(10deg); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) rotateX(0deg); 
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.animate-text-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: textShimmer 2s ease-in-out infinite;
+}
+
+.animate-float-up {
+  animation: floatUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 

@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+/* Retro-Futuristic FUI CSS Variables */
+:root {
+  --fui-primary: #6b7280; /* Silver gray */
+  --fui-secondary: #9ca3af; /* Light silver */
+  --fui-accent: #d1d5db; /* Light gray accent */
+  --fui-warning: #f59e0b; /* Amber */
+  --fui-background: #ffffff; /* White background */
+  --fui-surface: #f9fafb; /* Light surface */
+  --fui-border: #e5e7eb; /* Light border */
+  --fui-text: #374151; /* Dark gray text */
+  --fui-text-dim: #6b7280; /* Dimmed text */
+}
+
+body{
+  background: #000000;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  /* Disable default scrolling for React Lenis */
+  overflow-y: hidden;
+}
+
 
 /* Custom styles for BeYOUT preloader */
 @layer base {
@@ -29,8 +50,8 @@
 }
 
 @keyframes textGlow {
-  0% { filter: drop-shadow(0 0 20px rgba(5, 247, 70, 0.5)); }
-  100% { filter: drop-shadow(0 0 40px rgba(5, 247, 70, 1)); }
+  0% { filter: drop-shadow(0 0 20px rgba(107, 114, 128, 0.5)); }
+  100% { filter: drop-shadow(0 0 40px rgba(107, 114, 128, 1)); }
 }
 
 @keyframes hologramScan {
@@ -65,21 +86,355 @@
 }
 
 @keyframes globePulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(5, 247, 70, 0.3); }
-  50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(5, 247, 70, 0.6); }
+  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(107, 114, 128, 0.3); }
+  50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(107, 114, 128, 0.6); }
 }
 
 @keyframes coreGlow {
-  0% { box-shadow: 0 0 20px rgba(5, 247, 70, 0.8); }
-  100% { box-shadow: 0 0 40px rgba(5, 247, 70, 1), 0 0 60px rgba(5, 5, 247, 0.5); }
+  0% { box-shadow: 0 0 20px rgba(107, 114, 128, 0.8); }
+  100% { box-shadow: 0 0 40px rgba(107, 114, 128, 1), 0 0 60px rgba(156, 163, 175, 0.5); }
 }
 
 @keyframes numberGlow {
-  0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
-  100% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 40px rgba(5, 247, 70, 0.5); }
+  0% { text-shadow: 0 0 20px rgba(107, 114, 128, 0.5); }
+  100% { text-shadow: 0 0 30px rgba(107, 114, 128, 0.9), 0 0 40px rgba(156, 163, 175, 0.5); }
 }
 
 @keyframes progressGlow {
-  0% { box-shadow: 0 0 20px rgba(5, 247, 70, 0.8); }
-  100% { box-shadow: 0 0 30px rgba(5, 247, 70, 1), 0 0 40px rgba(5, 5, 247, 0.8); }
+  0% { box-shadow: 0 0 20px rgba(107, 114, 128, 0.8); }
+  100% { box-shadow: 0 0 30px rgba(107, 114, 128, 1), 0 0 40px rgba(156, 163, 175, 0.8); }
+}
+
+/* FUI Retro-Futuristic Animations */
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100vw); }
+}
+
+@keyframes glitch {
+  0%, 90%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+@keyframes neonGlow {
+  0%, 100% { 
+    text-shadow: 0 0 5px var(--fui-primary), 0 0 10px var(--fui-primary), 0 0 15px var(--fui-primary);
+    filter: brightness(1);
+  }
+  50% { 
+    text-shadow: 0 0 10px var(--fui-primary), 0 0 20px var(--fui-primary), 0 0 30px var(--fui-primary);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes matrixRain {
+  0% { transform: translateY(-100vh); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes dataStream {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes hologramFlicker {
+  0%, 98%, 100% { opacity: 1; }
+  99% { opacity: 0.8; }
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+
+/* FUI Component Styles */
+.fui-border {
+  position: relative;
+  border: 1px solid var(--fui-primary);
+  background: linear-gradient(45deg, transparent 30%, var(--fui-primary) 30%, var(--fui-primary) 32%, transparent 32%);
+  background-size: 10px 10px;
+  animation: borderFlow 3s linear infinite;
+}
+
+.fui-border::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, var(--fui-primary), var(--fui-secondary), var(--fui-accent), var(--fui-primary));
+  background-size: 200% 200%;
+  animation: borderFlow 2s linear infinite;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+.fui-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.fui-scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, var(--fui-primary) 50%, transparent 100%);
+  opacity: 0.3;
+  animation: scanline 3s linear infinite;
+}
+
+.fui-glow {
+  box-shadow: 
+    0 0 5px var(--fui-primary),
+    0 0 10px var(--fui-primary),
+    0 0 15px var(--fui-primary),
+    inset 0 0 5px var(--fui-primary);
+}
+
+.fui-text-glow {
+  animation: neonGlow 2s ease-in-out infinite alternate;
+}
+
+.fui-grid {
+  background-image: 
+    linear-gradient(var(--fui-primary) 1px, transparent 1px),
+    linear-gradient(90deg, var(--fui-primary) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+  animation: gridPulse 4s ease-in-out infinite;
+}
+
+.fui-hologram {
+  background: linear-gradient(135deg, 
+    rgba(107, 114, 128, 0.1) 0%, 
+    rgba(156, 163, 175, 0.1) 50%, 
+    rgba(209, 213, 219, 0.1) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  animation: hologramFlicker 5s infinite;
+}
+
+.fui-data-stream {
+  position: relative;
+  overflow: hidden;
+}
+
+.fui-data-stream::before {
+  content: '01010101 11001100 10101010';
+  position: absolute;
+  top: 50%;
+  left: -100%;
+  transform: translateY(-50%);
+  color: var(--fui-secondary);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  opacity: 0.6;
+  white-space: nowrap;
+  animation: dataStream 8s linear infinite;
+}
+
+/* Euphoric Animation Effects */
+@keyframes euphoria {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg) brightness(1) saturate(1);
+  }
+  25% { 
+    transform: scale(1.02) rotate(0.5deg);
+    filter: hue-rotate(90deg) brightness(1.1) saturate(1.2);
+  }
+  50% { 
+    transform: scale(1.05) rotate(0deg);
+    filter: hue-rotate(180deg) brightness(1.2) saturate(1.5);
+  }
+  75% { 
+    transform: scale(1.02) rotate(-0.5deg);
+    filter: hue-rotate(270deg) brightness(1.1) saturate(1.2);
+  }
+}
+
+@keyframes floatingParticles {
+  0% { 
+    transform: translateY(0px) translateX(0px);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { 
+    transform: translateY(-200px) translateX(50px);
+    opacity: 0;
+  }
+}
+
+@keyframes energyField {
+  0% { 
+    background-position: 0% 50%;
+    opacity: 0.3;
+  }
+  50% { 
+    background-position: 100% 50%;
+    opacity: 0.7;
+  }
+  100% { 
+    background-position: 0% 50%;
+    opacity: 0.3;
+  }
+}
+
+@keyframes quantumFlicker {
+  0%, 90%, 100% { opacity: 1; }
+  91%, 92%, 94%, 96%, 98% { opacity: 0.7; }
+  93%, 95%, 97%, 99% { opacity: 0.9; }
+}
+
+/* Euphoric Component Classes */
+.fui-euphoria {
+  animation: euphoria 8s ease-in-out infinite;
+}
+
+.fui-energy-field {
+  background: linear-gradient(45deg, 
+    var(--fui-primary), 
+    var(--fui-secondary), 
+    var(--fui-accent), 
+    var(--fui-primary));
+  background-size: 400% 400%;
+  animation: energyField 4s ease-in-out infinite;
+}
+
+.fui-quantum-flicker {
+  animation: quantumFlicker 3s infinite;
+}
+
+.fui-floating-particles::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--fui-primary);
+  border-radius: 50%;
+  animation: floatingParticles 6s linear infinite;
+  box-shadow: 
+    0 0 2px var(--fui-primary),
+    10px 20px 0 var(--fui-secondary),
+    -20px 30px 0 var(--fui-accent),
+    30px -10px 0 var(--fui-primary),
+    -40px -20px 0 var(--fui-secondary);
+}
+
+/* Globalization Animation Effects */
+@keyframes fadeOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes globalPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.1;
+  }
+  50% { 
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+}
+
+@keyframes connectionFlow {
+  0% { 
+    stroke-dashoffset: 10;
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { 
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/* Refined HUD styling */
+.hud-panel {
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.7) 0%, 
+    rgba(0, 20, 40, 0.4) 50%, 
+    rgba(0, 0, 0, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(107, 114, 128, 0.1);
+  border-radius: 4px;
+}
+
+/* Enhanced Heading Animations */
+@keyframes fade-in-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(60px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% { 
+    transform: translateY(0px) rotateX(0deg); 
+  }
+  50% { 
+    transform: translateY(-8px) rotateX(2deg); 
+  }
+}
+
+@keyframes float-slow-delayed {
+  0%, 100% { 
+    transform: translateY(0px) rotateX(0deg); 
+  }
+  50% { 
+    transform: translateY(-6px) rotateX(-1deg); 
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-float-slow-delayed {
+  animation: float-slow-delayed 4s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+
+@theme inline {
+  --animate-aurora: aurora 30s linear infinite;
+  @keyframes aurora {
+    from {
+      background-position:
+        50% 50%,
+        50% 50%;
+    }
+    to {
+      background-position:
+        350% 50%,
+        350% 50%;
+    }
+  }
 }
