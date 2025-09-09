@@ -241,7 +241,7 @@ const Timeline = () => {
                     </div>
                 </div>
              {/* Timeline Container */}
-                <div  className="relative w-full md:h-[400px] lg:h-[600px] overflow-hidden">
+                <div  className="relative w-full h-[400px] overflow-hidden mt-8">
                     {/* Enhanced Diagonal Line */}
                     <div className="absolute inset-0">
                         <svg 
@@ -252,9 +252,9 @@ const Timeline = () => {
                             {/* Glow effect behind line */}
                             <line
                                 x1="0"
-                                y1="500"
+                                y1="450"
                                 x2="1200"
-                                y2="100"
+                                y2="90"
                                 stroke="rgba(255,255,255,0.1)"
                                 strokeWidth="20"
                                 className="blur-sm"
@@ -264,9 +264,9 @@ const Timeline = () => {
                             <line
                                 ref={lineRef}
                                 x1="0"
-                                y1="500"
+                                y1="450"
                                 x2="1200"
-                                y2="100"
+                                y2="90"
                                 stroke="url(#enhancedSilverGradient)"
                                 strokeWidth="4"
                                 strokeLinecap="round"
@@ -294,7 +294,7 @@ const Timeline = () => {
                         {/* Timeline points */}
                         {timelineData.map((item, index) => {
                             const x = (index + 1) * (1200 / (timelineData.length + 1));
-                            const y = 500 - (x - 0) * (400 / 1200); // Calculate y position along the line
+                            const y = 450 - (x - 0) * (360 / 1200); // Calculate y position along the line with 0.4667 slope
                             
                             return (
                                 <g key={index}>
@@ -319,7 +319,7 @@ const Timeline = () => {
                 <div className="absolute inset-0">
                         {timelineData.map((item, index) => {
                             const leftPercent = ((index + 1) / (timelineData.length + 1)) * 100;
-                            const topPercent = 83.33 - (leftPercent * 0.6667);
+                            const topPercent = 75 - (leftPercent * 0.4667);
                             
                             return (
                                 <div

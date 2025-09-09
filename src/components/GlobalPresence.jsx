@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlowCircle from './GlowCircle';
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const GlobalPresence = () => {
   const [animationPhase, setAnimationPhase] = useState(0);
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
   const containerRef = useRef(null);
+  const titleRef = useRef(null);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -31,6 +38,68 @@ const GlobalPresence = () => {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(animationId);
     };
+  }, []);
+
+  // Text animation useEffect
+  useEffect(() => {
+    if (titleRef.current) {
+      // Split text into characters for animation
+      const split = new SplitText(titleRef.current, { type: "words, chars" });
+      
+      console.log("Global Presence split text chars:", split.chars); // Debug log
+      
+      // Set initial state - blurred and invisible
+      gsap.set(split.chars, {
+        opacity: 0,
+        y: 50,
+        rotationX: 90,
+        transformOrigin: "0% 50% -50px",
+        "--blur": "10px",
+      });
+
+      // Apply blur effect and gradient styling via CSS
+      split.chars.forEach(char => {
+        char.style.filter = "blur(var(--blur))";
+        char.style.background = 'linear-gradient(to right, #444444, white, #444444)';
+        char.style.webkitBackgroundClip = 'text';
+        char.style.webkitTextFillColor = 'transparent';
+        char.style.backgroundClip = 'text';
+      });
+
+      // Create scroll-triggered animation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+          onStart: () => console.log("Global Presence animation started"), // Debug log
+          onComplete: () => console.log("Global Presence animation completed"), // Debug log
+        }
+      });
+
+      tl.to(split.chars, {
+        duration: 1,
+        opacity: 1,
+        y: 0,
+        rotationX: 0,
+        "--blur": "0px",
+        stagger: 0.02,
+        ease: "back.out(1.7)",
+        onUpdate: function() {
+          // Update the filter during animation
+          this.targets().forEach(char => {
+            char.style.filter = `blur(${char.style.getPropertyValue('--blur')})`;
+          });
+        }
+      });
+
+      // Store the timeline for cleanup
+      return () => {
+        tl.kill();
+        split.revert();
+      };
+    }
   }, []);
 
   // Track mouse position
@@ -149,7 +218,12 @@ const GlobalPresence = () => {
         {/* Enhanced Header */}
         <div className="text-center mb-16">
         <h2 className="text-7xl md:text-9xl font-bold mb-6 relative">
-                            <span className="bg-gradient-to-r from-[#444444] via-white to-[#444444] bg-clip-text text-transparent drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]">
+                            <span ref={titleRef} className="text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]" style={{
+                                background: 'linear-gradient(to right, #444444, white, #444444)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text'
+                            }}>
                            Global Presence
                             </span>
                         </h2>
