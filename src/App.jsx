@@ -9,6 +9,7 @@ import Timeline from './components/Timeline'
 import GlobalPresence from './components/GlobalPresence'
 import CoreServices from './components/CoreServices'
 import { ReactLenis, useLenis } from '@studio-freight/react-lenis'
+import TeamSection from './components/TeamSection.jsx';
 
 import { AestheticFluidBg } from "./components/js/AestheticFluidBg.module.js"
 import { Leva } from 'leva'
@@ -95,6 +96,7 @@ function App() {
         <Timeline/>
         <GlobalPresence/>
         <CoreServices/>
+        <TeamSection/>
         {/* <GlobalPresence/> */}
 </div>
         {/* <CompaniesIntro /> */}

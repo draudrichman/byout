@@ -259,14 +259,30 @@ const CoreServices = () => {
         "--blur": "10px",
       });
 
-      // Apply blur effect and gradient styling via CSS
-      split.chars.forEach(char => {
+      // Apply blur effect and gradient to individual characters
+      split.chars.forEach((char, index) => {
         char.style.filter = "blur(var(--blur))";
-        char.style.background = 'linear-gradient(to right, #444444, white, #444444)';
-        char.style.webkitBackgroundClip = 'text';
-        char.style.webkitTextFillColor = 'transparent';
-        char.style.backgroundClip = 'text';
+        // Calculate gradient position for each character
+        const progress = index / (split.chars.length - 1);
+        const color = getGradientColor(progress);
+        char.style.color = color;
       });
+
+      // Function to calculate gradient color based on position
+      function getGradientColor(progress) {
+        // Create smooth gradient from #444444 -> white -> #444444
+        if (progress <= 0.5) {
+          // First half: #444444 to white
+          const factor = progress * 2;
+          const gray = Math.round(68 + (255 - 68) * factor);
+          return `rgb(${gray}, ${gray}, ${gray})`;
+        } else {
+          // Second half: white to #444444
+          const factor = (progress - 0.5) * 2;
+          const gray = Math.round(255 - (255 - 68) * factor);
+          return `rgb(${gray}, ${gray}, ${gray})`;
+        }
+      }
 
       // Create scroll-triggered animation
       const tl = gsap.timeline({
@@ -436,12 +452,7 @@ const CoreServices = () => {
   
 
   <h2 className="text-7xl md:text-9xl font-bold mb-6 relative text-center">
-                            <span ref={titleRef} className="text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]" style={{
-                                background: 'linear-gradient(to right, #444444, white, #444444)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text'
-                            }}>
+                            <span ref={titleRef} className="text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]">
                            Core Services
                             </span>
                         </h2>

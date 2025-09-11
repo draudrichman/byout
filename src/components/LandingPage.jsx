@@ -1,72 +1,62 @@
-import React, { lazy, Suspense } from 'react';
-import Navbar from './ui/Navbar';
-import { useControls } from 'leva';
+
+import React, { lazy, Suspense, useState, useEffect } from 'react';
+import  Navbar from './ui/Navbar';
+
 
 const World = lazy(() => import("../components/ui/globe").then((m) => ({ default: m.World })));
 
-
-
 const LandingPage = () => {
-  const { hexPolygonColor, chinaHexPolygonColor, targetingCountriesColor, globeColor, globeOpacity, pointOpacity, metallicIntensity, glowIntensity } = useControls({
-    hexPolygonColor: {
-      value: "#414141",
-      label: "Other Countries Color",
+  const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Define the three subtitle variations
+  const subtitleVariations = [
+    {
+      line1: "破界有光",
+      line1English: "Break Boundaries",
+      line2: "Reframe Markets",
+      line2Chinese: "落地成境"
     },
-    chinaHexPolygonColor: {
-      value: "#ffffff",
-      label: "China Color",
+    {
+      line1: "品牌产品解码重构｜全球顶层战略定位架构",
+      line2: "× 独家创新专利技术赋能",
+      line3: "× 直通全球顶级零售渠道落地"
     },
-    targetingCountriesColor: {
-      value: "#ffffff",
-      label: "Targeting Countries Color",
-    },
-    globeColor: {
-      value: "#ffffff",
-      label: "Globe Color",
-    },
-    globeOpacity: {
-      value: 0,
-      min: 0,
-      max: 1,
-      step: 0.1,
-      label: "Globe Opacity",
-    },
-    pointOpacity: {
-      value: 1,
-      min: 0,
-      max: 1,
-      step: 0.1,
-      label: "Point Opacity",
-    },
-    metallicIntensity: {
-      value: 0.9,
-      min: 0,
-      max: 1,
-      step: 0.1,
-      label: "Metallic Intensity",
-    },
-    glowIntensity: {
-      value: 0.8,
-      min: 0,
-      max: 2,
-      step: 0.1,
-      label: "Glow Intensity",
-    },
-  });
+    {
+      line1: "0-1 助力中国品牌转化为世界品牌",
+      line2: "为您构建穿越文化维度｜地理疆域的商业帝国",
+      line3: "实现销量与品牌价值双增长",
+      line4: "为增长负责，为结果买单"
+    }
+  ];
+
+  // Auto-transition between subtitles
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentSubtitleIndex((prev) => (prev + 1) % subtitleVariations.length);
+        setIsTransitioning(false);
+      }, 300);
+    }, 4000); // Change every 4 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   const globeConfig = {
     pointSize: 5,
     pointStyle: "dot",
-    pointOpacity,
+    pointOpacity: 1,
     particlesSize: 2,
-    hexPolygonColor,
-    chinaHexPolygonColor,
-    targetingCountriesColor,
-    globeColor,
-    globeOpacity,
+    hexPolygonColor: "#414141",
+    chinaHexPolygonColor: "#ffffff",
+    targetingCountriesColor: "#ffffff",
+    globeColor: "#ffffff",
+    globeOpacity: 0,
     showAtmosphere: false,
     atmosphereColor: "#ffffff",
     atmosphereAltitude: 0.2,
-    emissive: globeColor,
+    emissive: "#ffffff",
     emissiveIntensity: 0.1,
     shininess: 0.9,
     polygonColor: "rgba(0, 121, 145,0.7)",
@@ -81,49 +71,32 @@ const LandingPage = () => {
     initialPosition: { lat: 22.3193, lng: 114.1694 },
     autoRotate: true,
     autoRotateSpeed: 1,
-    metallicIntensity,
-    glowIntensity,
+    metallicIntensity: 0.9,
+    glowIntensity: 0.8,
   };
 
   const colors = [
-    "#ff0080", // Hot pink
-    "#00ff88", // Bright green
-    "#0080ff", // Bright blue
-    "#ff8000", // Bright orange
-    "#8000ff", // Purple
-    "#ff0088", // Magenta
-    "#00ffff", // Cyan
-    "#ffff00", // Yellow
-    "#ff4000", // Red-orange
-    "#40ff00", // Lime green
-    "#0040ff", // Royal blue
-    "#ff0040"  // Rose red
+    "#ff0080", "#00ff88", "#0080ff", "#ff8000", "#8000ff", "#ff0088",
+    "#00ffff", "#ffff00", "#ff4000", "#40ff00", "#0040ff", "#ff0040"
   ];
 
-  // Country coordinates (approximate centers)
+  // Country coordinates
   const chinaLat = 35.8617;
   const chinaLng = 104.1954;
-  
-  const usaLat = 39.8283; // USA center
+  const usaLat = 39.8283;
   const usaLng = -98.5795;
-  
-  const canadaLat = 56.1304; // Canada center
+  const canadaLat = 56.1304;
   const canadaLng = -106.3468;
-  
-  const cambodiaLat = 12.5657; // Cambodia center
+  const cambodiaLat = 12.5657;
   const cambodiaLng = 104.9910;
-  
-  const japanLat = 36.2048; // Japan center
+  const japanLat = 36.2048;
   const japanLng = 138.2529;
-  
-  const australiaLat = -25.2744; // Australia center
+  const australiaLat = -25.2744;
   const australiaLng = 133.7751;
-  
-  const newZealandLat = -40.9006; // New Zealand center
+  const newZealandLat = -40.9006;
   const newZealandLng = 174.8860;
 
   const sampleArcs = [
-    // China to USA
     {
       order: 1,
       startLat: chinaLat,
@@ -133,7 +106,6 @@ const LandingPage = () => {
       arcAlt: 0.3,
       color: colors[0],
     },
-    // China to Canada
     {
       order: 1,
       startLat: chinaLat,
@@ -143,7 +115,6 @@ const LandingPage = () => {
       arcAlt: 0.3,
       color: colors[1],
     },
-    // China to Cambodia
     {
       order: 1,
       startLat: chinaLat,
@@ -153,7 +124,6 @@ const LandingPage = () => {
       arcAlt: 0.3,
       color: colors[2],
     },
-    // China to Japan
     {
       order: 1,
       startLat: chinaLat,
@@ -163,7 +133,6 @@ const LandingPage = () => {
       arcAlt: 0.3,
       color: colors[3],
     },
-    // China to Australia
     {
       order: 1,
       startLat: chinaLat,
@@ -173,7 +142,6 @@ const LandingPage = () => {
       arcAlt: 0.3,
       color: colors[4],
     },
-    // China to New Zealand
     {
       order: 1,
       startLat: chinaLat,
@@ -185,106 +153,153 @@ const LandingPage = () => {
     }
   ];
 
-  return (
-    <div className='w-screen flex h-screen '>
-      <Navbar />
-      <div 
-        className="h-full  w-full overflow-hidden"
-        style={{
-          background: `
-            radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
-            linear-gradient(0deg, rgb(191, 191, 189), #000000f0 70%)
-          `
-        }}
-      >
-        <div className="flex flex-col lg:flex-row min-h-screen">
-          {/* Content Section */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 lg:px-16 xl:pl-36 py-8 lg:py-0">
-            <div className="mb-8 lg:mb-12">
-              {/* Main Title */}
-              <h1 className="text-6xl sm:text-8xl md:text-9xl lg:text-[6vw]  font-extralight tracking-widest text-white mb-4 lg:mb-6 leading-tight">
-              PRISM 瓴境
-              </h1>
-              
-              {/* Subtitle */}
-              <div className="text-gray-300 text-lg sm:text-2xl md:text-3xl lg:text-[5vh]  mb-6 lg:mb-8 max-w-lg leading-relaxed">
-                <div className="block">品牌全球化重构</div>
-                <div className="block pl-4 sm:pl-6 lg:pl-12">纳米技术赋能</div>
-                <div className="block pl-8 sm:pl-12 lg:pl-24">全球渠道落地</div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 sm:space-x-4 sm:space-y-0">
-                <button className="bg-white text-black px-6 sm:px-8 py-3 rounded-full font-medium text-sm sm:text-base hover:bg-opacity-90 transition-all">
-                  Speak to an Expert
-                </button>
-                <button className="border border-white text-white px-6 sm:px-8 py-3 rounded-full font-medium text-sm sm:text-base hover:bg-white hover:text-black transition-colors">
-                  Our Platform
-                </button>
-              </div>
+  const renderSubtitle = () => {
+    const current = subtitleVariations[currentSubtitleIndex];
+    
+    if (currentSubtitleIndex === 0) {
+      return (
+        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-baseline space-x-6">
+              <h2 className="text-white text-[1.5vw] font-extralight tracking-[0.2em]">
+                {current.line1}
+              </h2>
+              <span className="text-gray-400 text-4xl font-light tracking-widest">
+                {current.line1English}
+              </span>
+            </div>
+            <div className="flex items-baseline space-x-6 pl-12">
+              <span className="text-gray-400 text-4xl font-light tracking-widest">
+                {current.line2}
+              </span>
+              <h2 className="text-white text-[1.5vw] font-extralight tracking-[0.2em]">
+                {current.line2Chinese}
+              </h2>
             </div>
           </div>
-
-          {/* Globe Section */}
-          <div className="w-full lg:w-1/2  h-screen  flex items-center justify-center relative">
-            <div className="w-full h-full max-w-md lg:max-w-full">
-              <Suspense fallback={
-                <div className="flex items-center justify-center h-full text-white text-sm sm:text-base">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                  Loading Globe...
-                </div>
-              }>
-                <World data={sampleArcs} globeConfig={globeConfig} />          </Suspense>
+        </div>
+      );
+    } else if (currentSubtitleIndex === 1) {
+      return (
+        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
+          <div className="space-y-3">
+            <div className="text-white text-3xl font-light tracking-wide leading-relaxed">
+              {current.line1}
             </div>
+            <div className="text-gray-300 text-2xl font-light tracking-wide leading-relaxed pl-4">
+              {current.line2}
+            </div>
+            <div className="text-gray-300 text-2xl font-light tracking-wide leading-relaxed pl-4">
+              {current.line3}
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
+          <div className="space-y-3">
+            <div className="text-white text-4xl font-light tracking-wide leading-relaxed">
+              {current.line1}
+            </div>
+            <div className="text-gray-300 text-2xl font-light tracking-wide leading-relaxed">
+              {current.line2}
+            </div>
+            <div className="text-gray-300 text-xl font-light tracking-wide leading-relaxed">
+              {current.line3}
+            </div>
+            <div className="text-gray-300 text-xl font-light tracking-wide leading-relaxed">
+              {current.line4}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className='w-screen h-screen overflow-hidden relative'
+    >
+      {/* Navigation */}
+      <Navbar />
+
+     
+
+      {/* Background gradient */}
+      {/* <div 
+        className="absolute w-full h-full"
+        style={{
+          background: `
+          radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
+          linear-gradient(0deg, rgb(191, 191, 189), #000000f0 70%)
+        `
+        }}
+      /> */}
+
+      <div className="relative -z-10 flex h-full"
+        style={{
+          background: `
+          radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
+          linear-gradient(0deg, rgb(191, 191, 189), #000000f0 70%)
+        `
+        }}
+      >
+        {/* Content Section */}
+        <div className="w-1/2 flex flex-col justify-center pl-24 pr-8">
+          {/* Main Title */}
+          <h1 className="text-white mb-12">
+            <span className="text-[120px] font-thin tracking-[0.15em] leading-none block">
+              Prism
+            </span>
+            <span className="text-[70px] font-extralight tracking-[0.3em] opacity-80 ml-2">
+              瓴境
+            </span>
+          </h1>
+          
+          {/* Morphing Subtitles */}
+          <div className="mb-16 min-h-[200px]">
+            {renderSubtitle()}
+          </div>
+
+          {/* Vertical divider lines */}
+          <div className="absolute left-8 top-1/4 h-1/2 flex flex-col justify-between">
+            <div className="w-px h-24 bg-gradient-to-b from-transparent via-white to-transparent opacity-20"></div>
+            <div className="w-px h-24 bg-gradient-to-b from-transparent via-white to-transparent opacity-20"></div>
+            <div className="w-px h-24 bg-gradient-to-b from-transparent via-white to-transparent opacity-20"></div>
+          </div>
+        </div>
+
+        {/* Globe Section */}
+        <div className="w-1/2 flex items-center justify-center relative">
+          <div className="w-full h-full flex items-center justify-center">
+            <Suspense fallback={
+              <div className="flex items-center justify-center text-white">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
+                Loading Globe...
+              </div>
+            }>
+              <World data={sampleArcs} globeConfig={globeConfig} />
+            </Suspense>
           </div>
         </div>
       </div>
 
+   
 
-{/* <svg xmlns="http://www.w3.org/2000/svg" className=' absolute  w-full h-full'  fill="none">
-  <mask id="a" width="1729" height="1802" x="0" y="0" maskUnits="userSpaceOnUse" style={{maskType: 'alpha'}}>
-    <path fill="#D9D9D9" d="M0 0h1728v1800.83H0z" style={{fill: '#d9d9d9', fillOpacity: 1}} transform="matrix(-1 0 0 1 1728.71 .863)"/>
-  </mask>
-  <g mask="url(#a)">
-    <g filter="url(#b)">
-      <path fill="#FF7300" d="M243.146 442.489C56.421 296.6-247.47 322.512-376.076 353.704l179.126 923.906H851.931l944.119 33.15 265.09-728.258c5.7-7.723-39.35-65.812-265.09-236.39-282.19-213.223-705.48-75.755-838.158 97.211-132.674 172.966-481.339 181.526-714.746-.834Z" style={{fill: '#ff7300', fillOpacity: 1}}/>
-    </g>
-    <g filter="url(#c)">
-      <path stroke="red" strokeWidth="71" d="M2061.14 582.5c5.7-7.723-39.35-65.812-265.1-236.39-282.18-213.223-705.47-75.755-838.149 97.211-132.674 172.966-481.339 181.526-714.745-.834C56.42 296.599-247.472 322.51-376.077 353.701" style={{stroke: 'red', strokeOpacity: 1}}/>
-    </g>
-    <g filter="url(#d)" opacity="0.5">
-      <path stroke="red" strokeWidth="71" d="M2061.13 531.531c5.7-7.722-39.35-65.812-265.09-236.39-282.18-213.223-705.48-75.755-838.156 97.211-229.419 299.09-481.34 181.526-714.746-.834C56.412 245.63-247.479 271.541-376.085 302.732" style={{stroke: 'red', strokeOpacity: 1}}/>
-    </g>
-    <g filter="url(#e)">
-      <path fill="#fff" d="M-478.381 1420.69c0 2117.34 655.442 1664.27 1382.846 1664.27 727.405 0 1251.315 143.55 1251.315-1664.27 0-267.57-589.68-484.482-1317.08-484.482-727.404 0-1317.081 216.912-1317.081 484.482Z" style={{fill: '#fff', fillOpacity: 1}}/>
-    </g>
-  </g>
-  <defs>
-    <filter id="b" width="2845.68" height="1481.29" x="-580.078" y="33.467" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
-      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="102"/>
-    </filter>
-    <filter id="c" width="2889.54" height="817.69" x="-588.445" y="-2.023" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
-      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="102"/>
-    </filter>
-    <filter id="d" width="2889.54" height="867.63" x="-588.453" y="-52.992" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
-      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="102"/>
-    </filter>
-    <filter id="e" width="3202.16" height="2757.44" x="-762.383" y="652.208" colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
-      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur result="effect1_foregroundBlur_760_56865" stdDeviation="142"/>
-    </filter>
-  </defs>
-</svg> */}
-
+      {/* Progress indicators for subtitle transitions */}
+      <div className="absolute bottom-24 left-24 flex space-x-2 z-30">
+        {subtitleVariations.map((_, index) => (
+          <div
+            key={index}
+            className={`h-1 transition-all duration-300 ${
+              index === currentSubtitleIndex ? 'w-8 bg-white' : 'w-2 bg-gray-600'
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
 
 export default LandingPage;
+
