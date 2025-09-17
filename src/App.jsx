@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 
 import LandingPage from './components/LandingPage'
-import './App.css'
+// import './App.css'
 import { AuroraBackground } from './components/ui/aurora-background'
 import StatsPage from './components/StatsPage'
 import CompaniesIntro from './components/CompaniesIntro'
 import Timeline from './components/Timeline'
+import HorizontalTimeline from './components/HorizontalTimeline'
 import GlobalPresence from './components/GlobalPresence'
 import CoreServices from './components/CoreServices'
 import { ReactLenis, useLenis } from '@studio-freight/react-lenis'
@@ -93,7 +94,8 @@ function App() {
           <LandingPage key="landing" />
         </AuroraBackground>
         <StatsPage/>
-        <Timeline/>
+        <HorizontalTimeline/>
+        {/* <Timeline/> */}
         <GlobalPresence/>
         <CoreServices/>
         <TeamSection/>

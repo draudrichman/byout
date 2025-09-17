@@ -263,7 +263,7 @@ export function Globe({ globeConfig, data }) {
             clearcoatRoughness: 0.02, // Extremely smooth clearcoat
             transmission: 0.4, // Enhanced glass-like transmission
             transparent: true,
-            opacity: 0.95, // Slightly more opaque for better visibility
+            opacity: 0, // Slightly more opaque for better visibility
             emissive: new Color(d?.color || "#ffffff"),
             emissiveIntensity: 0.8, // Stronger glow for better visibility
             envMapIntensity: 3.0, // Very strong environment reflections

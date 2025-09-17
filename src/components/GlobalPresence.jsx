@@ -20,25 +20,7 @@ const GlobalPresence = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Track scroll velocity for shader-like effects
-  useEffect(() => {
-    let animationId;
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const velocity = (currentScrollY - lastScrollY.current) * 0.05;
-      setScrollVelocity(velocity);
-      lastScrollY.current = currentScrollY;
-      
-      clearTimeout(animationId);
-      animationId = setTimeout(() => setScrollVelocity(0), 100);
-    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(animationId);
-    };
-  }, []);
 
   // Text animation useEffect
   useEffect(() => {

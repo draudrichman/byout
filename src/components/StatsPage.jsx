@@ -140,7 +140,7 @@ const StatsPage = () => {
             style={{
                 background: `
                  radial-gradient(circle at bottom, rgb(0, 0, 0) 0px, #01010100 100%),
-    linear-gradient(180deg, rgb(191, 191, 189), #000000f0 70%);
+    linear-gradient(180deg, rgb(191, 191, 189), #000000f0 70%)
                 `
             }}
         >

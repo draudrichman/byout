@@ -16,58 +16,51 @@ const Timeline = () => {
 
     const timelineData = [
         {
-            year: '2007',
-            date: '2007年3月',
-            description: '公司成立',
-            position: 'above'
+            year: 'Phase 1',
+            phase: '第一阶段',
+            title: '联合诊断与战略签约',
+            subtitle: 'Joint Diagnosis & Strategic Signing',
+            description: '联合诊断、甲类战略与投入、奠定合作里程碑',
+            keyPoints: [
+                '初步接洽与产品力测评：品牌宣传、企业展示、品牌货',
+                '深度产品调研与市场需求：品牌宣传各城市调研',
+                '战略研讨会（线上/线下）：安环卫管会议',
+                '方案报价与合约签署：服务方提供合同'
+            ]
         },
         {
-            year: '2011',
-            date: '2011年5月',
-            description: '业务拓展',
-            position: 'below'
+            year: 'Phase 2',
+            phase: '第二阶段',
+            title: '产品优化与准入准备',
+            subtitle: 'Product Optimization & Access Preparation',
+            description: '打造符合北美市场需求的大单品和新品，并完成所有准入基建设',
+            keyPoints: [
+                '成立专项小组与产品优化：成立专项小组、渠道专家、Broker专才团队',
+                '本地化与合规建设：完整产品监制、包装标准化标准、编码技术等'
+            ]
         },
         {
-            year: '2015',
-            date: '2015年度',
-            description: '战略升级',
-            position: 'above'
+            year: 'Phase 3',
+            phase: '第三阶段',
+            title: '渠道推进与订单获取',
+            subtitle: 'Channel Promotion & Order Acquisition',
+            description: '成功将产品进推进入各大出口标渠道',
+            keyPoints: [
+                '正式渠道推介与谈判：由服务方专业Broker团队向店商起（如Sams Club）采购求人员介绍推荐',
+                '试销与订单获取：向消费者业务试销和量，并重营业业务相关支持'
+            ]
         },
         {
-            year: '2018',
-            date: '2018年度',
-            description: '融资A轮完成110亿',
-            position: 'below'
-        },
-        {
-            year: '2020',
-            date: '2020年度',
-            description: '全球疫情下创新发展',
-            position: 'above'
-        },
-        {
-            year: '2021',
-            date: '2021年1月',
-            description: '港交所上市',
-            position: 'below'
-        },
-        {
-            year: '2021',
-            date: '2021年度',
-            description: '业务全球化扩张',
-            position: 'above'
-        },
-        {
-            year: '2021',
-            date: '2021年度',
-            description: '获得行业领先地位',
-            position: 'below'
-        },
-        {
-            year: '2023',
-            date: '2023年度',
-            description: '2023年度中国上市公',
-            position: 'above'
+            year: 'Phase 4',
+            phase: '第四阶段',
+            title: '落地运营与持续增长',
+            subtitle: 'Landing Operation & Sustainable Growth',
+            description: '确保稳定供应 × 销售 × 维护，并实现可持续增长',
+            keyPoints: [
+                '大货生产与入仓：品牌端按PO生产大货，并建设恰当办法高效各货时间',
+                '试销经营与增值服务：新国际服务前哨、年终营销等',
+                '长期紧密与增值服务：新品推荐、拓展新渠道、明星KOL合营销等'
+            ]
         }
     ];
 
@@ -86,6 +79,13 @@ const Timeline = () => {
             letterSpacing: "0.1em"
         });
 
+        // Set initial line state - completely hidden
+        const lineLength = 1000;
+        gsap.set(lineRef.current, {
+            strokeDasharray: lineLength,
+            strokeDashoffset: lineLength
+        });
+
         let animationComplete = false;
         let revealedYears = new Set();
 
@@ -102,6 +102,9 @@ const Timeline = () => {
                 // Calculate line progress (0 to 1)
                 const progress = self.progress;
                 
+                // Debug logging
+                console.log('ScrollTrigger progress:', progress);
+                
                 // Animate PRISM letter spacing based on scroll progress
                 const letterSpacing = progress * 0.3; // 0 to 0.3em
                 gsap.set(prismRef.current, {
@@ -109,10 +112,13 @@ const Timeline = () => {
                 });
                 
                 // Animate line stroke-dashoffset to reveal the line
-                const lineLength = 1200 * Math.sqrt(2); // Approximate line length
+                const lineLength = 1000; // Straight horizontal line length (1100 - 100 = 1000)
+                const dashOffset = lineLength * (1 - progress);
+                console.log('Line progress - dashOffset:', dashOffset, 'lineLength:', lineLength);
+                
                 gsap.set(lineRef.current, {
                     strokeDasharray: lineLength,
-                    strokeDashoffset: lineLength * (1 - progress)
+                    strokeDashoffset: dashOffset
                 });
 
                 // Check each marker and reveal year when line reaches it
@@ -219,17 +225,17 @@ const Timeline = () => {
 
                     {/* Main Title */}
                     <div className="text-center mb-12">
-                        <h2 className="text-7xl md:text-9xl font-bold mb-6 relative">
+                        <h2 className="text-5xl md:text-7xl font-bold mb-6 relative">
                             <span className="bg-gradient-to-r from-[#444444] via-white to-[#444444] bg-clip-text text-transparent drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]">
-                                2007-2023
+                                业务流程
                             </span>
                         </h2>
                         <div className="space-y-3 relative">
                             <p className="text-xl md:text-2xl text-white font-medium drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                全球品牌年轻化专业咨询创意机构  
+                                四阶段专业服务体系
                             </p>
                             <p className="text-base md:text-lg text-[#cccccc] drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-                                Global brand youth professional consulting creative agency
+                                Four-Phase Professional Service System
                             </p>
                             {/* Decorative elements */}
                             <div className="flex justify-center items-center space-x-4 mt-6">
@@ -241,7 +247,7 @@ const Timeline = () => {
                     </div>
                 </div>
              {/* Timeline Container */}
-                <div  className="relative w-full h-[400px] overflow-hidden mt-8">
+                <div className="absolute inset-0 top-[5%] w-full h-auto overflow-hidden flex items-center justify-center">
                     {/* Enhanced Diagonal Line */}
                     <div className="absolute inset-0">
                         <svg 
@@ -251,22 +257,22 @@ const Timeline = () => {
                         >
                             {/* Glow effect behind line */}
                             <line
-                                x1="0"
-                                y1="450"
-                                x2="1200"
-                                y2="90"
+                                x1="100"
+                                y1="300"
+                                x2="1100"
+                                y2="300"
                                 stroke="rgba(255,255,255,0.1)"
                                 strokeWidth="20"
                                 className="blur-sm"
                             />
                             
-                            {/* Main diagonal line */}
+                            {/* Main straight horizontal line */}
                             <line
                                 ref={lineRef}
-                                x1="0"
-                                y1="450"
-                                x2="1200"
-                                y2="90"
+                                x1="100"
+                                y1="300"
+                                x2="1100"
+                                y2="300"
                                 stroke="url(#enhancedSilverGradient)"
                                 strokeWidth="4"
                                 strokeLinecap="round"
@@ -293,8 +299,8 @@ const Timeline = () => {
                             </defs>
                         {/* Timeline points */}
                         {timelineData.map((item, index) => {
-                            const x = (index + 1) * (1200 / (timelineData.length + 1));
-                            const y = 450 - (x - 0) * (360 / 1200); // Calculate y position along the line with 0.4667 slope
+                            const x = 100 + (index + 1) * (1000 / (timelineData.length + 1)); // Distribute points evenly along the 1000px line
+                            const y = 300; // Fixed y position for straight horizontal line
                             
                             return (
                                 <g key={index}>
@@ -318,8 +324,7 @@ const Timeline = () => {
                 {/* Enhanced Timeline Content */}
                 <div className="absolute inset-0">
                         {timelineData.map((item, index) => {
-                            const leftPercent = ((index + 1) / (timelineData.length + 1)) * 100;
-                            const topPercent = 75 - (leftPercent * 0.4667);
+                            const leftPercent = 8.33 + ((index + 1) / (timelineData.length + 1)) * 83.33; // Distribute evenly from 8.33% to 91.67%
                             
                             return (
                                 <div
@@ -327,14 +332,14 @@ const Timeline = () => {
                                     className="absolute transform -translate-x-1/2"
                                     style={{
                                         left: `${leftPercent}%`,
-                                        top: `${topPercent}%`
+                                        top: `50%`
                                     }}
                                 >
-                                    {/* Enhanced Year */}
-                                    <div className="relative">
+                                    {/* Phase Label Above */}
+                                    <div className="absolute bottom-full mb-6 left-1/2 transform -translate-x-1/2">
                                         <h3 
                                             ref={el => yearRefs.current[index] = el}
-                                            className="text-5xl md:text-7xl font-bold text-white mb-2 text-center relative"
+                                            className="text-2xl md:text-3xl font-bold text-white text-center relative whitespace-nowrap"
                                             style={{
                                                 background: 'linear-gradient(135deg, #888888, #ffffff, #cccccc)',
                                                 WebkitBackgroundClip: 'text',
@@ -344,38 +349,58 @@ const Timeline = () => {
                                             }}
                                         >
                                             {item.year}
-                                            {/* Year backdrop glow */}
+                                            {/* Phase backdrop glow */}
                                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-lg blur-xl -z-10"></div>
                                         </h3>
-                                        
-                                        {/* Enhanced Description */}
-                                        <div 
-                                            className={`absolute ${
-                                                item.position === 'above' 
-                                                    ? 'bottom-full mb-10' 
-                                                    : 'top-full mt-10'
-                                            } left-1/2 transform -translate-x-1/2 whitespace-nowrap`}
-                                        >
-                                            <div className="text-center p-4 rounded-lg backdrop-blur-sm border border-white/10 bg-black/20">
-                                                <p className="text-sm text-white font-semibold mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
-                                                    {item.date}
-                                                </p>
-                                                <p className="text-xs text-[#cccccc] max-w-40 mx-auto leading-relaxed drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-                                                    {item.description}
-                                                </p>
-                                                {/* Description accent line */}
-                                                <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto mt-2"></div>
-                                            </div>
-
-                                            <BorderBeam
-                                    duration={6}
-                                    delay={3}
-                                    size={100}
-                                    borderWidth={2}
-                                    className="from-transparent via-white to-transparent"
-                                />
-
+                                    </div>
+                                    
+                                    {/* Enhanced Phase Description Box */}
+                                    <div className="absolute top-full mt-6 left-1/2 transform -translate-x-1/2">
+                                        <div className="text-center p-6 rounded-lg backdrop-blur-sm border border-white/10 bg-black/20 min-w-[280px] max-w-[320px]">
+                                            {/* Phase Number */}
+                                            <p className="text-base text-white font-semibold mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+                                                {item.phase}
+                                            </p>
+                                            
+                                            {/* Phase Title in Chinese */}
+                                            <h4 className="text-base text-white font-bold mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+                                                {item.title}
+                                            </h4>
+                                            
+                                            {/* Phase Title in English */}
+                                            <p className="text-sm text-[#cccccc] mb-3 italic drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
+                                                {item.subtitle}
+                                            </p>
+                                            
+                                            {/* Main Description */}
+                                            <p className="text-sm text-[#cccccc] leading-relaxed mb-4 drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
+                                                {item.description}
+                                            </p>
+                                            
+                                            {/* Key Points */}
+                                            {item.keyPoints && item.keyPoints.length > 0 && (
+                                                <div className="text-left space-y-2">
+                                                    <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto mb-3"></div>
+                                                    {item.keyPoints.slice(0, 2).map((point, pointIndex) => (
+                                                        <p key={pointIndex} className="text-xs text-[#aaaaaa] leading-relaxed drop-shadow-[0_0_3px_rgba(255,255,255,0.1)]">
+                                                            • {point}
+                                                        </p>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            
+                                            {/* Description accent line */}
+                                            <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto mt-4"></div>
                                         </div>
+
+                                        <BorderBeam
+                                duration={6}
+                                delay={3}
+                                size={100}
+                                borderWidth={2}
+                                className="from-transparent via-white to-transparent"
+                            />
+
                                     </div>
                                 </div>
                             );

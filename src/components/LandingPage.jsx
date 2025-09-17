@@ -1,6 +1,7 @@
 
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import  Navbar from './ui/Navbar';
+import WaveBackground from './WaveBackground';
 
 
 const World = lazy(() => import("../components/ui/globe").then((m) => ({ default: m.World })));
@@ -161,18 +162,18 @@ const LandingPage = () => {
         <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
           <div className="flex flex-col space-y-2">
             <div className="flex items-baseline space-x-6">
-              <h2 className="text-white text-[1.5vw] font-extralight tracking-[0.2em]">
+              <h2 className="text-white text-[2vw] font-extralight tracking-[0.2em]">
                 {current.line1}
               </h2>
-              <span className="text-gray-400 text-4xl font-light tracking-widest">
+              <span className="text-gray-400 text-4xl font-extralight tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 {current.line1English}
               </span>
             </div>
             <div className="flex items-baseline space-x-6 pl-12">
-              <span className="text-gray-400 text-4xl font-light tracking-widest">
+              <span className="text-gray-400 text-4xl font-extralight tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 {current.line2}
               </span>
-              <h2 className="text-white text-[1.5vw] font-extralight tracking-[0.2em]">
+              <h2 className="text-white text-[2vw] font-extralight tracking-[0.2em]">
                 {current.line2Chinese}
               </h2>
             </div>
@@ -182,14 +183,14 @@ const LandingPage = () => {
     } else if (currentSubtitleIndex === 1) {
       return (
         <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
-          <div className="space-y-3">
-            <div className="text-white text-3xl font-light tracking-wide leading-relaxed">
+          <div className="space-y-6">
+            <div className="text-white text-4xl font-light tracking-wide leading-relaxed">
               {current.line1}
             </div>
-            <div className="text-gray-300 text-2xl font-light tracking-wide leading-relaxed pl-4">
+            <div className="text-gray-300 text-3xl font-light tracking-wide leading-relaxed pl-4">
               {current.line2}
             </div>
-            <div className="text-gray-300 text-2xl font-light tracking-wide leading-relaxed pl-4">
+            <div className="text-gray-300 text-3xl font-light tracking-wide leading-relaxed pl-4">
               {current.line3}
             </div>
           </div>
@@ -198,17 +199,17 @@ const LandingPage = () => {
     } else {
       return (
         <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
-          <div className="space-y-3">
+          <div className="space-y-6">
             <div className="text-white text-4xl font-light tracking-wide leading-relaxed">
               {current.line1}
             </div>
-            <div className="text-gray-300 text-2xl font-light tracking-wide leading-relaxed">
+            <div className="text-gray-100 text-3xl font-light tracking-wide leading-relaxed">
               {current.line2}
             </div>
-            <div className="text-gray-300 text-xl font-light tracking-wide leading-relaxed">
+            <div className="text-gray-100 text-3xl font-light tracking-wide leading-relaxed">
               {current.line3}
             </div>
-            <div className="text-gray-300 text-xl font-light tracking-wide leading-relaxed">
+            <div className="text-gray-100 text-3xl font-light tracking-wide leading-relaxed">
               {current.line4}
             </div>
           </div>
@@ -236,24 +237,14 @@ const LandingPage = () => {
         }}
       /> */}
 
-      <div className="relative -z-10 flex h-full"
-        style={{
-          background: `
-          radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
-          linear-gradient(0deg, rgb(191, 191, 189), #000000f0 70%)
-        `
-        }}
+      <div className="relative z-10 flex h-full"
+     
       >
         {/* Content Section */}
         <div className="w-1/2 flex flex-col justify-center pl-24 pr-8">
           {/* Main Title */}
           <h1 className="text-white mb-12">
-            <span className="text-[120px] font-thin tracking-[0.15em] leading-none block">
-              Prism
-            </span>
-            <span className="text-[70px] font-extralight tracking-[0.3em] opacity-80 ml-2">
-              瓴境
-            </span>
+      <img src="./img/logos/prism.svg" alt="" />
           </h1>
           
           {/* Morphing Subtitles */}
@@ -261,11 +252,18 @@ const LandingPage = () => {
             {renderSubtitle()}
           </div>
 
-          {/* Vertical divider lines */}
-          <div className="absolute left-8 top-1/4 h-1/2 flex flex-col justify-between">
-            <div className="w-px h-24 bg-gradient-to-b from-transparent via-white to-transparent opacity-20"></div>
-            <div className="w-px h-24 bg-gradient-to-b from-transparent via-white to-transparent opacity-20"></div>
-            <div className="w-px h-24 bg-gradient-to-b from-transparent via-white to-transparent opacity-20"></div>
+          {/* Vertical progress indicators for subtitle transitions */}
+          <div className="absolute left-8 top-[43%] h-1/2 flex flex-col gap-16">
+            {subtitleVariations.map((_, index) => (
+              <div
+                key={index}
+                className={`w-1 h-24 border border-gray-400 transition-all duration-500 ${
+                  index === currentSubtitleIndex 
+                    ? 'shadow-lg shadow-white/80 border-white bg-white' 
+                    : 'border-opacity-30'
+                }`}
+              />
+            ))}
           </div>
         </div>
 
@@ -284,19 +282,9 @@ const LandingPage = () => {
         </div>
       </div>
 
-   
+      {/* Wave Background at the bottom */}
+      <WaveBackground />
 
-      {/* Progress indicators for subtitle transitions */}
-      <div className="absolute bottom-24 left-24 flex space-x-2 z-30">
-        {subtitleVariations.map((_, index) => (
-          <div
-            key={index}
-            className={`h-1 transition-all duration-300 ${
-              index === currentSubtitleIndex ? 'w-8 bg-white' : 'w-2 bg-gray-600'
-            }`}
-          />
-        ))}
-      </div>
     </div>
   );
 };

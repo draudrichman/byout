@@ -1,17 +1,5 @@
 @import "tailwindcss";
 
-/* Retro-Futuristic FUI CSS Variables */
-:root {
-  --fui-primary: #6b7280; /* Silver gray */
-  --fui-secondary: #9ca3af; /* Light silver */
-  --fui-accent: #d1d5db; /* Light gray accent */
-  --fui-warning: #f59e0b; /* Amber */
-  --fui-background: #ffffff; /* White background */
-  --fui-surface: #f9fafb; /* Light surface */
-  --fui-border: #e5e7eb; /* Light border */
-  --fui-text: #374151; /* Dark gray text */
-  --fui-text-dim: #6b7280; /* Dimmed text */
-}
 
 body{
   background: #000000;
