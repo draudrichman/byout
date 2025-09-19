@@ -29,9 +29,8 @@ const Navbar = () => {
           <div className="flex items-center justify-between px-8 py-4">
             {/* Logo with FUI styling */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-gray-600 to-gray-400 relative">
-                <span className="text-white font-bold text-2xl leading-none font-mono">∞</span>
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gray-600 to-gray-400 opacity-50 animate-pulse"></div>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center relative">
+                <img src="./img/logos/icon.svg" alt="Logo" className="w-h-16 h-16 text-white" />
               </div>
               <span className="text-white font-bold text-xl tracking-wider font-mono fui-text-glow">
                 PRISM

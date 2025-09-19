@@ -481,7 +481,78 @@ a:focus-visible {
 	background-color: var(--color-bg-alt);
 }
 
+.detail-visible .frame {
+	opacity: 0;
+	z-index: 100;
+	color: var(--color-frame-alt);
+}
 
+.detail-visible a:hover {
+	color: var(--color-link-hover-alt);
+}
+
+/* Tech Details Styles */
+.tech-details {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	grid-area: content;
+	pointer-events: none;
+	z-index: 9999;
+	padding: 1.5rem 2.5rem 3rem;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 100%;
+	background-color: #000000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Show tech-details only when there's an active detail */
+.tech-details.active {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.tech-detail {
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	top: 0;
+	color: var(--color-text-alt);
+	overflow-y: auto;
+}
+
+.tech-detail--current {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.detail-text {
+	will-change: transform;
+	display: block;
+}
+
+.detail-back {
+	will-change: transform, opacity;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.detail-back svg {
+	stroke: currentColor;
+	fill: none;
+	stroke-width: 2;
+}
 
 /* Font imports - add these to your index.css or main CSS file */
 @import url('https://use.typekit.net/ehl0ehl.css');
