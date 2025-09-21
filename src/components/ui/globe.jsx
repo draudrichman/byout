@@ -43,6 +43,7 @@ export function Globe({ globeConfig, data }) {
     shininess: globeConfig.shininess || 100, // High shininess for glass
     arcTime: 2000,
     arcLength: 0.9,
+    ringColor: "#000000",
     rings: 1,
     maxRings: 3,
     globeOpacity: globeConfig.globeOpacity || 0.4, // More visible glass
@@ -51,40 +52,7 @@ export function Globe({ globeConfig, data }) {
     ...globeConfig,
   }), [globeConfig]);
 
-  // Create metallic point materials
-  const createMetallicPointMaterial = useCallback((color, opacity = 1) => {
-    const metallicIntensity = defaultProps.metallicIntensity || 0.9;
-    const glowIntensity = defaultProps.glowIntensity || 0.8;
-    const material = new MeshPhysicalMaterial({
-      color: new Color(color),
-      metalness: metallicIntensity,
-      roughness: 0.05, // Even smoother for more shine
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.05,
-      emissive: new Color(color),
-      emissiveIntensity: 0.4 + (glowIntensity * 0.3), // Enhanced emissive based on glow intensity
-      transparent: true,
-      opacity: opacity,
-      envMapIntensity: 1.5, // Higher environment map intensity
-      reflectivity: 1.0,
-    });
-    return material;
-  }, [defaultProps.metallicIntensity, defaultProps.glowIntensity]);
-
-  // Create glow material for outer shell
-  const createGlowMaterial = useCallback((color, opacity = 0.3) => {
-    const glowIntensity = defaultProps.glowIntensity || 0.8;
-    const material = new MeshStandardMaterial({
-      color: new Color(color),
-      emissive: new Color(color),
-      emissiveIntensity: glowIntensity * 1.5, // Enhanced glow
-      transparent: true,
-      opacity: opacity,
-      side: 2, // DoubleSide
-      blending: 1, // AdditiveBlending for stronger glow
-    });
-    return material;
-  }, [defaultProps.glowIntensity]);
+ 
 
   // Initialize globe only once with improved error handling
   useEffect(() => {
@@ -325,7 +293,7 @@ export function Globe({ globeConfig, data }) {
           
           return arcGroup;
         });
-
+ const colorInterpolator = t => `rgba(255,100,50,${Math.sqrt(1-t)})`;
       // Disable default points since we're using custom metallic ones
       globeRef.current
         .pointsData([])
@@ -335,11 +303,11 @@ export function Globe({ globeConfig, data }) {
         .pointAltitude(0.0)
         .pointRadius(defaultProps.particlesSize);
 
-      // Enhanced rings setup
+      // Enhanced rings setup with prominent green color
       globeRef.current
         .ringsData([])
-        .ringColor(() => defaultProps.polygonColor)
-        .ringMaxRadius(defaultProps.maxRings)
+        
+        .ringMaxRadius(8) // Increased max radius for more prominent rings
         .ringPropagationSpeed(RING_PROPAGATION_SPEED)
         .ringRepeatPeriod((defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings);
 
@@ -369,13 +337,25 @@ export function Globe({ globeConfig, data }) {
         const ringCount = Math.floor((data.length * 4) / 5);
         const newNumbersOfRings = genRandomNumbers(0, data.length, Math.min(ringCount, data.length));
 
-        const ringsData = data
+        // Create rings at both start points and end points (landing locations)
+        const startRingsData = data
           .filter((d, i) => newNumbersOfRings.includes(i) && d?.startLat != null && d?.startLng != null)
           .map((d) => ({
             lat: d.startLat,
             lng: d.startLng,
-            color: d.color || "#ffffff",
+            color: "#00ff88", // Green color for all rings
           }));
+
+        const endRingsData = data
+          .filter((d, i) => newNumbersOfRings.includes(i) && d?.endLat != null && d?.endLng != null)
+          .map((d) => ({
+            lat: d.endLat,
+            lng: d.endLng,
+            color: "#00ff88", // Green color for all rings
+          }));
+
+        // Combine both start and end rings
+        const ringsData = [...startRingsData, ...endRingsData];
 
         globeRef.current.ringsData(ringsData);
       } catch (error) {

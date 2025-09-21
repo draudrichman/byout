@@ -1,15 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import GlowCircle from './GlowCircle';
 
 // Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const HorizontalTimeline = () => {
     const sectionRef = useRef(null);
     const trackRef = useRef(null);
     const progressBarRef = useRef(null);
     const progressIndicatorRef = useRef(null);
+    const titleRef = useRef(null);
+    const serviceTitleRef = useRef(null); // New ref for Service Process title
     const yearRefs = useRef([]);
     const itemRefs = useRef([]);
 
@@ -80,20 +84,105 @@ const HorizontalTimeline = () => {
         }
     ];
 
+    // Service Process title animation
     useEffect(() => {
-        if (!sectionRef.current || !trackRef.current) return;
+        if (serviceTitleRef.current) {
+            // Split text into characters for animation
+            const split = new SplitText(serviceTitleRef.current, { type: "words, chars" });
+            
+            console.log("Service Process split text chars:", split.chars); // Debug log
+            
+            // Set initial state - characters positioned well below to animate upward
+            gsap.set(split.chars, {
+                opacity: 0,
+                y: 150, // Characters start well below the overflow boundary
+                rotationX: 0, // Remove rotation for cleaner upward movement
+                transformOrigin: "center bottom",
+                // "--blur": "10px",
+            });
+
+            // Apply blur effect and gradient to individual characters
+            split.chars.forEach((char, index) => {
+                char.style.filter = "blur(var(--blur))";
+                // Calculate gradient position for each character
+                const progress = index / (split.chars.length - 1);
+                const color = getGradientColor(progress);
+                char.style.color = color;
+            });
+
+            // Function to calculate gradient color based on position
+            function getGradientColor(progress) {
+                // Create smooth gradient from #444444 -> white -> #444444
+                if (progress <= 0.5) {
+                    // First half: #444444 to white
+                    const factor = progress * 2;
+                    const gray = Math.round(68 + (255 - 68) * factor);
+                    return `rgb(${gray}, ${gray}, ${gray})`;
+                } else {
+                    // Second half: white to #444444
+                    const factor = (progress - 0.5) * 2;
+                    const gray = Math.round(255 - (255 - 68) * factor);
+                    return `rgb(${gray}, ${gray}, ${gray})`;
+                }
+            }
+
+            // Create scroll-scrubbed animation
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: serviceTitleRef.current,
+                    start: "top 90%",
+                    end: "top 30%",
+                    scrub: true, // Smooth scrub animation tied to scroll
+                    onStart: () => console.log("Service Process animation started"), // Debug log
+                    onComplete: () => console.log("Service Process animation completed"), // Debug log
+                }
+            });
+
+            tl.to(split.chars, {
+                // duration: 1.2,
+                opacity: 1,
+                y: 0, // Animate to final position
+                // "--blur": "0px",
+                stagger: 0.007, // Slightly increased stagger for more pronounced effect
+                ease: "power3.out", // Smoother easing for upward movement
+                onUpdate: function() {
+                    // Update the filter during animation
+                    this.targets().forEach(char => {
+                        char.style.filter = `blur(${char.style.getPropertyValue('--blur')})`;
+                    });
+                }
+            });
+
+            // Store the timeline for cleanup
+            return () => {
+                tl.kill();
+                split.revert();
+            };
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!sectionRef.current) return;
 
         const section = sectionRef.current;
-        const track = trackRef.current;
         const items = itemRefs.current;
         const years = yearRefs.current;
 
-        // Set initial states
+        // Set initial states - hide all items except the first
         gsap.set(items, { 
-            opacity: 0.3, 
+            opacity: 0,
             scale: 0.8,
             filter: "blur(5px)"
         });
+
+        // Show first item initially
+        if (items[0]) {
+            gsap.set(items[0], {
+                opacity: 1,
+                scale: 1,
+                filter: "blur(0px)"
+            });
+        }
 
         gsap.set(progressIndicatorRef.current, {
             scaleX: 0,
@@ -101,25 +190,15 @@ const HorizontalTimeline = () => {
         });
 
         const setupAnimation = () => {
-            // Calculate total scroll distance based on device
-            const isMobile = window.innerWidth < 768;
-            const trackWidth = track.scrollWidth;
-            const viewportWidth = window.innerWidth;
-            const scrollDistance = trackWidth - viewportWidth;
+            const totalItems = timelineData.length;
+            const scrollDistance = window.innerHeight * 2; // Fixed scroll distance for smoother experience
 
-            // Create horizontal scroll animation
-            const horizontalTween = gsap.to(track, {
-                x: -scrollDistance,
-                ease: "none"
-            });
-
-            // Create ScrollTrigger for pinning and horizontal scroll
+            // Create ScrollTrigger for pinning and content transitions
             return ScrollTrigger.create({
                 trigger: section,
                 start: "top top",
-                end: () => `+=${scrollDistance + (isMobile ? window.innerHeight * 0.5 : window.innerHeight)}`,
+                end: `+=${scrollDistance}`,
                 pin: true,
-                animation: horizontalTween,
                 scrub: 1,
                 invalidateOnRefresh: true,
                 onUpdate: (self) => {
@@ -130,41 +209,52 @@ const HorizontalTimeline = () => {
                         scaleX: progress
                     });
 
-                    // Calculate which item should be focused
-                    const totalItems = timelineData.length;
+                    // Calculate which item should be active
                     const itemProgress = progress * (totalItems - 1);
+                    const currentIndex = Math.round(itemProgress);
+                    const clampedIndex = Math.max(0, Math.min(currentIndex, totalItems - 1));
 
-                    // Update item states with enhanced mobile responsiveness
+                    // Update title with smooth transition
+                    if (titleRef.current) {
+                        const newTitle = timelineData[clampedIndex].title;
+                        if (titleRef.current.textContent !== newTitle) {
+                            // Animate title change with fade out, change text, fade in
+                            gsap.to(titleRef.current, {
+                                opacity: 0,
+                                y: -20,
+                                duration: 0.3,
+                                ease: "power2.out",
+                                onComplete: () => {
+                                    titleRef.current.textContent = newTitle;
+                                    gsap.to(titleRef.current, {
+                                        opacity: 1,
+                                        y: 0,
+                                        duration: 0.4,
+                                        ease: "power2.out"
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                    // Update item visibility - only show current item
                     items.forEach((item, index) => {
                         if (!item) return;
 
-                        const distance = Math.abs(index - itemProgress);
-                        const isFocused = distance < 0.5;
-                        const isAdjacent = distance < 1.5;
-                        
-                        if (isFocused) {
-                            // Focused item - full opacity and scale with enhanced animation
+                        if (index === clampedIndex) {
+                            // Active item - full visibility with smooth transition
                             gsap.to(item, {
                                 opacity: 1,
-                                scale: isMobile ? 0.95 : 1,
+                                scale: 1,
                                 filter: "blur(0px)",
-                                duration: 0.4,
-                                ease: "power2.out"
-                            });
-                        } else if (isAdjacent) {
-                            // Adjacent items - partially visible
-                            gsap.to(item, {
-                                opacity: 0.6,
-                                scale: isMobile ? 0.85 : 0.9,
-                                filter: "blur(2px)",
-                                duration: 0.4,
+                                duration: 0.6,
                                 ease: "power2.out"
                             });
                         } else {
-                            // Distant items - minimal visibility
+                            // Hidden items
                             gsap.to(item, {
-                                opacity: 0.3,
-                                scale: isMobile ? 0.75 : 0.8,
+                                opacity: 0,
+                                scale: 0.8,
                                 filter: "blur(5px)",
                                 duration: 0.4,
                                 ease: "power2.out"
@@ -176,12 +266,11 @@ const HorizontalTimeline = () => {
                     years.forEach((year, index) => {
                         if (!year) return;
                         
-                        const yearProgress = index / (totalItems - 1);
-                        const isActive = Math.abs(progress - yearProgress) < 0.15;
+                        const isActive = index === clampedIndex;
                         
                         gsap.to(year, {
                             color: isActive ? "#ffffff" : "#666666",
-                            scale: isActive ? (isMobile ? 1.1 : 1.2) : 1,
+                            scale: isActive ? 1.2 : 1,
                             duration: 0.3,
                             ease: "power2.out"
                         });
@@ -201,6 +290,7 @@ const HorizontalTimeline = () => {
                             });
                         }
                     });
+
                 }
             });
         };
@@ -245,6 +335,26 @@ const HorizontalTimeline = () => {
                     opacity: 1;
                 }
             }
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(0px) translateX(0px);
+                    opacity: 0.3;
+                }
+                50% {
+                    transform: translateY(-20px) translateX(10px);
+                    opacity: 0.7;
+                }
+            }
+            @keyframes pulse {
+                0% {
+                    opacity: 0.3;
+                    transform: scale(1);
+                }
+                100% {
+                    opacity: 0.1;
+                    transform: scale(1.05);
+                }
+            }
         `;
         document.head.appendChild(style);
         
@@ -258,17 +368,125 @@ const HorizontalTimeline = () => {
             ref={sectionRef}
             className="timeline relative w-full h-screen bg-black overflow-hidden"
         >
-            {/* Timeline Track */}
+            {/* Background Effects */}
+            <div className="absolute inset-0 pointer-events-none">
+                {/* Glow Circles */}
+                <GlowCircle 
+                    color="rgba(59, 130, 246, 0.15)" 
+                    size="600px" 
+                    blur="120px" 
+                    left="20%" 
+                    top="30%" 
+                    zIndex="-1"
+                    className="animate-pulse"
+                    style={{animationDuration: '6s'}}
+                />
+                <GlowCircle 
+                    color="rgba(147, 51, 234, 0.12)" 
+                    size="800px" 
+                    blur="150px" 
+                    left="80%" 
+                    top="70%" 
+                    zIndex="-1"
+                    className="animate-pulse"
+                    style={{animationDuration: '8s', animationDelay: '2s'}}
+                />
+                <GlowCircle 
+                    color="rgba(236, 72, 153, 0.1)" 
+                    size="500px" 
+                    blur="100px" 
+                    left="60%" 
+                    top="20%" 
+                    zIndex="-1"
+                    className="animate-pulse"
+                    style={{animationDuration: '10s', animationDelay: '4s'}}
+                />
+                <GlowCircle 
+                    color="rgba(34, 197, 94, 0.08)" 
+                    size="700px" 
+                    blur="140px" 
+                    left="10%" 
+                    top="80%" 
+                    zIndex="-1"
+                    className="animate-pulse"
+                    style={{animationDuration: '7s', animationDelay: '1s'}}
+                />
+                
+                {/* Animated gradient overlay */}
+                <div 
+                    className="absolute inset-0 opacity-20"
+                    style={{
+                        background: 'radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 50%)',
+                        animation: 'pulse 8s ease-in-out infinite alternate'
+                    }}
+                />
+                
+                {/* Floating particles */}
+                <div className="absolute inset-0">
+                    {[...Array(8)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white/30 rounded-full"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animation: `float ${4 + Math.random() * 3}s ease-in-out infinite`,
+                                animationDelay: `${Math.random() * 2}s`
+                            }}
+                        />
+                    ))}
+                </div>
+                
+                {/* Subtle grid pattern */}
+                <div 
+                    className="absolute inset-0 opacity-3"
+                    style={{
+                        backgroundImage: `
+                            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '60px 60px'
+                    }}
+                />
+            </div>
+      
+        
+     {/* Crimson Core Glow */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+             "radial-gradient(45% 40% at 50% 50%, #c81e3a 0%, #a51d35 12%, #7d1a2f 25%, #591828 35%, #3c1722 45%, #2a151d 55%, #1f1317 65%, #141013 75%, #0a0a0a 85%, #000000 100%), #000000",
+        }}
+      />
+      {/* Strong vignette for full black edges */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,1) 100%)",
+        }}
+      />
+
+      {/* Service Process Title */}
+      <div className="text-center pt-28">
+        <h2 className="text-7xl md:text-9xl font-bold mb-6 relative overflow-hidden">
+                            <span ref={serviceTitleRef} className="text-white block">
+                           Service Process
+                            </span>
+                        </h2>
+        </div>
+
+            {/* Timeline Track - Centered Items */}
             <div 
                 ref={trackRef}
-                className="timeline-track absolute top-0 left-0 h-full flex items-center"
-                style={{ width: `${timelineData.length * 100}vw` }}
+                className="timeline-track absolute top-0 left-0 w-full h-full flex items-center justify-center"
             >
                 {timelineData.map((item, index) => (
                     <div
                         key={index}
                         ref={(el) => itemRefs.current[index] = el}
-                        className="flex-shrink-0 w-screen h-full flex items-center justify-center px-8 md:px-16"
+                        className="absolute w-full h-full flex items-center justify-center px-8 md:px-16"
                     >
                         <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                             {/* Content Side */}
@@ -331,9 +549,32 @@ const HorizontalTimeline = () => {
                 ))}
             </div>
 
+      
+
             {/* Progress Bar */}
             <div className="absolute bottom-8 left-0 w-full px-6 md:px-12">
                 <div className="relative">
+                    {/* Phase Titles Above Progress Bar */}
+                    <div className="flex justify-between items-center mb-6">
+                        {timelineData.map((item, index) => (
+                            <div key={index} className="flex flex-col items-center" style={{minWidth: 0}}>
+                                <div 
+                                    className="text-sm md:text-base lg:text-lg font-bold text-center whitespace-nowrap"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #444444 0%, #ffffff 50%, #444444 100%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        backgroundClip: 'text',
+                                        textShadow: '0 0 20px rgba(255, 255, 255, 0.3)',
+                                        filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))'
+                                    }}
+                                >
+                                    {item.title}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    
                     {/* Progress Track */}
                     <div 
                         ref={progressBarRef}
@@ -371,10 +612,13 @@ const HorizontalTimeline = () => {
                         </div>
                     </div>
 
+
+
+
                     {/* Year Markers */}
                     <div className="flex justify-between items-center mt-6">
                         {timelineData.map((item, index) => (
-                            <div key={index} className="flex flex-col items-center">
+                            <div key={index} className="flex flex-col items-center" style={{minWidth: 0}}>
                                 <div 
                                     className="w-3 h-3 bg-white/60 rounded-full mb-3 shadow-lg"
                                     style={{

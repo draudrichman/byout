@@ -220,10 +220,17 @@ const LandingPage = () => {
 
   return (
     <div className='w-screen h-screen overflow-hidden relative'
+style={{
+  background: `
+  radial-gradient(circle at center, #141414 0, #cbcbcb00 100%), linear-gradient(2deg, #c7c7c7, transparent 40%)
+  `
+}}
+
     >
       {/* Navigation */}
       <Navbar />
-
+      {/* radial-gradient(circle at center, #141414 0, transparent 100%), linear-gradient(
+        2deg, #c9c9c9, transparent 40%) */}
      
 
       {/* Background gradient */}
@@ -248,7 +255,7 @@ const LandingPage = () => {
           </h1>
           
           {/* Morphing Subtitles */}
-          <div className="mb-16 min-h-[200px]">
+          <div className="mb-16 pl-3 min-h-[200px]">
             {renderSubtitle()}
           </div>
 
@@ -283,7 +290,7 @@ const LandingPage = () => {
       </div>
 
       {/* Wave Background at the bottom */}
-      <WaveBackground />
+      {/* <WaveBackground /> */}
 
     </div>
   );

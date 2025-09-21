@@ -26,15 +26,13 @@ const Navbar = () => {
               : 'shadow-xl shadow-gray-400/30'
           } border border-gray-300/30 bg-white/90`}
         >
-          <div className="flex items-center justify-between px-8 py-4">
+          <div className="flex items-center justify-between px-2 ">
             {/* Logo with FUI styling */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center relative">
-                <img src="./img/logos/icon.svg" alt="Logo" className="w-h-16 h-16 text-white" />
+            <div className="flex items-center ">
+              <div className=" rounded-lg flex items-center justify-center relative">
+                <img src="./img/logos/icon.svg" width={90} height={90} alt="Logo" className=" text-white" />
               </div>
-              <span className="text-white font-bold text-xl tracking-wider font-mono fui-text-glow">
-                PRISM
-              </span>
+            
             </div>
 
             {/* Navigation Links with FUI styling */}

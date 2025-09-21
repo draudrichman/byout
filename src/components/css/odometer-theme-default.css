@@ -24,7 +24,7 @@
   visibility: hidden;
 }
 .odometer.odometer-auto-theme .odometer-digit .odometer-digit-inner, .odometer.odometer-theme-digital .odometer-digit .odometer-digit-inner {
-  text-align: left;
+  text-align: center;
   display: block;
   position: absolute;
   top: 0;

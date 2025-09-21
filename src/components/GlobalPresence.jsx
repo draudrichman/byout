@@ -30,13 +30,13 @@ const GlobalPresence = () => {
       
       console.log("Global Presence split text chars:", split.chars); // Debug log
       
-      // Set initial state - blurred and invisible
+      // Set initial state - characters positioned well below to animate upward
       gsap.set(split.chars, {
         opacity: 0,
-        y: 50,
-        rotationX: 90,
-        transformOrigin: "0% 50% -50px",
-        "--blur": "10px",
+        y: 150, // Characters start well below the overflow boundary
+        rotationX: 0, // Remove rotation for cleaner upward movement
+        transformOrigin: "center bottom",
+        // "--blur": "10px",
       });
 
       // Apply blur effect and gradient to individual characters
@@ -64,26 +64,25 @@ const GlobalPresence = () => {
         }
       }
 
-      // Create scroll-triggered animation
+      // Create scroll-scrubbed animation
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: titleRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
+          start: "top 90%",
+          end: "top 30%",
+          scrub: true, // Smooth scrub animation tied to scroll
           onStart: () => console.log("Global Presence animation started"), // Debug log
           onComplete: () => console.log("Global Presence animation completed"), // Debug log
         }
       });
 
       tl.to(split.chars, {
-        duration: 1,
+        // duration: 1.2,
         opacity: 1,
-        y: 0,
-        rotationX: 0,
-        "--blur": "0px",
-        stagger: 0.02,
-        ease: "back.out(1.7)",
+        y: 0, // Animate to final position
+        // "--blur": "0px",
+        stagger: 0.007, // Slightly increased stagger for more pronounced effect
+        ease: "power3.out", // Smoother easing for upward movement
         onUpdate: function() {
           // Update the filter during animation
           this.targets().forEach(char => {
@@ -215,8 +214,8 @@ const GlobalPresence = () => {
 
         {/* Enhanced Header */}
         <div className="text-center mb-16">
-        <h2 className="text-7xl md:text-9xl font-bold mb-6 relative">
-                            <span ref={titleRef} className="text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]">
+        <h2 className="text-7xl md:text-9xl font-bold mb-6 relative overflow-hidden">
+                            <span ref={titleRef} className="text-white block">
                            Global Presence
                             </span>
                         </h2>

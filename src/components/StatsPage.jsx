@@ -12,10 +12,10 @@ const StatsPage = () => {
     const titleRef = useRef(null);
     const statsRef = useRef(null);
     const [stats, setStats] = useState([
-        { value: 0, target: 250, label: 'Happy Customers', description: 'Satisfied clients worldwide' },
-        { value: 0, target: 500, label: 'Projects Completed', description: 'Successful deliveries on time' },
-        { value: 0, target: 99, label: 'Success Rate', description: 'Exceeding expectations consistently' },
-        { value: 0, target: 24, label: 'Years Experience', description: 'Building trust and excellence' }
+        { value: 0, target: 100, label: '服务品牌', description: 'Brands Served' },
+        { value: 0, target: 7, label: '渠道覆盖国家', description: 'Countries with Retail Channels Coverage' },
+        { value: 0, target: 11, label: '累计销售额', description: 'Cumulative Sales' },
+        { value: 0, target: 91, label: '成功入驻产品', description: 'Products Listed' }
     ]);
 
     useEffect(() => {
@@ -63,13 +63,13 @@ const StatsPage = () => {
             
             console.log("Split text chars:", split.chars); // Debug log
             
-            // Set initial state - blurred and invisible
+            // Set initial state - characters positioned well below to animate upward
             gsap.set(split.chars, {
                 opacity: 0,
-                y: 50,
-                rotationX: 90,
-                transformOrigin: "0% 50% -50px",
-                "--blur": "10px",
+                y: 150, // Characters start well below the overflow boundary
+                rotationX: 0, // Remove rotation for cleaner upward movement
+                transformOrigin: "center bottom",
+                // "--blur": "10px",
             });
 
             // Apply blur effect and gradient to individual characters
@@ -97,13 +97,13 @@ const StatsPage = () => {
                 }
             }
 
-            // Create scroll-triggered animation
+            // Create scroll-scrubbed animation
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: titleRef.current,
-                    start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse",
+                    start: "top 90%",
+                    end: "top 30%",
+                    scrub: true, // Smooth scrub animation tied to scroll
                     onStart: () => console.log("Animation started"), // Debug log
                     onComplete: () => console.log("Animation completed"), // Debug log
                 }
@@ -112,13 +112,12 @@ const StatsPage = () => {
             
 
             tl.to(split.chars, {
-                duration: 1,
+                // duration: 1.2,
                 opacity: 1,
-                y: 0,
-                rotationX: 0,
-                "--blur": "0px",
-                stagger: 0.02,
-                ease: "back.out(1.7)",
+                y: 0, // Animate to final position
+                // "--blur": "0px",
+                stagger: 0.007, // Slightly increased stagger for more pronounced effect
+                ease: "power3.out", // Smoother easing for upward movement
                 onUpdate: function() {
                     // Update the filter during animation
                     this.targets().forEach(char => {
@@ -136,11 +135,10 @@ const StatsPage = () => {
     }, []);
     return (
         <section
-            className="py-20 relative w-full overflow-hidden"
+            className="py-60 relative h-1/2 overflow-hidden"
             style={{
                 background: `
-                 radial-gradient(circle at bottom, rgb(0, 0, 0) 0px, #01010100 100%),
-    linear-gradient(180deg, rgb(191, 191, 189), #000000f0 70%)
+              radial-gradient(circle at center, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%), linear-gradient(rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 70%)
                 `
             }}
         >
@@ -158,8 +156,8 @@ const StatsPage = () => {
                         Our Achievements
                     </h2> */}
 
-                    <h2 className="text-7xl md:text-9xl font-bold mb-6 relative">
-                            <span ref={titleRef} className="text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]">
+                    <h2 className="text-7xl md:text-9xl font-bold mb-6 relative overflow-hidden">
+                            <span ref={titleRef} className="text-white  block">
                             Our Achievements
                             </span>
                         </h2>
@@ -171,11 +169,11 @@ const StatsPage = () => {
 
                 {/* Horizontal Stats Cards */}
 
-<div className='w-full p-10 rounded-lg border 0 '
-style={{
-    background: 'radial-gradient(100% 120% at 85% 0px, rgb(140 140 140), transparent 70%)',
+<div className='w-full p-10 rounded-lg  '
+// style={{
+//     background: 'radial-gradient(100% 120% at 85% 0px, rgb(140 140 140), transparent 70%)',
     
-}}
+// }}
 
 >
 
@@ -189,10 +187,7 @@ style={{
                         className="group relative flex-1"
                         style={{ animationDelay: `${index * 200}ms` }}
                         >
-                            {/* Animated border */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#aea9b4] to-[#232324] rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            {/* Card */}
+                        {/* Card */}
                             <div className="relative bg-black/40 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl h-72 flex flex-col justify-center">
                                 {/* Stat Value */}
                                 <div className="mb-4">
