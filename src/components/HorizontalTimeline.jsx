@@ -160,7 +160,6 @@ const HorizontalTimeline = () => {
             };
         }
     }, []);
-
     useEffect(() => {
         if (!sectionRef.current) return;
 

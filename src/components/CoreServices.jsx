@@ -3,8 +3,8 @@ import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
+import ShaderBackground from './ShaderBackground';
 import './css/CoverPageTransition.css';
-import ElectricBorder from './ui/electric-border';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -85,128 +85,109 @@ class TextLinesReveal {
   }
 }
 
-// TechnologyBox component
-const TechnologyBox = ({ data, index, onDetailClick, onVideoClick }) => {
-  const boxRef = useRef(null);
+// Item component
+const Item = ({ data, index, onItemClick }) => {
+  const itemRef = useRef(null);
+  const imageInnerRef = useRef(null);
 
   useEffect(() => {
-    const box = boxRef.current;
-    if (!box) return;
+    const link = itemRef.current?.querySelector('.item__link');
+    const imageInner = imageInnerRef.current;
+
+    if (!link || !imageInner) return;
 
     const handleMouseEnter = () => {
-      gsap.to(box, {
-        duration: 0.3,
-        scale: 1.02,
-        boxShadow: '0 20px 40px rgba(255,255,255,0.1)',
-        ease: 'power2.out'
+      gsap.killTweensOf(imageInner);
+      gsap.to(imageInner, {
+        duration: 2,
+        ease: 'power4',
+        scale: 1.2
       });
     };
 
     const handleMouseLeave = () => {
-      gsap.to(box, {
-        duration: 0.3,
-        scale: 0.98,
-        boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-        ease: 'power2.out'
+      gsap.killTweensOf(imageInner);
+      gsap.to(imageInner, {
+        duration: 0.7,
+        ease: 'expo',
+        scale: 1
       });
     };
 
-    box.addEventListener('mouseenter', handleMouseEnter);
-    box.addEventListener('mouseleave', handleMouseLeave);
+    link.addEventListener('mouseenter', handleMouseEnter);
+    link.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      box.removeEventListener('mouseenter', handleMouseEnter);
-      box.removeEventListener('mouseleave', handleMouseLeave);
+      link.removeEventListener('mouseenter', handleMouseEnter);
+      link.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 
   return (
-    <ElectricBorder
-    speed={1}
-    chaos={0.5}
-    thickness={2}
-    style={{ borderRadius: 16 }}
-    >
-
-    <div 
-      className="technology-box scale-[98%] relative p-12 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm border border-gray-700/30 rounded-2xl shadow-xl min-h-[400px] flex flex-col justify-between"
-      ref={boxRef}
-      >
-      <div>
-        {/* Title */}
-        <h3 className="text-2xl font-bold text-white mb-4 text-center border-b border-gray-600/30 pb-6">
-          {data.title}
-        </h3>
-        
-        {/* Subtitle */}
-        <p className="text-sm text-gray-300 text-center mb-8 leading-relaxed">
-          {data.subtitle}
-        </p>
+    <div className="item" ref={itemRef}>
+      <span className="item__meta">{data.year}</span>
+      <h2 className="item__title">{data.name}</h2>
+      <div className="item__img">
+        <div 
+          className="item__img-inner" 
+          ref={imageInnerRef}
+          style={{ backgroundImage: `url(${data.image})` }}
+        />
       </div>
-
-      {/* Action Buttons */}
-      <div className="flex gap-4 justify-center mt-auto">
-        <button 
-          onClick={() => onDetailClick(index)}
-          className="px-6 py-2 bg-transparent border border-gray-500/50 text-gray-300 rounded-lg hover:bg-white/10 hover:border-white/30 transition-all duration-300 text-sm"
-        >
-          detail
-        </button>
-        <button 
-          onClick={() => onVideoClick(index)}
-          className="px-6 py-2 bg-transparent border border-gray-500/50 text-gray-300 rounded-lg hover:bg-white/10 hover:border-white/30 transition-all duration-300 text-sm"
-          >
-          video
-        </button>
-      </div>
+      <p className="item__desc">{data.description}</p>
+      <a className="item__link" onClick={() => onItemClick(index)}>view</a>
     </div>
-</ElectricBorder>
   );
 };
 
-// AnimatedTechnologyDetail component matching original preview layout
-const AnimatedTechnologyDetail = ({ data, isActive, onBack }) => {
-  const detailRef = useRef(null);
+// Preview component
+const Preview = ({ data, isActive, onBack }) => {
+  const previewRef = useRef(null);
+  const textLinesRef = useRef([]);
+
+  useEffect(() => {
+    // Initialize text lines reveal for paragraphs
+    const paragraphs = previewRef.current?.querySelectorAll('.preview__column > p');
+    if (paragraphs) {
+      textLinesRef.current = Array.from(paragraphs).map(p => new TextLinesReveal(p));
+    }
+
+    return () => {
+      // Cleanup
+      textLinesRef.current = [];
+    };
+  }, []);
 
   return (
-    <div className={`preview ${isActive ? 'preview--current' : ''}`} ref={detailRef}>
+    <div className={`preview ${isActive ? 'preview--current' : ''}`} ref={previewRef}>
       <div className="preview__img">
         <div 
           className="preview__img-inner" 
-          style={{ 
-            backgroundImage: `linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)`,
-            backgroundSize: 'cover'
-          }} 
+          style={{ backgroundImage: `url(${data.bigImage})` }} 
         />
       </div>
       <h2 className="preview__title oh">
-        <span className="oh__inner">{data.title}</span>
+        <span className="oh__inner">{data.surname}</span>
       </h2>
       <div className="preview__column preview__column--start">
         <span className="preview__column-title preview__column-title--main oh">
-          <span className="oh__inner">{data.titleEn}</span>
+          <span className="oh__inner">{data.name}</span>
         </span>
         <span className="oh">
-          <span className="oh__inner">Core Technology</span>
+          <span className="oh__inner">{data.year}</span>
         </span>
       </div>
       <div className="preview__column">
         <h3 className="preview__column-title oh">
-          <span className="oh__inner">Description</span>
+          <span className="oh__inner">Location</span>
         </h3>
-        <p>{data.description}</p>
+        <p>{data.location}</p>
       </div>
       <div className="preview__column">
         <h3 className="preview__column-title oh">
-          <span className="oh__inner">Technical Features</span>
+          <span className="oh__inner">Material</span>
         </h3>
-        <div className="space-y-2">
-          {data.features.slice(0, 5).map((feature, index) => (
-            <p key={index} className="text-sm leading-relaxed">
-              {feature}
-            </p>
-          ))}
-        </div>
+        <p>{data.material}</p>
       </div>
       <button className="unbutton preview__back" onClick={onBack}>
         <svg width="100px" height="18px" viewBox="0 0 50 9">
@@ -217,89 +198,48 @@ const AnimatedTechnologyDetail = ({ data, isActive, onBack }) => {
   );
 };
 
-// Simple video modal (keeping original modal style for video)
-const VideoModal = ({ data, isActive, onBack }) => {
-  if (!isActive) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="relative w-full max-w-4xl mx-4">
-        <h2 className="text-3xl font-bold text-white mb-6 text-center">
-          {data.title} - Video Demo
-        </h2>
-        
-        <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center mb-6">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🎥</div>
-            <p className="text-lg">Video content will be displayed here</p>
-            <p className="text-sm mt-2">Integration with video player required</p>
-          </div>
-        </div>
-
-        <button 
-          className="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl font-bold"
-          onClick={onBack}
-        >
-          ×
-        </button>
-      </div>
-    </div>
-  );
-};
-
 // Main component
 const CoreServices = () => {
-  const [currentDetail, setCurrentDetail] = useState(null);
-  const [currentVideo, setCurrentVideo] = useState(null);
-  const [isDetailVisible, setIsDetailVisible] = useState(false);
-  const [isVideoVisible, setIsVideoVisible] = useState(false);
+  const [currentPreview, setCurrentPreview] = useState(null);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   
   const contentRef = useRef(null);
   const frameRef = useRef(null);
   const titleRef = useRef(null);
   const overlayRowsRef = useRef([]);
-  const detailsRef = useRef([]);
+  const previewsRef = useRef([]);
 
-  // Two core technologies data
-  const technologiesData = [
+  // Sample data - replace with your actual data
+  const itemsData = [
     {
-      id: 'hph',
-      title: 'HPH纳米破碎-动态交互',
-      titleEn: 'HPH Nano Crushing Dynamic Interaction',
-      subtitle: '世界顶尖的破碎科技双轴转载，革新产品全球竞争力',
-      subtitleEn: 'World-class crushing technology with dual-axis transfer, revolutionizing global product competitiveness',
-      description: '我们拥有内地**世界级的专利技术**，它针对产品非常的高效率。而是能够让产品全系列的商业模式价值链提升的高的要求。',
-      descriptionEn: 'We possess mainland China\'s **world-class patented technology**, which is highly efficient for products and can enhance the value chain of the entire product series business model.',
-      features: [
-        '**破碎器械（破碎应用）：**',
-        '**制造/维修：** 制造全套控制，水利系统，风雨系统，K线原理，风险无穷**最新系列**',
-        '**NFC类汇/检查蛋白：** 实现**无轮加速力**，K线原理，口感组织效率**，品质全面超越传统HPP及UHT技术产品**',
-        '**条纹级：** 实际内容的制作过程**制造级别**',
-        '**品质成（器械，复合调理计）：** 内外工艺流、听水、延伸上感应液体内保险含量**',
-        '**保质品/可爱食品：** 制作外观级别的制作过程，教育产品稳定性、设置及有效分解效率**',
-        '**大健康与美容装备：**',
-        '**山药材料光亮级：** 遵循有效分解基本制造流程，实现100%的材料利用**',
-        '**化妆品液/药膏：** 新药外观级别化体，提升产品稳定性、设置及有效分解效率收敛**'
-      ]
+      year: '',
+      name: 'Brand Development',
+      surname: 'Moulder',
+      image: "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1000&format=pjpg&exif=0&iptc=0",
+      bigImage: "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1000&format=pjpg&exif=0&iptc=0",
+      description: 'I am only waiting for love to give myself up at last into his hands. That is why it is so late and why I have been guilty of such omissions.',
+      location: 'And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.',
+      material: 'At the violet hour, when the eyes and back, turn upward from the desk, when the human engine waits.'
     },
     {
-      id: 'pef',
-      title: 'PEF超水温脉冲中断的修技术',
-      titleEn: 'PEF Ultra Water Temperature Pulse Interruption Technology',
-      subtitle: '在这两项技术的协同作用下',
-      subtitleEn: 'Under the synergistic effect of these two technologies',
-      description: '不仅仅是产品保现货产品全套技术的多个维度一体化原理，将其与竞争本，同时能与产品全系列的协同作用，生存力，竞争力，制造能力。均能够起到提升的技术性能。',
-      descriptionEn: 'Not only does it provide integrated principles across multiple dimensions of complete product technology, but it also synergizes with the entire product series, enhancing survival capability, competitiveness, and manufacturing ability.',
-      features: [
-        '**我们的技术已成功应用于千万级别以下领域，完整实现合成化需求：**',
-        '**保质成（器械，复合调理计）：** 内外工艺流、听水、延伸上感应液体内保险含量**',
-        '**NFC类汇/检查蛋白：** 实现**无轮加速力**，K线原理，口感组织效率**，品质全面超越传统HPP及UHT技术产品**',
-        '**条纹级：** 实际内容的制作过程**制造级别**',
-        '**大健康与美容装备：**',
-        '**保质品/可爱食品：** 制作外观级别的制作过程，教育产品稳定性、设置及有效分解效率**',
-        '**山药材料光亮级：** 遵循有效分解基本制造流程，实现100%的材料利用**',
-        '**化妆品液/药膏：** 新药外观级别化体，提升产品稳定性、设置及有效分解效率收敛**'
-      ]
+      year: '',
+      name: 'Technology ',
+      surname: 'Bennett',
+      image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1640&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      bigImage: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1640&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      description: 'They come with their laws and their codes to bind me fast; but I evade them ever, for I am only waiting for love to give myself up at last into his hands.',
+      location: 'And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.',
+      material: 'At the violet hour, when the eyes and back, turn upward from the desk, when the human engine waits.'
+    },
+    {
+      year: '',
+      name: 'Retail Operations',
+      surname: 'Hughes',
+      image: "https://images.unsplash.com/photo-1644088379091-d574269d422f?q=80&w=2186&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      bigImage: "https://images.unsplash.com/photo-1644088379091-d574269d422f?q=80&w=2186&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      description: 'Clouds heap upon clouds and it darkens. Ah, love, why dost thou let me wait outside at the door all alone?',
+      location: 'And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.',
+      material: 'At the violet hour, when the eyes and back, turn upward from the desk, when the human engine waits.'
     }
   ];
 
@@ -381,15 +321,15 @@ const CoreServices = () => {
     }
   }, []);
 
-  // Animation functions for detail view (using original preview animation structure)
-  const openDetail = (index) => {
-    const tech = technologiesData[index];
-    const preview = detailsRef.current[index];
+  // Animation functions
+  const openItem = (index) => {
+    const item = itemsData[index];
+    const preview = previewsRef.current[index];
     
     if (!preview) return;
 
-    setIsDetailVisible(true);
-    setCurrentDetail(index);
+    setIsPreviewVisible(true);
+    setCurrentPreview(index);
 
     const timeline = gsap.timeline({
       defaults: { duration: 1, ease: 'power3.inOut' }
@@ -409,7 +349,7 @@ const CoreServices = () => {
       .addLabel('content', 'start+=0.6')
       .add(() => {
         document.body.classList.add('preview-visible');
-        gsap.set(frameRef.current, { opacity: 0 });
+        gsap.set('.frame', { opacity: 0 });
         // Show the previews container
         const previewsContainer = document.querySelector('.previews');
         if (previewsContainer) {
@@ -422,17 +362,17 @@ const CoreServices = () => {
       }, 'content')
       .add(() => {
         // Animate text lines
-        const paragraphs = preview.querySelectorAll('.preview__column > p, .preview__column > div');
+        const paragraphs = preview.querySelectorAll('.preview__column > p');
         paragraphs.forEach(p => {
           const textReveal = new TextLinesReveal(p);
           textReveal.in();
         });
-        gsap.set(preview.querySelectorAll('.preview__column > p, .preview__column > div'), {
+        gsap.set(preview.querySelectorAll('.preview__column > p'), {
           opacity: 1,
           delay: 0.1
         });
       }, 'content')
-      .to(frameRef.current, {
+      .to('.frame', {
         ease: 'expo',
         startAt: { y: '-100%', opacity: 0 },
         opacity: 1,
@@ -449,8 +389,8 @@ const CoreServices = () => {
       }, 'content');
   };
 
-  const closeDetail = (index) => {
-    const preview = detailsRef.current[index];
+  const closeItem = (index) => {
+    const preview = previewsRef.current[index];
     
     if (!preview) return;
 
@@ -466,7 +406,7 @@ const CoreServices = () => {
       }, 'start')
       .add(() => {
         // Animate text lines out
-        const paragraphs = preview.querySelectorAll('.preview__column > p, .preview__column > div');
+        const paragraphs = preview.querySelectorAll('.preview__column > p');
         paragraphs.forEach(p => {
           const textReveal = new TextLinesReveal(p);
           textReveal.out();
@@ -481,12 +421,12 @@ const CoreServices = () => {
       .to(preview.querySelector('.preview__img-inner'), {
         y: '-101%'
       }, 'start')
-      .to(frameRef.current, {
+      .to('.frame', {
         opacity: 0,
         y: '-100%',
         onComplete: () => {
           document.body.classList.remove('preview-visible');
-          gsap.set(frameRef.current, {
+          gsap.set('.frame', {
             opacity: 1,
             y: '0%'
           });
@@ -496,8 +436,8 @@ const CoreServices = () => {
       .to(overlayRowsRef.current, {
         scaleY: 0,
         onComplete: () => {
-          setIsDetailVisible(false);
-          setCurrentDetail(null);
+          setIsPreviewVisible(false);
+          setCurrentPreview(null);
           contentRef.current?.classList.remove('content--hidden');
           // Hide the previews container
           const previewsContainer = document.querySelector('.previews');
@@ -508,73 +448,62 @@ const CoreServices = () => {
       }, 'grid');
   };
 
-  // Simple handlers for video (keeping modal style for video)
-  const handleVideoClick = (index) => {
-    setCurrentVideo(index);
-    setIsVideoVisible(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const handleCloseVideo = () => {
-    setCurrentVideo(null);
-    setIsVideoVisible(false);
-    document.body.style.overflow = 'auto';
-  };
-
   return (
-    <main id='main-core' className={` bg-black relative overflow-hidden ${isDetailVisible ? 'preview-visible' : ''}`}>
-      {/* Title */}
-      {/* <div className="text-center mb-16 pt-20">
-        <h2 className="text-7xl md:text-9xl font-bold mb-6 relative">
-          <span ref={titleRef} className="text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]">
-            Core Services
-          </span>
-        </h2>
-      </div> */}
-
-      {/* Description */}
-      <div className="text-center  px-8">
-        <p className="text-gray-300 text-2xl max-w-4xl mx-auto leading-relaxed  mb-2">
-          世界顶尖的破碎科技双轴转载，革新产品全球竞争力
-        </p>
-        <p className="text-gray-400 max-w-3xl mx-auto leading-relaxed">
-          我们拥有内地**世界级的专利技术**，它针对产品非常的高效率。
-          而是能够让产品全系列的商业模式价值链提升的高的要求。
-        </p>
-      </div>
-
-      {/* Technologies Grid */}
-      <div className="max-w-7xl mx-auto px-8 " ref={contentRef}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {technologiesData.map((tech, index) => (
-            <TechnologyBox 
-              key={tech.id}
-              data={tech}
-              index={index}
-              onDetailClick={openDetail}
-              onVideoClick={handleVideoClick}
-            />
-          ))}
+    <main id='main-core' className={`${isPreviewVisible ? 'preview-visible' : ''} h-screen w-screen overflow-hidden`}>
+      {/* Top Section with Shader Background */}
+      <section className="relative w-full h-[45vh] overflow-hidden" style={{ gridArea: 'frame' }}>
+        {/* Shader Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <ShaderBackground opacity={0.8} />
         </div>
+        
+        {/* Dark orange overlay for the liquid effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-amber-800/60 to-orange-700/80 mix-blend-multiply"></div>
+        
+        {/* Content overlay */}
+        <div className="relative z-10 w-full h-full flex items-center justify-between px-8 lg:px-16">
+          {/* Left side - English text */}
+          <div className="flex-1 max-w-md">
+            <h1 
+              ref={titleRef} 
+              className="text-4xl lg:text-6xl font-bold mb-4 lg:mb-8 text-white"
+            >
+              CORE SERVICES
+            </h1>
+            
+            {/* Chinese descriptive text */}
+            <div className="text-white space-y-2 lg:space-y-4 text-sm lg:text-lg leading-relaxed">
+              <p>以"光"为引的「穿越化」买点论(Prismaeon™)</p>
+              <p>开创前策 x 科技 x渠道落地的三位一体服务</p>
+              <p>突破文化·国界,时间周期的市场及维度局限</p>
+              <p>打造具备穿越化性质的超级品牌&产品</p>
+            </div>
+          </div>
+          
+          {/* Right side - Chinese title with separator */}
+          <div className="flex-1 flex justify-end items-center">
+            <div className="flex items-center space-x-4 lg:space-x-8">
+              <span className="text-4xl lg:text-6xl font-bold text-white">核心</span>
+              <div className="w-px h-16 lg:h-24 bg-white/60"></div>
+              <span className="text-4xl lg:text-6xl font-bold text-white">服务</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  
-
+      {/* Original Cards Layout - Constrained to remaining viewport */}
+      <div className="content h-[55vh] overflow-y-auto" ref={contentRef}>
+        {itemsData.map((item, index) => (
+          <Item 
+            key={index}
+            data={item}
+            index={index}
+            onItemClick={openItem}
+          />
+        ))}
       </div>
 
-      
-<div className="text-center  px-8">
-   
-   <p className="text-gray-400 max-w-3xl mx-auto leading-relaxed">
-   在这两项技术的协同作用下，
-不仅实现了高品质保鲜产品在延长的分销链条一段保鲜期·摒耗与成本，
-同时提升了产品体验的全新维度的可感性：生命力、竞争力、和韧力。
-为您缔造绝对无法被超越的技术壁垒。。
-   </p>
- </div>
-
-  
-
-      {/* Overlay for transitions */}
+      {/* Overlay for animations */}
       <div className="overlay">
         <div 
           className="overlay__row" 
@@ -586,33 +515,21 @@ const CoreServices = () => {
         ></div>
       </div>
 
-      {/* Previews section - fixed positioned like original */}
+      {/* Preview section */}
       <section className="previews">
-        {technologiesData.map((tech, index) => (
+        {itemsData.map((item, index) => (
           <div 
-            key={tech.id}
-            ref={(el) => detailsRef.current[index] = el}
+            key={index}
+            ref={(el) => previewsRef.current[index] = el}
           >
-            <AnimatedTechnologyDetail
-              data={tech}
-              isActive={currentDetail === index}
-              onBack={() => closeDetail(index)}
+            <Preview
+              data={item}
+              isActive={currentPreview === index}
+              onBack={() => closeItem(index)}
             />
           </div>
         ))}
       </section>
-
-      {/* Technology Video Modal (simple overlay) */}
-      {isVideoVisible && currentVideo !== null && (
-        <VideoModal
-          data={technologiesData[currentVideo]}
-          isActive={isVideoVisible}
-          onBack={handleCloseVideo}
-        />
-      )}
-
-
-
     </main>
   );
 };

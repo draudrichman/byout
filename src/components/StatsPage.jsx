@@ -12,10 +12,10 @@ const StatsPage = () => {
     const titleRef = useRef(null);
     const statsRef = useRef(null);
     const [stats, setStats] = useState([
-        { value: 0, target: 100, label: '服务品牌', description: 'Brands Served' },
-        { value: 0, target: 7, label: '渠道覆盖国家', description: 'Countries with Retail Channels Coverage' },
-        { value: 0, target: 11, label: '累计销售额', description: 'Cumulative Sales' },
-        { value: 0, target: 91, label: '成功入驻产品', description: 'Products Listed' }
+        { value: 0, target: 100, label: '服务品牌', description: 'Brands Served', suffix: '+' },
+        { value: 0, target: 7, label: '渠道覆盖国家', description: 'Countries with Retail Channels Coverage', suffix: '亿' },
+        { value: 0, target: 11, label: '累计销售额', description: 'Cumulative Sales', suffix: '+' },
+        { value: 0, target: 91, label: '成功入驻产品', description: 'Products Listed', suffix: '+' }
     ]);
 
     useEffect(() => {
@@ -188,25 +188,34 @@ const StatsPage = () => {
                         style={{ animationDelay: `${index * 200}ms` }}
                         >
                         {/* Card */}
-                            <div className="relative bg-black/40 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl h-72 flex flex-col justify-center">
-                                {/* Stat Value */}
-                                <div className="mb-4">
+                            <div className="relative bg-black/40 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl h-72 flex flex-col justify-between">
+                                {/* Stat Value - Fixed height container */}
+                                <div className="flex items-center justify-center h-16 mb-4">
                                     <Odometer 
                                         value={stat.value} 
                                         format="d"
                                         className="text-4xl md:text-5xl font-bold text-white"
                                         />
+                                    {stat.suffix && (
+                                        <span className="text-4xl md:text-5xl font-bold text-white ml-1">{stat.suffix}</span>
+                                    )}
                                 </div>
                                 
-                                {/* Stat Label */}
-                                <h3 className="text-lg font-semibold text-white mb-3">
-                                    {stat.label}
-                                </h3>
+                                {/* Middle section with fixed spacing */}
+                                <div className="flex-1 flex flex-col justify-center">
+                                    {/* Stat Label */}
+                                    <h3 className="text-lg font-semibold text-white mb-3 h-12 flex items-center justify-center">
+                                        {stat.label}
+                                    </h3>
+                                    
+                                    {/* Stat Description */}
+                                    <p className="text-white/80 text-sm leading-relaxed h-10 flex items-center justify-center">
+                                        {stat.description}
+                                    </p>
+                                </div>
                                 
-                                {/* Stat Description */}
-                                <p className="text-white/80 text-sm leading-relaxed">
-                                    {stat.description}
-                                </p>
+                                {/* Bottom spacer to maintain consistent bottom spacing */}
+                                <div className="h-6"></div>
                                 
                                 {/* Hover effect indicator */}
                                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-[#d1d1d1] to-[#2a2a2b] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

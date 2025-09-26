@@ -98,7 +98,7 @@ function App() {
         {/* <Timeline/> */}
         <GlobalPresence/>
         <CoreServices/>
-        <TeamSection/>
+        {/* <TeamSection/> */}
         {/* <GlobalPresence/> */}
 </div>
         {/* <CompaniesIntro /> */}
