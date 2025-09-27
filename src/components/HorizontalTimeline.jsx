@@ -16,6 +16,7 @@ const HorizontalTimeline = () => {
     const serviceTitleRef = useRef(null); // New ref for Service Process title
     const yearRefs = useRef([]);
     const itemRefs = useRef([]);
+    const previousActiveIndex = useRef(-1); // Track previous active index
 
     const timelineData = [
         {
@@ -23,64 +24,62 @@ const HorizontalTimeline = () => {
             phase: '第一阶段',
             title: '联合诊断与战略签约',
             subtitle: 'Joint Diagnosis & Strategic Signing',
-            description: '联合诊断、甲类战略与投入、奠定合作里程碑',
+            description: 'Mutual selection, clear strategy and investment, shared blueprint, laying the foundation for cooperation.',
             keyPoints: [
-                '初步接洽与产品力测评：品牌宣传、企业展示、品牌货',
-                '深度产品调研与市场需求：品牌宣传各城市调研',
-                '战略研讨会（线上/线下）：安环卫管会议',
-                '方案报价与合约签署：服务方提供合同'
+                '初步接洽与产品力初评：Brand submits company and product information. Service provider conducts preliminary assessment based on product commercial potential and channel matching degree.',
+                '深度产品评测与市场洞察：Brand sends product samples for evaluation. Both parties sign NDA. Service provider issues detailed Product Market Adaptability Assessment Report and Channel Entry Strategic Recommendations.',
+                '战略研讨会（线上/线下）：High-level meeting (≥3 hours) requiring participation from brand\'s founder and product lead. Core discussion on product optimization, market positioning, channel strategy, and financial models.',
+                '方案报价与合约签订：Service provider offers integrated Product-Channel Dual-Drive one-stop service solution and quotation. Upon brand confirmation, contract is signed with first installment payment.'
             ],
-            image: "/img/1.jpg"
+            image: "./img/phase_1.jpg"
         },
         {
             year: 'Phase 2',
             phase: '第二阶段',
             title: '产品优化与准入准备',
             subtitle: 'Product Optimization & Access Preparation',
-            description: '打造符合北美市场需求的大单品和新品，并完成所有准入基建设',
+            description: 'To create innovative flagship products that meet North American market demands and complete all necessary access preparations.',
             keyPoints: [
-                '成立专项小组与产品优化：成立专项小组、渠道专家、Broker专才团队',
-                '本地化与合规建设：完整产品监制、包装标准化标准、编码技术等'
+                '成立专项小组与产品优化：Specialized team formed including product designers, product managers, channel experts, and brokers. Guides brand to complete product optimization, design confirmation, and final proofing.',
+                '本地化与合规建设：Guides brand to register company, handle tax matters, and open bank accounts in target country. Completes product safety certifications (FCC, UL, CSA) and packaging label compliance. Prepares international logistics and warehousing solutions.'
             ],
-            image: "/img/2.jpg"
+            image: "./img/phase_2.jpg"
         },
         {
             year: 'Phase 3',
             phase: '第三阶段',
-            title: '渠道推进与订单获取',
-            subtitle: 'Channel Promotion & Order Acquisition',
-            description: '成功将产品进推进入各大出口标渠道',
+            title: '技术赋能与价值重塑',
+            subtitle: 'Tech-Enablement & Value Remodeling',
+            description: 'To introduce world\'s top 1 exclusive patented technology, fundamentally enhancing product competitiveness and brand\'s international commercial value.',
             keyPoints: [
-                '正式渠道推介与谈判：由服务方专业Broker团队向店商起（如Sams Club）采购求人员介绍推荐',
-                '试销与订单获取：向消费者业务试销和量，并重营业业务相关支持'
+                '技术方案植入与执行：HPH Technology Custom Application - ultra-high pressure nano-crushing for dynamic sterilization, nano-homogenization, extended shelf life, and optimized innovative taste and flavor.',
+                'PEF技术定制应用：PEF Technology Custom Application - planning terminal preservation solutions using F-pulse electric field non-thermal sterilization technology for smart cold chain cabinets and revolutionary product transport preservation.'
             ],
-            image: "/img/3.jpg"
+            image: "./img/phase_3.jpg"
         },
         {
             year: 'Phase 4',
             phase: '第四阶段',
-            title: '落地运营与持续增长',
-            subtitle: 'Landing Operation & Sustainable Growth',
-            description: '确保稳定供应 × 销售 × 维护，并实现可持续增长',
+            title: '渠道推进与订单获取',
+            subtitle: 'Channel Promotion & Order Acquisition',
+            description: 'To successfully recommend products into target channels.',
             keyPoints: [
-                '大货生产与入仓：品牌端按PO生产大货，并建设恰当办法高效各货时间',
-                '试销经营与增值服务：新国际服务前哨、年终营销等',
-                '长期紧密与增值服务：新品推荐、拓展新渠道、明星KOL合营销等'
+                '正式渠道推荐与谈判：Professional Broker team recommends product to purchasing decision-makers at target supermarkets (e.g., Sams Club). Based on feedback, guides brand to adjust final product, price, or packaging.',
+                '试销与订单获取：Promotes supermarket to arrange trial orders (First Order). Assists brand and supermarket in signing formal Purchase Orders (PO). Second and third installment payments triggered after trial orders and formal contract signing.'
             ],
-            image: "/img/1_big.jpg"
+            image: "./img/phase_4.jpg"
         },
         {
             year: 'Phase 5',
             phase: '第五阶段',
-            title: '规模化扩张与品牌建设',
-            subtitle: 'Scale Expansion & Brand Building',
-            description: '实现规模化运营，建立强势品牌影响力，开拓更多市场机会',
+            title: '落地运营与持续增长',
+            subtitle: 'Landing Operation & Sustainable Growth',
+            description: 'To ensure stable supply, sales, and maintenance, and achieve sustainable growth.',
             keyPoints: [
-                '多渠道扩张：拓展至更多零售渠道，建立全方位销售网络',
-                '品牌营销升级：提升品牌知名度，建立消费者忠诚度',
-                '产品线丰富：基于市场反馈，推出更多符合本地化需求的产品'
+                '大货生产与入仓：Brand produces mass goods according to PO and delivers to supermarket\'s central warehouse (RDC) via designated logistics. Commission (Sales Share) activated upon successful warehouse entry.',
+                '长期运营与增值服务：Inventory Management including daily order processing and monitoring. Channel Maintenance with store visits and promotional activities. Customer Service handling returns and complaints. Growth Services including new product recommendations and channel expansion.'
             ],
-            image: "/img/2_big.jpg"
+            image: "./img/phase_5.jpg"
         }
     ];
 
@@ -174,13 +173,116 @@ const HorizontalTimeline = () => {
             filter: "blur(5px)"
         });
 
-        // Show first item initially
+        // Show first item initially with animations
         if (items[0]) {
             gsap.set(items[0], {
                 opacity: 1,
                 scale: 1,
                 filter: "blur(0px)"
             });
+
+            // Initialize first item animations
+            const firstFigure = items[0].querySelector('.timeline-image-figure');
+            const firstImage = items[0].querySelector('.timeline-image');
+            const firstText = items[0].querySelector('.timeline-text');
+            const firstPhase = items[0].querySelector('.timeline-phase');
+            const firstTitle = items[0].querySelector('.timeline-title');
+            const firstSubtitle = items[0].querySelector('.timeline-subtitle');
+            const firstKeypoints = items[0].querySelector('.timeline-keypoints');
+            const firstKeypointItems = items[0].querySelectorAll('.timeline-keypoint');
+
+            if (firstFigure && firstImage && firstText) {
+                // Set initial states for image
+                gsap.set(firstFigure, {
+                    clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                });
+                gsap.set(firstImage, {
+                    transform: 'scale(1.5)'
+                });
+
+                // Set initial states for text elements
+                gsap.set([firstPhase, firstTitle, firstSubtitle, firstText, firstKeypoints], {
+                    opacity: 0,
+                    y: 30,
+                    clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                });
+
+                // Set initial states for keypoint items
+                gsap.set(firstKeypointItems, {
+                    opacity: 0,
+                    y: 15
+                });
+
+                // Trigger initial animations after a short delay
+                const initialTl = gsap.timeline({ delay: 0.5 });
+                
+                // Image reveal
+                initialTl.to(firstFigure, {
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                    duration: 1,
+                    ease: "power3.out"
+                });
+
+                initialTl.to(firstImage, {
+                    transform: 'scale(1)',
+                    duration: 1,
+                    ease: "power3.out"
+                }, "<");
+
+                // Text reveals with fast stagger
+                initialTl.to(firstPhase, {
+                    opacity: 1,
+                    y: 0,
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                    duration: 0.4,
+                    ease: "power2.out"
+                }, "+=0.05");
+
+                initialTl.to(firstTitle, {
+                    opacity: 1,
+                    y: 0,
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                    duration: 0.4,
+                    ease: "power2.out"
+                }, "-=0.3");
+
+                initialTl.to(firstSubtitle, {
+                    opacity: 1,
+                    y: 0,
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                    duration: 0.4,
+                    ease: "power2.out"
+                }, "-=0.3");
+
+                initialTl.to(firstText, {
+                    opacity: 1,
+                    y: 0,
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                    duration: 0.4,
+                    ease: "power2.out"
+                }, "-=0.25");
+
+                initialTl.to(firstKeypoints, {
+                    opacity: 1,
+                    y: 0,
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                    duration: 0.4,
+                    ease: "power2.out"
+                }, "-=0.25");
+
+                // Animate individual keypoint items with faster stagger
+                initialTl.to(firstKeypointItems, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.3,
+                    stagger: 0.05,
+                    ease: "power2.out"
+                }, "-=0.2");
+
+
+                // Set the initial active index
+                previousActiveIndex.current = 0;
+            }
         }
 
         gsap.set(progressIndicatorRef.current, {
@@ -249,6 +351,111 @@ const HorizontalTimeline = () => {
                                 duration: 0.6,
                                 ease: "power2.out"
                             });
+
+                            // Only trigger animations if this is a new active index
+                            if (previousActiveIndex.current !== clampedIndex) {
+                                previousActiveIndex.current = clampedIndex;
+
+                                // Trigger image and text reveal animations
+                                const figure = item.querySelector('.timeline-image-figure');
+                                const image = item.querySelector('.timeline-image');
+                                const text = item.querySelector('.timeline-text');
+                                const phase = item.querySelector('.timeline-phase');
+                                const title = item.querySelector('.timeline-title');
+                                const subtitle = item.querySelector('.timeline-subtitle');
+                                const keypoints = item.querySelector('.timeline-keypoints');
+                                const keypointItems = item.querySelectorAll('.timeline-keypoint');
+
+                                if (figure && image && text) {
+                                    // Reset image animations
+                                    gsap.set(figure, {
+                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                    });
+                                    gsap.set(image, {
+                                        transform: 'scale(1.5)'
+                                    });
+
+                                    // Reset text animations
+                                    gsap.set([phase, title, subtitle, text, keypoints], {
+                                        opacity: 0,
+                                        y: 30,
+                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                    });
+
+                                    // Reset individual keypoint items
+                                    gsap.set(keypointItems, {
+                                        opacity: 0,
+                                        y: 15
+                                    });
+
+                                    // Create timeline for animations
+                                    const animationTl = gsap.timeline();
+
+                                    // Image reveal animation
+                                    animationTl.to(figure, {
+                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                                        duration: 1,
+                                        ease: "power3.out"
+                                    });
+
+                                    animationTl.to(image, {
+                                        transform: 'scale(1)',
+                                        duration: 1,
+                                        ease: "power3.out"
+                                    }, "<"); // Start at the same time as figure animation
+
+                                    // Text reveal animations (fast and snappy)
+                                    animationTl.to(phase, {
+                                        opacity: 1,
+                                        y: 0,
+                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                                        duration: 0.4,
+                                        ease: "power2.out"
+                                    }, "+=0.05");
+
+                                    animationTl.to(title, {
+                                        opacity: 1,
+                                        y: 0,
+                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                                        duration: 0.4,
+                                        ease: "power2.out"
+                                    }, "-=0.3");
+
+                                    animationTl.to(subtitle, {
+                                        opacity: 1,
+                                        y: 0,
+                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                                        duration: 0.4,
+                                        ease: "power2.out"
+                                    }, "-=0.3");
+
+                                    animationTl.to(text, {
+                                        opacity: 1,
+                                        y: 0,
+                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                                        duration: 0.4,
+                                        ease: "power2.out"
+                                    }, "-=0.25");
+
+                                    animationTl.to(keypoints, {
+                                        opacity: 1,
+                                        y: 0,
+                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                                        duration: 0.4,
+                                        ease: "power2.out"
+                                    }, "-=0.25");
+
+                                    // Animate individual keypoint items with faster stagger
+                                    animationTl.to(keypointItems, {
+                                        opacity: 1,
+                                        y: 0,
+                                        duration: 0.3,
+                                        stagger: 0.05,
+                                        ease: "power2.out"
+                                    }, "-=0.2");
+
+                                }
+                            }
                         } else {
                             // Hidden items
                             gsap.to(item, {
@@ -352,6 +559,32 @@ const HorizontalTimeline = () => {
                 100% {
                     opacity: 0.1;
                     transform: scale(1.05);
+                }
+            }
+            @keyframes rollFromLeft {
+                from {
+                    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+                }
+                to {
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                }
+            }
+            @keyframes scaleDown {
+                from {
+                    transform: scale(1.5);
+                }
+                to {
+                    transform: scale(1);
+                }
+            }
+            @keyframes rollFromRight {
+                from {
+                    opacity: 0;
+                    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+                }
+                to {
+                    opacity: 1;
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
                 }
             }
         `;
@@ -491,29 +724,67 @@ const HorizontalTimeline = () => {
                             {/* Content Side */}
                             <div className={`space-y-6 ${index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}>
                                 <div className="space-y-3">
-                                    <p className="text-sm md:text-base text-gray-100 font-medium tracking-wide uppercase">
+                                    <p 
+                                        className="timeline-phase text-sm md:text-base text-gray-100 font-medium tracking-wide uppercase"
+                                        style={{
+                                            opacity: 0,
+                                            transform: 'translateY(20px)',
+                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        }}
+                                    >
                                         {item.year} • {item.phase}
                                     </p>
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-white leading-tight">
+                                    <h2 
+                                        className="timeline-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-white leading-tight"
+                                        style={{
+                                            opacity: 0,
+                                            transform: 'translateY(30px)',
+                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        }}
+                                    >
                                         {item.title}
                                     </h2>
-                                    <p className="text-base md:text-lg text-gray-300 font-medium italic">
+                                    <p 
+                                        className="timeline-subtitle text-base md:text-lg text-gray-300 font-medium italic"
+                                        style={{
+                                            opacity: 0,
+                                            transform: 'translateY(20px)',
+                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        }}
+                                    >
                                         {item.subtitle}
                                     </p>
                                 </div>
-                                <p className="text-lg md:text-xl text-gray-100 leading-relaxed max-w-lg">
+                                <figcaption 
+                                    className="timeline-text text-lg md:text-xl text-gray-100 leading-relaxed max-w-lg"
+                                    style={{
+                                        opacity: 0,
+                                        transform: 'translateY(25px)',
+                                        display: 'inline',
+                                        fontFamily: 'inherit',
+                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                    }}
+                                >
                                     {item.description}
-                                </p>
+                                </figcaption>
                                 
                                 {/* Key Points */}
                                 {item.keyPoints && item.keyPoints.length > 0 && (
-                                    <div className="space-y-3">
+                                    <div className="timeline-keypoints space-y-3" style={{
+                                        opacity: 0,
+                                        transform: 'translateY(30px)',
+                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                    }}>
                                         <h4 className="text-sm font-semibold text-gray-200 uppercase tracking-wide">
                                             关键要点 Key Points
                                         </h4>
                                         <ul className="space-y-2 max-w-lg">
                                             {item.keyPoints.slice(0, 2).map((point, pointIndex) => (
-                                                <li key={pointIndex} className="text-sm text-gray-300 leading-relaxed flex items-start">
+                                                <li key={pointIndex} className="timeline-keypoint text-sm text-gray-300 leading-relaxed flex items-start" style={{
+                                                    opacity: 0,
+                                                    transform: 'translateY(15px)',
+                                                    transitionDelay: `${pointIndex * 100}ms`
+                                                }}>
                                                     <span className="inline-block w-1.5 h-1.5 bg-white/60 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                                                     <span>{point}</span>
                                                 </li>
@@ -522,24 +793,32 @@ const HorizontalTimeline = () => {
                                     </div>
                                 )}
 
-                                <button className="inline-flex items-center space-x-2 text-white border border-white/20 px-6 py-3 rounded-full hover:bg-white/10 transition-colors duration-300">
-                                    <span>了解更多 Learn more</span>
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                </button>
                             </div>
 
                             {/* Image Side */}
                             <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
                                 <div className="relative">
-                                    <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-200">
-                                        <img 
-                                            src={item.image} 
-                                            alt={item.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
+                                    <figure 
+                                        className="timeline-image-figure aspect-[4/3] rounded-2xl overflow-hidden bg-gray-200"
+                                        style={{
+                                            margin: 0,
+                                            padding: 0,
+                                            display: 'grid',
+                                            placeItems: 'center',
+                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        }}
+                                    >
+                                        <div style={{ overflow: 'hidden' }} className="w-full h-full">
+                                            <img 
+                                                src={item.image} 
+                                                alt={item.title}
+                                                className="timeline-image w-full h-full object-cover"
+                                                style={{
+                                                    transform: 'scale(1.5)'
+                                                }}
+                                            />
+                                        </div>
+                                    </figure>
                                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent"></div>
                                 </div>
                             </div>
