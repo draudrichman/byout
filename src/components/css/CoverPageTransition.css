@@ -239,61 +239,24 @@ a:focus-visible {
 
 .item {
 	margin-bottom: 2rem;
-	
-	display: grid;
-	grid-template-columns: 100%;
-	grid-template-rows: 0.5rem auto auto 1fr auto;
-}
-
-.item__meta {
-	color: #ffffff;
-}
-
-.item__title {
-	font-family: kudryashev-d-excontrast-sans, sans-serif;
-	font-weight: 300;
-	font-size: 2rem;
-	margin-bottom: 0.5rem;
-	color: #ffffff;
-}
-
-.item__img {
 	position: relative;
+	
+	/* Apply the provided background styling */
+	border-radius: 25px;
+	box-shadow: inset 0 0 0 calc(1px + 0px) hsla(0, 0%, 100%, .075), inset 0 0 5vw hsla(0, 0%, 100%, .05);
+	background-color: hsla(0, 0%, 100%, .025);
+
+	padding: 2vw;
 	overflow: hidden;
-	width: 100%;
-	aspect-ratio: 500/333;
+	
+	transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	/* min-height: 400px; */
 }
 
-.item__img-inner {
-	background-position: 50% 45%;
-	background-size: cover;
-	width: 100%;
-	height: 100%;
-}
 
-.item__desc {
-	margin-top: 1rem;
-	line-height: 1.1;
-	color: #ffffff;
-}
+/* Removed old view text styles as they're replaced by the button */
 
-.item__link {
-	cursor: pointer;
-	text-transform: lowercase;
-	width: 100%;
-	padding: 1rem;
-	color: #ffffff;
-	border: 1px solid #ffffff;
-	border-radius: 2rem;
-	text-align: center;
-	display: block;
-}
-
-.item__link:hover {
-	background: #ffffff;
-	border-color: #ffffff;
-	color: #000000;
-}
+/* Removed old description and link styles as they're no longer needed */
 
 .overlay {
 	position: fixed;
@@ -557,6 +520,20 @@ a:focus-visible {
 	stroke: currentColor;
 	fill: none;
 	stroke-width: 2;
+}
+
+.background-gradient-circle, .background-gradient-circle-2 {
+    background-color: hsla(0, 0%, 100%, .25);
+    filter: blur(100px);
+    opacity: .7;
+    bottom: 0;
+    flex: none;
+    height: 25vh;
+    overflow: visible;
+    position: absolute;
+    width: 20vw;
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* Font imports - add these to your index.css or main CSS file */

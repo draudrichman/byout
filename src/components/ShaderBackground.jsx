@@ -73,8 +73,8 @@ void main(void) {
 	uv*=1.-.3*(sin(T*.2)*.5+.5);
 	
 	float lightLines = 0.0;
-	for (float i=1.; i<12.; i++) {
-		uv+=.1*cos(i*vec2(.1+.01*i, .8)+i*i+T*.5+.1*uv.x);
+	for (float i=1.; i<10.; i++) {
+		uv+=.1*cos(i*vec2(.15+.015*i, .8)+i*i+T*.5+.1*uv.x);
 		vec2 p=uv;
 		float d=length(p);
 		
@@ -87,22 +87,25 @@ void main(void) {
 		lightLines += noiseContrib;
 	}
 	
-	// Create white light lines on pure black background
-	float intensity = lightLines * 0.8;
+	// Create bright white light lines on pure black background
+	float intensity = lightLines * 1.2;
 	intensity = smoothstep(0.0, 1.0, intensity);
 	
-	// Pure black background with white lines
+	// Pure white and pure black colors
 	vec3 pureWhite = vec3(1.0, 1.0, 1.0);
 	vec3 pureBlack = vec3(0.0, 0.0, 0.0);
 	
-	// Mix between pure black background and white light lines only
+	// Mix between pure black background and bright white light lines
 	col = mix(pureBlack, pureWhite, intensity);
 	
-	// Add extra white highlights to the light lines
-	col += intensity * 0.3;
+	// Add extra bright white highlights for more luminous effect
+	col += intensity * intensity * 0.5;
 	
-	// Enhance contrast for sharp black/white effect
-	col = smoothstep(0.1, 0.9, col);
+	// Enhance contrast for sharp black/white effect with brighter whites
+	col = smoothstep(0.05, 0.95, col);
+	
+	// Ensure maximum white brightness
+	col = clamp(col, 0.0, 1.0);
 	
 	O=vec4(col,1);
 }`;

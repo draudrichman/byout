@@ -101,7 +101,7 @@ const Item = ({ data, index, onItemClick }) => {
       gsap.to(imageInner, {
         duration: 2,
         ease: 'power4',
-        scale: 1.2
+        scale: 1.1
       });
     };
 
@@ -124,22 +124,41 @@ const Item = ({ data, index, onItemClick }) => {
   }, []);
 
   return (
-    <div className="item" ref={itemRef}>
-      <span className="item__meta">{data.year}</span>
-      <h2 className="item__title">{data.name}</h2>
-      <div className="item__img">
-        <div 
-          className="item__img-inner" 
-          ref={imageInnerRef}
-          style={{ backgroundImage: `url(${data.image})` }}
-        />
-      </div>
-      <p className="item__desc">{data.description}</p>
-      <a className="item__link" onClick={() => onItemClick(index)}>view</a>
+    <div className="item  " ref={itemRef}>
+
+<div className='flex flex-col justify-center items-center gap-7 '>
+  
+  <div className=' flex justify-center items-center overflow-hidden' > 
+    <img  className='w-[80%] rounded-2xl' src={data.image} alt={data.name} />
+  </div>
+
+<div className='flex flex-col justify-center items-center gap-4'>
+
+<div className='flex flex-col justify-center items-center'>
+  <h3 className='text-3xl  font-bold bg-gradient-to-r from-[#888888] via-white to-[#888888] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]'>{data.name}</h3>
+  <p className=' font-light text-gray-400'>{data.description}</p>
+</div>
+
+
+<button onClick={() => onItemClick(index)} className="shadow-[inset_0_0_0_2px_#616467] text-black px-12 py-4 rounded-full tracking-widest uppercase font-bold bg-transparent hover:bg-[#616467] hover:text-white dark:text-neutral-200 transition duration-200">
+  View
+</button>
+  
+      
+
+
+</div>
+
+
+</div>
+
+
+<div class="background-gradient-circle"></div>
+
     </div>
   );
 };
-
+// onClick={() => onItemClick(index)}
 // Preview component
 const Preview = ({ data, isActive, onBack }) => {
   const previewRef = useRef(null);
@@ -208,6 +227,10 @@ const CoreServices = () => {
   const titleRef = useRef(null);
   const overlayRowsRef = useRef([]);
   const previewsRef = useRef([]);
+  
+  // Refs for scroll reveal animations
+  const descriptiveTextRef = useRef([]);
+  const chineseCharsRef = useRef([]);
 
   // Sample data - replace with your actual data
   const itemsData = [
@@ -319,6 +342,78 @@ const CoreServices = () => {
         split.revert();
       };
     }
+  }, []);
+
+  // Scroll reveal animations for descriptive text and Chinese characters
+  useEffect(() => {
+    // Animate descriptive text paragraphs
+    descriptiveTextRef.current.forEach((element, index) => {
+      if (element) {
+        // Set initial state
+        gsap.set(element, {
+          opacity: 0,
+          y: 50,
+          scale: 0.95
+        });
+
+        // Create scroll-triggered animation
+        gsap.to(element, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play none none reverse",
+          },
+          delay: index * 0.1 // Stagger the animations
+        });
+      }
+    });
+
+    // Animate Chinese characters
+    chineseCharsRef.current.forEach((element, index) => {
+      if (element) {
+        // Set initial state
+        gsap.set(element, {
+          opacity: 0,
+          scale: 0,
+          rotation: 45,
+          transformOrigin: "center center"
+        });
+
+        // Create scroll-triggered animation
+        gsap.to(element, {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 1,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 85%",
+            end: "bottom 15%",
+            toggleActions: "play none none reverse",
+          },
+          delay: index * 0.15 // Stagger the animations
+        });
+      }
+    });
+
+    // Cleanup function
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger && (
+          descriptiveTextRef.current.includes(trigger.trigger) ||
+          chineseCharsRef.current.includes(trigger.trigger)
+        )) {
+          trigger.kill();
+        }
+      });
+    };
   }, []);
 
   // Animation functions
@@ -457,13 +552,11 @@ const CoreServices = () => {
           <ShaderBackground opacity={0.8} />
         </div>
         
-        {/* Dark orange overlay for the liquid effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-amber-800/60 to-orange-700/80 mix-blend-multiply"></div>
         
         {/* Content overlay */}
-        <div className="relative z-10 w-full h-full flex items-center justify-between px-8 lg:px-16">
+        <div className="relative z-10 w-full h-full flex items-center justify-between px-8 lg:px-30">
           {/* Left side - English text */}
-          <div className="flex-1 max-w-md">
+          <div className="flex-1 ">
             <h1 
               ref={titleRef} 
               className="text-4xl lg:text-6xl font-bold mb-4 lg:mb-8 text-white"
@@ -472,20 +565,92 @@ const CoreServices = () => {
             </h1>
             
             {/* Chinese descriptive text */}
-            <div className="text-white space-y-2 lg:space-y-4 text-sm lg:text-lg leading-relaxed">
-              <p>以"光"为引的「穿越化」买点论(Prismaeon™)</p>
-              <p>开创前策 x 科技 x渠道落地的三位一体服务</p>
-              <p>突破文化·国界,时间周期的市场及维度局限</p>
-              <p>打造具备穿越化性质的超级品牌&产品</p>
+            <div className="text-white space-y-2 flex flex-col gap-5 lg:space-y-4 text-sm lg:text-2xl font-semibold leading-relaxed">
+              <p ref={(el) => descriptiveTextRef.current[0] = el} className=' flex  gap-4'><span>以"光"为引的「穿越化」买点论</span>  <span>( Prismaeon™ )</span></p>
+              <p className=' tracking-[0.3rem]  ' ref={(el) => descriptiveTextRef.current[1] = el}>开创前策 x 科技 x 渠道落地的三位一体服务</p>
+              <p className=' tracking-[0.3rem]  ' ref={(el) => descriptiveTextRef.current[2] = el}>突破文化·国界·时间周期的市场及维度局限</p>
+              <p className=' tracking-[0.3rem]  ' ref={(el) => descriptiveTextRef.current[3] = el}>打造具备穿越化性质的超级品牌&产品</p>
             </div>
           </div>
           
-          {/* Right side - Chinese title with separator */}
+          {/* Right side - Chinese title with grid layout */}
           <div className="flex-1 flex justify-end items-center">
-            <div className="flex items-center space-x-4 lg:space-x-8">
-              <span className="text-4xl lg:text-6xl font-bold text-white">核心</span>
-              <div className="w-px h-16 lg:h-24 bg-white/60"></div>
-              <span className="text-4xl lg:text-6xl font-bold text-white">服务</span>
+            <div className="relative w-64 h-64 lg:w-80 lg:h-80">
+              {/* Center Glowing Icon with Silver-White Gradient */}
+              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+            
+                
+                {/* Mid silver-white glow */}
+              
+             
+                
+                {/* Main icon with animated gradient enhancement */}
+                <div className="relative scale-[300%]">
+                  <div className="relative">
+                    {/* Gradient overlay animation */}
+                    <div className="absolute inset-0 opacity-80 animate-pulse">
+                      <div 
+                        className="w-full h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
+                        style={{ 
+                          maskImage: 'url(/img/logos/icon.svg)', 
+                          WebkitMaskImage: 'url(/img/logos/icon.svg)',
+                          maskSize: 'contain',
+                          WebkitMaskSize: 'contain',
+                          maskRepeat: 'no-repeat',
+                          WebkitMaskRepeat: 'no-repeat',
+                          maskPosition: 'center',
+                          WebkitMaskPosition: 'center',
+                          animation: 'gradientShift 3s ease-in-out infinite alternate'
+                        }}
+                      />
+                    </div>
+                    <img 
+                      src="/img/logos/icon.svg" 
+                      alt="Core Services Icon" 
+                      width={800}
+                      height={800}
+                      className="relative z-10 opacity-90 filter brightness-110 contrast-105 drop-shadow-[0_0_15px_rgba(147,51,234,0.7)]"
+                    />
+                    {/* Additional animated glow */}
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 opacity-30 blur-sm animate-pulse"
+                      style={{ 
+                        maskImage: 'url(/img/logos/icon.svg)', 
+                        WebkitMaskImage: 'url(/img/logos/icon.svg)',
+                        maskSize: 'contain',
+                        WebkitMaskSize: 'contain',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskRepeat: 'no-repeat',
+                        maskPosition: 'center',
+                        WebkitMaskPosition: 'center'
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Character grid */}
+              <div className="grid grid-cols-2 grid-rows-2 w-full h-full">
+                {/* Top-left: 核 */}
+                <div className="flex items-center justify-center pr-4 pb-2">
+                  <span ref={(el) => chineseCharsRef.current[0] = el} className="text-4xl lg:text-6xl font-bold text-white">核</span>
+                </div>
+                
+                {/* Top-right: 心 */}
+                <div className="flex items-center justify-center pl-4 pb-2">
+                  <span ref={(el) => chineseCharsRef.current[1] = el} className="text-4xl lg:text-6xl font-bold text-white">心</span>
+                </div>
+                
+                {/* Bottom-left: 服 */}
+                <div className="flex items-center justify-center pr-4 pt-2">
+                  <span ref={(el) => chineseCharsRef.current[2] = el} className="text-4xl lg:text-6xl font-bold text-white">服</span>
+                </div>
+                
+                {/* Bottom-right: 务 */}
+                <div className="flex items-center justify-center pl-4 pt-2">
+                  <span ref={(el) => chineseCharsRef.current[3] = el} className="text-4xl lg:text-6xl font-bold text-white">务</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -535,3 +700,23 @@ const CoreServices = () => {
 };
 
 export default CoreServices;
+
+// Add CSS for gradient animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes gradientShift {
+    0% {
+      background: linear-gradient(45deg, #60a5fa, #a855f7, #ec4899);
+    }
+    33% {
+      background: linear-gradient(45deg, #34d399, #60a5fa, #a855f7);
+    }
+    66% {
+      background: linear-gradient(45deg, #fbbf24, #34d399, #60a5fa);
+    }
+    100% {
+      background: linear-gradient(45deg, #ec4899, #fbbf24, #34d399);
+    }
+  }
+`;
+document.head.appendChild(style);
