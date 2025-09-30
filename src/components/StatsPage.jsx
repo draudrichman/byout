@@ -13,8 +13,8 @@ const StatsPage = () => {
     const statsRef = useRef(null);
     const [stats, setStats] = useState([
         { value: 0, target: 100, label: '服务品牌', description: 'Brands Served', suffix: '+' },
-        { value: 0, target: 7, label: '渠道覆盖国家', description: 'Countries with Retail Channels Coverage', suffix: '亿' },
-        { value: 0, target: 11, label: '累计销售额', description: 'Cumulative Sales', suffix: '+' },
+        { value: 0, target: 7, label: '渠道覆盖国家', description: 'Countries with Retail Channels Coverage', suffix: '' },
+        { value: 0, target: 11, label: '累计销售额', description: 'Cumulative Sales', suffix: '亿' },
         { value: 0, target: 91, label: '成功入驻产品', description: 'Products Listed', suffix: '+' }
     ]);
 
