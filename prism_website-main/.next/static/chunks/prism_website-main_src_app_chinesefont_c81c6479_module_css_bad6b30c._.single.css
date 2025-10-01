@@ -1,0 +1,25 @@
+/* [project]/prism_website-main/src/app/chinesefont_c81c6479.module.css [app-client] (css) */
+@font-face {
+  font-family: chineseFont;
+  src: url("../media/MFYueHei_Noncommercial_Regular-s.p.8cc0f47c.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: chineseFont Fallback;
+  src: local(Arial);
+  ascent-override: 103.37%;
+  descent-override: 14.1%;
+  line-gap-override: 58.73%;
+  size-adjust: 85.13%;
+}
+
+.chinesefont_c81c6479-module__WpM-La__className {
+  font-family: chineseFont, chineseFont Fallback;
+}
+
+.chinesefont_c81c6479-module__WpM-La__variable {
+  --font-chinese: "chineseFont", "chineseFont Fallback";
+}
+
+/*# sourceMappingURL=prism_website-main_src_app_chinesefont_c81c6479_module_css_bad6b30c._.single.css.map*/

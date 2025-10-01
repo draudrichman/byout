@@ -11,10 +11,11 @@ import GlobalPresence from './components/GlobalPresence'
 import CoreServices from './components/CoreServices'
 import { ReactLenis, useLenis } from '@studio-freight/react-lenis'
 import TeamSection from './components/TeamSection.jsx';
-
 import { AestheticFluidBg } from "./components/js/AestheticFluidBg.module.js"
 import { Leva } from 'leva'
-
+import ExperienceShowcase from './components/ExperienceShowcase'
+import CompanyIntroduction from './components/CompanyIntroduction'
+import Prism from "./components/PrismaBackground.jsx";
 
 
 
@@ -94,6 +95,33 @@ function App() {
           <LandingPage key="landing" />
         </AuroraBackground>
         <StatsPage/>
+
+        {/* Prism background only for CompanyIntroduction and ExperienceShowcase */}
+        <div className="relative">
+          {/* <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-black">
+            <Prism
+                 animationType="3drotate"
+                 timeScale={1}
+                 height={2.5}
+                 baseWidth={3.5}
+                 hueShift={0.02}
+                 colorFrequency={3}
+                 noise={0.1}
+                 glow={0.1}
+                 scale={3.6}
+                 colorScheme="champagne-chrome"
+            />
+          </div> */}
+          <div className="relative z-10">
+            <CompanyIntroduction/>
+            <ExperienceShowcase/>
+          </div>
+        </div>
+
+
+
+
+
         <HorizontalTimeline/>
         {/* <Timeline/> */}
         <GlobalPresence/>

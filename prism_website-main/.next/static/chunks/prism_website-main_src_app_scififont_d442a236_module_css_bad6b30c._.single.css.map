@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/prism_website-main/src/app/scififont_d442a236.module.css"],"sourcesContent":["@font-face {\n    font-family: 'scifiFont';\n    src: url('@vercel/turbopack-next/internal/font/local/font?{%22path%22:%22../../public/Fonts/Ethnocentric%20Rg.otf%22,%22preload%22:true,%22has_size_adjust%22:true}') format('opentype');\n    font-display: swap;\n    \n}\n\n@font-face {\n    font-family: 'scifiFont Fallback';\n    src: local(\"Arial\");\n    ascent-override: 49.92%;\ndescent-override: 13.47%;\nline-gap-override: 0.00%;\nsize-adjust: 189.30%;\n\n}\n\n.className {\n    font-family: 'scifiFont', 'scifiFont Fallback';\n    \n}\n.variable {\n    --font-scifi: 'scifiFont', 'scifiFont Fallback';\n}\n\n"],"names":[],"mappings":"AAAA;;;;;;AAOA;;;;;;;;;AAUA;;;;AAIA"}}]
+}

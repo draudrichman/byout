@@ -1,0 +1,25 @@
+{
+  "pages": {
+    "/page": [
+      "static/chunks/0d619_next_dist_900a97cb._.js",
+      "static/chunks/prism_website-main_src_app_favicon_ico_mjs_0c5c46a3._.js",
+      "static/chunks/[root-of-the-server]__7bde6754._.css",
+      "static/chunks/0d619_9a2c7c1f._.js",
+      "static/chunks/prism_website-main_src_components_PrismaBackground_tsx_435315c0._.js",
+      "static/chunks/prism_website-main_src_app_layout_tsx_6a5f9c63._.js",
+      "static/chunks/0d619_next_dist_client_components_builtin_global-error_53c5bc9e.js",
+      "static/chunks/prism_website-main_src_components_d55315dd._.js",
+      "static/chunks/0d619_0100954a._.js",
+      "static/chunks/prism_website-main_src_app_page_tsx_53c5bc9e._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_ded00980._.js",
+      "static/chunks/0d619_next_dist_compiled_react-dom_5cd67517._.js",
+      "static/chunks/0d619_next_dist_compiled_next-devtools_index_157c5696.js",
+      "static/chunks/0d619_next_dist_compiled_aefbfbf7._.js",
+      "static/chunks/0d619_next_dist_client_68b0cb34._.js",
+      "static/chunks/0d619_next_dist_1ab8839d._.js",
+      "static/chunks/0d619_@swc_helpers_cjs_e60cab74._.js",
+      "static/chunks/prism_website-main_a0ff3932._.js",
+      "static/chunks/turbopack-prism_website-main_ebcd378c._.js"
+    ]
+  }
+}

@@ -682,23 +682,7 @@ const HorizontalTimeline = () => {
                 />
             </div>
       
-        
-     {/* Crimson Core Glow */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-             "radial-gradient(45% 40% at 50% 50%, #c81e3a 0%, #a51d35 12%, #7d1a2f 25%, #591828 35%, #3c1722 45%, #2a151d 55%, #1f1317 65%, #141013 75%, #0a0a0a 85%, #000000 100%), #000000",
-        }}
-      />
-      {/* Strong vignette for full black edges */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,1) 100%)",
-        }}
-      />
+
 
       {/* Service Process Title */}
       <div className="text-center pt-28">
