@@ -1,3 +1,6 @@
+/* Font imports - must be at the top */
+@import url('https://use.typekit.net/ehl0ehl.css');
+
 *,
 *::after,
 *::before {
@@ -535,6 +538,3 @@ a:focus-visible {
     pointer-events: none;
     z-index: 0;
 }
-
-/* Font imports - add these to your index.css or main CSS file */
-@import url('https://use.typekit.net/ehl0ehl.css');
