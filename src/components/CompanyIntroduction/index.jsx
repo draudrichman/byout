@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from 'react';
+import React, { useRef, memo } from 'react';
 import { useScrollAnimations } from './hooks/useScrollAnimations';
 import LogoSection from './LogoSection';
 import BrandPositioning from './BrandPositioning';
@@ -9,7 +9,7 @@ import PhilosophySections from './PhilosophySections';
 import ValueProposition from './ValueProposition';
 import ClosingStatement from './ClosingStatement';
 
-const CompanyIntroduction = () => {
+const CompanyIntroduction = memo(() => {
   const contentRef = useRef(null);
   const textContainerRef = useRef(null);
 
@@ -31,6 +31,8 @@ const CompanyIntroduction = () => {
       </div>
     </div>
   );
-};
+});
+
+CompanyIntroduction.displayName = 'CompanyIntroduction';
 
 export default CompanyIntroduction;

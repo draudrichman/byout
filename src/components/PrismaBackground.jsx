@@ -25,6 +25,7 @@ const Prism = ({
 }) => {
   const containerRef = useRef(null);
   const [responsiveScale, setResponsiveScale] = useState(1);
+  const [isVisible, setIsVisible] = useState(true);
 
   // Screen size detection and responsive scaling
   useEffect(() => {
@@ -45,6 +46,16 @@ const Prism = ({
     window.addEventListener('resize', updateResponsiveScale);
     return () => window.removeEventListener('resize', updateResponsiveScale);
   }, [responsive, mobileScale, tabletScale]);
+
+  // Pause rendering when tab is not visible to save resources
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsVisible(!document.hidden);
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -70,11 +81,13 @@ const Prism = ({
     const HOVSTR = Math.max(0, hoverStrength || 1);
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    // Optimize DPR based on device capabilities
+    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
     const renderer = new Renderer({
       dpr,
       alpha: transparent,
       antialias: false,
+      powerPreference: "high-performance",
     });
     const gl = renderer.gl;
     gl.disable(gl.DEPTH_TEST);
@@ -448,6 +461,12 @@ const Prism = ({
       program.uniforms.iTime.value = time;
 
       let continueRAF = true;
+      
+      // Skip rendering if tab is not visible
+      if (document.hidden) {
+        raf = requestAnimationFrame(render);
+        return;
+      }
 
       // Update W coordinate for 4D space animation
       program.uniforms.uW4D.value = Math.sin(time * TS * 0.3) * 2.0;

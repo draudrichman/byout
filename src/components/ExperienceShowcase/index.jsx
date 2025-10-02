@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, memo } from 'react';
 import { gsap } from 'gsap';
 import { MapSelector } from './map/MapSelector';
 import MapInfoPanel from './map/MapInfoPanel';
@@ -11,7 +11,7 @@ import DecryptedText from './DecryptedText';
 import HudConnector from './HudConnector';
 import AwardsAndBrands from './AwardsAndBrands';
 
-const ExperienceShowcase = () => {
+const ExperienceShowcase = memo(() => {
   const [selectedCountry, setSelectedCountry] = useState("Canada");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedFlagIndex, setSelectedFlagIndex] = useState(0);
@@ -164,6 +164,8 @@ const ExperienceShowcase = () => {
       </div>
     </div>
   );
-};
+});
+
+ExperienceShowcase.displayName = 'ExperienceShowcase';
 
 export default ExperienceShowcase;

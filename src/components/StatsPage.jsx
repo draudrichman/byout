@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, memo } from 'react';
 import Odometer from 'react-odometerjs';
 import { BorderBeam } from './ui/border-beam';
 import { gsap } from 'gsap';
@@ -8,7 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const StatsPage = () => {
+const StatsPage = memo(() => {
     const titleRef = useRef(null);
     const statsRef = useRef(null);
     const [stats, setStats] = useState([
@@ -243,6 +243,8 @@ const StatsPage = () => {
             
         </section>
     );
-};
+});
+
+StatsPage.displayName = 'StatsPage';
 
 export default StatsPage;

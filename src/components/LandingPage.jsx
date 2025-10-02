@@ -1,12 +1,12 @@
 
-import React, { lazy, Suspense, useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect, memo } from 'react';
 import  Navbar from './ui/Navbar';
 import WaveBackground from './WaveBackground';
 
 
 const World = lazy(() => import("../components/ui/globe").then((m) => ({ default: m.World })));
 
-const LandingPage = () => {
+const LandingPage = memo(() => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -294,7 +294,9 @@ style={{
 
     </div>
   );
-};
+});
+
+LandingPage.displayName = 'LandingPage';
 
 export default LandingPage;
 

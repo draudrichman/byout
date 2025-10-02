@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,7 +7,7 @@ import GlowCircle from './GlowCircle';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const HorizontalTimeline = () => {
+const HorizontalTimeline = memo(() => {
     const sectionRef = useRef(null);
     const trackRef = useRef(null);
     const progressBarRef = useRef(null);
@@ -83,27 +83,21 @@ const HorizontalTimeline = () => {
         }
     ];
 
-    // Service Process title animation
+    // Service Process title animation - Optimized for smoothness
     useEffect(() => {
         if (serviceTitleRef.current) {
             // Split text into characters for animation
-            const split = new SplitText(serviceTitleRef.current, { type: "words, chars" });
+            const split = new SplitText(serviceTitleRef.current, { type: "chars" });
             
-            console.log("Service Process split text chars:", split.chars); // Debug log
-            
-            // Set initial state - characters positioned well below to animate upward
+            // Set initial state - simple and GPU-accelerated
             gsap.set(split.chars, {
                 opacity: 0,
-                y: 150, // Characters start well below the overflow boundary
-                rotationX: 0, // Remove rotation for cleaner upward movement
-                transformOrigin: "center bottom",
-                // "--blur": "10px",
+                y: 80,
+                willChange: "transform, opacity"
             });
 
-            // Apply blur effect and gradient to individual characters
+            // Apply gradient to individual characters
             split.chars.forEach((char, index) => {
-                char.style.filter = "blur(var(--blur))";
-                // Calculate gradient position for each character
                 const progress = index / (split.chars.length - 1);
                 const color = getGradientColor(progress);
                 char.style.color = color;
@@ -111,43 +105,37 @@ const HorizontalTimeline = () => {
 
             // Function to calculate gradient color based on position
             function getGradientColor(progress) {
-                // Create smooth gradient from #444444 -> white -> #444444
+                // Create smooth gradient from #666666 -> white -> #666666
                 if (progress <= 0.5) {
-                    // First half: #444444 to white
                     const factor = progress * 2;
-                    const gray = Math.round(68 + (255 - 68) * factor);
+                    const gray = Math.round(102 + (255 - 102) * factor);
                     return `rgb(${gray}, ${gray}, ${gray})`;
                 } else {
-                    // Second half: white to #444444
                     const factor = (progress - 0.5) * 2;
-                    const gray = Math.round(255 - (255 - 68) * factor);
+                    const gray = Math.round(255 - (255 - 102) * factor);
                     return `rgb(${gray}, ${gray}, ${gray})`;
                 }
             }
 
-            // Create scroll-scrubbed animation
+            // Create smooth scroll-scrubbed animation
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: serviceTitleRef.current,
-                    start: "top 90%",
-                    end: "top 30%",
-                    scrub: true, // Smooth scrub animation tied to scroll
-                    onStart: () => console.log("Service Process animation started"), // Debug log
-                    onComplete: () => console.log("Service Process animation completed"), // Debug log
+                    start: "top 85%",
+                    end: "top 40%",
+                    scrub: 0.3, // Reduced for better performance
                 }
             });
 
             tl.to(split.chars, {
-                // duration: 1.2,
                 opacity: 1,
-                y: 0, // Animate to final position
-                // "--blur": "0px",
-                stagger: 0.007, // Slightly increased stagger for more pronounced effect
-                ease: "power3.out", // Smoother easing for upward movement
-                onUpdate: function() {
-                    // Update the filter during animation
-                    this.targets().forEach(char => {
-                        char.style.filter = `blur(${char.style.getPropertyValue('--blur')})`;
+                y: 0,
+                stagger: 0.01, // Reduced stagger for better performance
+                ease: "power2.out",
+                onComplete: () => {
+                    // Remove will-change after animation completes
+                    split.chars.forEach(char => {
+                        char.style.willChange = "auto";
                     });
                 }
             });
@@ -166,119 +154,103 @@ const HorizontalTimeline = () => {
         const items = itemRefs.current;
         const years = yearRefs.current;
 
-        // Set initial states - hide all items except the first
+        // Set initial states - hide all items except the first (optimized for performance)
         gsap.set(items, { 
             opacity: 0,
-            scale: 0.8,
-            filter: "blur(5px)"
+            scale: 0.95,
+            willChange: "transform, opacity"
         });
 
-        // Show first item initially with animations
+        // Show first item initially with smooth animations
         if (items[0]) {
             gsap.set(items[0], {
                 opacity: 1,
-                scale: 1,
-                filter: "blur(0px)"
+                scale: 1
             });
 
             // Initialize first item animations
-            const firstFigure = items[0].querySelector('.timeline-image-figure');
             const firstImage = items[0].querySelector('.timeline-image');
-            const firstText = items[0].querySelector('.timeline-text');
             const firstPhase = items[0].querySelector('.timeline-phase');
             const firstTitle = items[0].querySelector('.timeline-title');
             const firstSubtitle = items[0].querySelector('.timeline-subtitle');
+            const firstText = items[0].querySelector('.timeline-text');
             const firstKeypoints = items[0].querySelector('.timeline-keypoints');
             const firstKeypointItems = items[0].querySelectorAll('.timeline-keypoint');
 
-            if (firstFigure && firstImage && firstText) {
-                // Set initial states for image
-                gsap.set(firstFigure, {
-                    clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                });
+            if (firstImage) {
+                // Set initial states - simpler and smoother
                 gsap.set(firstImage, {
-                    transform: 'scale(1.5)'
+                    scale: 1.15,
+                    opacity: 0
                 });
 
                 // Set initial states for text elements
                 gsap.set([firstPhase, firstTitle, firstSubtitle, firstText, firstKeypoints], {
                     opacity: 0,
-                    y: 30,
-                    clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                    y: 20
                 });
 
                 // Set initial states for keypoint items
                 gsap.set(firstKeypointItems, {
                     opacity: 0,
-                    y: 15
+                    x: -10
                 });
 
-                // Trigger initial animations after a short delay
-                const initialTl = gsap.timeline({ delay: 0.5 });
+                // Trigger initial animations with smooth timing
+                const initialTl = gsap.timeline({ delay: 0.3 });
                 
-                // Image reveal
-                initialTl.to(firstFigure, {
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                    duration: 1,
-                    ease: "power3.out"
+                // Image reveal - simple scale and fade
+                initialTl.to(firstImage, {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
                 });
 
-                initialTl.to(firstImage, {
-                    transform: 'scale(1)',
-                    duration: 1,
-                    ease: "power3.out"
-                }, "<");
-
-                // Text reveals with fast stagger
+                // Text reveals with smooth stagger
                 initialTl.to(firstPhase, {
                     opacity: 1,
                     y: 0,
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                    duration: 0.4,
+                    duration: 0.5,
                     ease: "power2.out"
-                }, "+=0.05");
+                }, "-=0.4");
 
                 initialTl.to(firstTitle, {
                     opacity: 1,
                     y: 0,
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                    duration: 0.4,
+                    duration: 0.5,
                     ease: "power2.out"
-                }, "-=0.3");
+                }, "-=0.35");
 
                 initialTl.to(firstSubtitle, {
                     opacity: 1,
                     y: 0,
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                    duration: 0.4,
+                    duration: 0.5,
                     ease: "power2.out"
-                }, "-=0.3");
+                }, "-=0.35");
 
                 initialTl.to(firstText, {
                     opacity: 1,
                     y: 0,
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                    duration: 0.4,
+                    duration: 0.5,
                     ease: "power2.out"
-                }, "-=0.25");
+                }, "-=0.35");
 
                 initialTl.to(firstKeypoints, {
                     opacity: 1,
                     y: 0,
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                    duration: 0.4,
+                    duration: 0.5,
                     ease: "power2.out"
-                }, "-=0.25");
+                }, "-=0.35");
 
-                // Animate individual keypoint items with faster stagger
+                // Animate individual keypoint items
                 initialTl.to(firstKeypointItems, {
                     opacity: 1,
-                    y: 0,
-                    duration: 0.3,
-                    stagger: 0.05,
+                    x: 0,
+                    duration: 0.4,
+                    stagger: 0.08,
                     ease: "power2.out"
-                }, "-=0.2");
-
+                }, "-=0.3");
 
                 // Set the initial active index
                 previousActiveIndex.current = 0;
@@ -292,7 +264,7 @@ const HorizontalTimeline = () => {
 
         const setupAnimation = () => {
             const totalItems = timelineData.length;
-            const scrollDistance = window.innerHeight * 2; // Fixed scroll distance for smoother experience
+            const scrollDistance = window.innerHeight * 2.5; // Slightly longer for smoother transitions
 
             // Create ScrollTrigger for pinning and content transitions
             return ScrollTrigger.create({
@@ -300,43 +272,21 @@ const HorizontalTimeline = () => {
                 start: "top top",
                 end: `+=${scrollDistance}`,
                 pin: true,
-                scrub: 1,
+                scrub: 0.3, // Optimized for better performance
                 invalidateOnRefresh: true,
+                anticipatePin: 1,
                 onUpdate: (self) => {
                     const progress = self.progress;
                     
-                    // Update progress bar
-                    gsap.set(progressIndicatorRef.current, {
-                        scaleX: progress
-                    });
+                    // Update progress bar - direct set for better performance
+                    if (progressIndicatorRef.current) {
+                        progressIndicatorRef.current.style.transform = `scaleX(${progress})`;
+                    }
 
                     // Calculate which item should be active
                     const itemProgress = progress * (totalItems - 1);
                     const currentIndex = Math.round(itemProgress);
                     const clampedIndex = Math.max(0, Math.min(currentIndex, totalItems - 1));
-
-                    // Update title with smooth transition
-                    if (titleRef.current) {
-                        const newTitle = timelineData[clampedIndex].title;
-                        if (titleRef.current.textContent !== newTitle) {
-                            // Animate title change with fade out, change text, fade in
-                            gsap.to(titleRef.current, {
-                                opacity: 0,
-                                y: -20,
-                                duration: 0.3,
-                                ease: "power2.out",
-                                onComplete: () => {
-                                    titleRef.current.textContent = newTitle;
-                                    gsap.to(titleRef.current, {
-                                        opacity: 1,
-                                        y: 0,
-                                        duration: 0.4,
-                                        ease: "power2.out"
-                                    });
-                                }
-                            });
-                        }
-                    }
 
                     // Update item visibility - only show current item
                     items.forEach((item, index) => {
@@ -347,8 +297,7 @@ const HorizontalTimeline = () => {
                             gsap.to(item, {
                                 opacity: 1,
                                 scale: 1,
-                                filter: "blur(0px)",
-                                duration: 0.6,
+                                duration: 0.5,
                                 ease: "power2.out"
                             });
 
@@ -356,67 +305,56 @@ const HorizontalTimeline = () => {
                             if (previousActiveIndex.current !== clampedIndex) {
                                 previousActiveIndex.current = clampedIndex;
 
-                                // Trigger image and text reveal animations
-                                const figure = item.querySelector('.timeline-image-figure');
+                                // Trigger smooth image and text reveal animations
                                 const image = item.querySelector('.timeline-image');
-                                const text = item.querySelector('.timeline-text');
                                 const phase = item.querySelector('.timeline-phase');
                                 const title = item.querySelector('.timeline-title');
                                 const subtitle = item.querySelector('.timeline-subtitle');
+                                const text = item.querySelector('.timeline-text');
                                 const keypoints = item.querySelector('.timeline-keypoints');
                                 const keypointItems = item.querySelectorAll('.timeline-keypoint');
 
-                                if (figure && image && text) {
-                                    // Reset image animations
-                                    gsap.set(figure, {
-                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                                    });
+                                if (image) {
+                                    // Reset image - simple scale animation
                                     gsap.set(image, {
-                                        transform: 'scale(1.5)'
+                                        scale: 1.15,
+                                        opacity: 0
                                     });
 
-                                    // Reset text animations
+                                    // Reset text animations - simple fade and slide
                                     gsap.set([phase, title, subtitle, text, keypoints], {
                                         opacity: 0,
-                                        y: 30,
-                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        y: 20
                                     });
 
                                     // Reset individual keypoint items
                                     gsap.set(keypointItems, {
                                         opacity: 0,
-                                        y: 15
+                                        x: -10
                                     });
 
-                                    // Create timeline for animations
+                                    // Create smooth timeline for animations
                                     const animationTl = gsap.timeline();
 
-                                    // Image reveal animation
-                                    animationTl.to(figure, {
-                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                                        duration: 1,
-                                        ease: "power3.out"
+                                    // Image reveal - smooth and simple
+                                    animationTl.to(image, {
+                                        scale: 1,
+                                        opacity: 1,
+                                        duration: 0.7,
+                                        ease: "power2.out"
                                     });
 
-                                    animationTl.to(image, {
-                                        transform: 'scale(1)',
-                                        duration: 1,
-                                        ease: "power3.out"
-                                    }, "<"); // Start at the same time as figure animation
-
-                                    // Text reveal animations (fast and snappy)
+                                    // Text reveal animations - smooth and fast
                                     animationTl.to(phase, {
                                         opacity: 1,
                                         y: 0,
-                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
                                         duration: 0.4,
                                         ease: "power2.out"
-                                    }, "+=0.05");
+                                    }, "-=0.4");
 
                                     animationTl.to(title, {
                                         opacity: 1,
                                         y: 0,
-                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
                                         duration: 0.4,
                                         ease: "power2.out"
                                     }, "-=0.3");
@@ -424,7 +362,6 @@ const HorizontalTimeline = () => {
                                     animationTl.to(subtitle, {
                                         opacity: 1,
                                         y: 0,
-                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
                                         duration: 0.4,
                                         ease: "power2.out"
                                     }, "-=0.3");
@@ -432,71 +369,66 @@ const HorizontalTimeline = () => {
                                     animationTl.to(text, {
                                         opacity: 1,
                                         y: 0,
-                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
                                         duration: 0.4,
                                         ease: "power2.out"
-                                    }, "-=0.25");
+                                    }, "-=0.3");
 
                                     animationTl.to(keypoints, {
                                         opacity: 1,
                                         y: 0,
-                                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
                                         duration: 0.4,
                                         ease: "power2.out"
-                                    }, "-=0.25");
+                                    }, "-=0.3");
 
-                                    // Animate individual keypoint items with faster stagger
+                                    // Animate individual keypoint items
                                     animationTl.to(keypointItems, {
                                         opacity: 1,
-                                        y: 0,
-                                        duration: 0.3,
-                                        stagger: 0.05,
+                                        x: 0,
+                                        duration: 0.35,
+                                        stagger: 0.08,
                                         ease: "power2.out"
-                                    }, "-=0.2");
-
+                                    }, "-=0.25");
                                 }
                             }
                         } else {
-                            // Hidden items
+                            // Hidden items - smooth fade out
                             gsap.to(item, {
                                 opacity: 0,
-                                scale: 0.8,
-                                filter: "blur(5px)",
+                                scale: 0.95,
                                 duration: 0.4,
                                 ease: "power2.out"
                             });
                         }
                     });
 
-                    // Update year highlights in progress bar
+                    // Update year highlights in progress bar with smooth transitions
                     years.forEach((year, index) => {
                         if (!year) return;
                         
                         const isActive = index === clampedIndex;
                         
                         gsap.to(year, {
-                            color: isActive ? "#ffffff" : "#666666",
-                            scale: isActive ? 1.2 : 1,
-                            duration: 0.3,
+                            color: isActive ? "#ffffff" : "#777777",
+                            scale: isActive ? 1.15 : 1,
+                            duration: 0.4,
                             ease: "power2.out"
                         });
 
-                        // Enhanced glow effect for active year
+                        // Smooth glow effect for active year
                         if (isActive) {
                             gsap.to(year, {
-                                textShadow: "0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.4)",
-                                duration: 0.3,
+                                textShadow: "0 0 20px rgba(255, 255, 255, 0.7), 0 0 35px rgba(255, 255, 255, 0.5)",
+                                duration: 0.4,
                                 ease: "power2.out"
                             });
                         } else {
                             gsap.to(year, {
-                                textShadow: "0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3)",
-                                duration: 0.3,
+                                textShadow: "0 0 8px rgba(255, 255, 255, 0.3)",
+                                duration: 0.4,
                                 ease: "power2.out"
                             });
                         }
                     });
-
                 }
             });
         };
@@ -527,7 +459,7 @@ const HorizontalTimeline = () => {
         };
     }, []);
 
-    // Add keyframes to document head
+    // Add optimized keyframes to document head
     useEffect(() => {
         const style = document.createElement('style');
         style.textContent = `
@@ -547,44 +479,18 @@ const HorizontalTimeline = () => {
                     opacity: 0.3;
                 }
                 50% {
-                    transform: translateY(-20px) translateX(10px);
-                    opacity: 0.7;
+                    transform: translateY(-15px) translateX(8px);
+                    opacity: 0.6;
                 }
             }
             @keyframes pulse {
-                0% {
+                0%, 100% {
                     opacity: 0.3;
                     transform: scale(1);
                 }
-                100% {
-                    opacity: 0.1;
-                    transform: scale(1.05);
-                }
-            }
-            @keyframes rollFromLeft {
-                from {
-                    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-                }
-                to {
-                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-                }
-            }
-            @keyframes scaleDown {
-                from {
-                    transform: scale(1.5);
-                }
-                to {
-                    transform: scale(1);
-                }
-            }
-            @keyframes rollFromRight {
-                from {
-                    opacity: 0;
-                    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
-                }
-                to {
-                    opacity: 1;
-                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                50% {
+                    opacity: 0.15;
+                    transform: scale(1.03);
                 }
             }
         `;
@@ -713,7 +619,7 @@ const HorizontalTimeline = () => {
                                         style={{
                                             opacity: 0,
                                             transform: 'translateY(20px)',
-                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                            willChange: 'transform, opacity'
                                         }}
                                     >
                                         {item.year} • {item.phase}
@@ -722,8 +628,8 @@ const HorizontalTimeline = () => {
                                         className="timeline-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-white leading-tight"
                                         style={{
                                             opacity: 0,
-                                            transform: 'translateY(30px)',
-                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                            transform: 'translateY(20px)',
+                                            willChange: 'transform, opacity'
                                         }}
                                     >
                                         {item.title}
@@ -733,7 +639,7 @@ const HorizontalTimeline = () => {
                                         style={{
                                             opacity: 0,
                                             transform: 'translateY(20px)',
-                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                            willChange: 'transform, opacity'
                                         }}
                                     >
                                         {item.subtitle}
@@ -743,10 +649,10 @@ const HorizontalTimeline = () => {
                                     className="timeline-text text-lg md:text-xl text-gray-100 leading-relaxed max-w-lg"
                                     style={{
                                         opacity: 0,
-                                        transform: 'translateY(25px)',
+                                        transform: 'translateY(20px)',
                                         display: 'inline',
                                         fontFamily: 'inherit',
-                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        willChange: 'transform, opacity'
                                     }}
                                 >
                                     {item.description}
@@ -756,8 +662,8 @@ const HorizontalTimeline = () => {
                                 {item.keyPoints && item.keyPoints.length > 0 && (
                                     <div className="timeline-keypoints space-y-3" style={{
                                         opacity: 0,
-                                        transform: 'translateY(30px)',
-                                        clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                        transform: 'translateY(20px)',
+                                        willChange: 'transform, opacity'
                                     }}>
                                         <h4 className="text-sm font-semibold text-gray-200 uppercase tracking-wide">
                                             关键要点 Key Points
@@ -766,8 +672,8 @@ const HorizontalTimeline = () => {
                                             {item.keyPoints.slice(0, 2).map((point, pointIndex) => (
                                                 <li key={pointIndex} className="timeline-keypoint text-sm text-gray-300 leading-relaxed flex items-start" style={{
                                                     opacity: 0,
-                                                    transform: 'translateY(15px)',
-                                                    transitionDelay: `${pointIndex * 100}ms`
+                                                    transform: 'translateX(-10px)',
+                                                    willChange: 'transform, opacity'
                                                 }}>
                                                     <span className="inline-block w-1.5 h-1.5 bg-white/60 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                                                     <span>{point}</span>
@@ -783,27 +689,27 @@ const HorizontalTimeline = () => {
                             <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
                                 <div className="relative">
                                     <figure 
-                                        className="timeline-image-figure aspect-[4/3] rounded-2xl overflow-hidden bg-gray-200"
+                                        className="timeline-image-figure aspect-[4/3] rounded-2xl overflow-hidden bg-gray-800"
                                         style={{
                                             margin: 0,
                                             padding: 0,
                                             display: 'grid',
-                                            placeItems: 'center',
-                                            clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                                            placeItems: 'center'
                                         }}
                                     >
-                                        <div style={{ overflow: 'hidden' }} className="w-full h-full">
-                                            <img 
-                                                src={item.image} 
-                                                alt={item.title}
-                                                className="timeline-image w-full h-full object-cover"
-                                                style={{
-                                                    transform: 'scale(1.5)'
-                                                }}
-                                            />
-                                        </div>
+                                        <img 
+                                            src={item.image} 
+                                            alt={item.title}
+                                            loading="lazy"
+                                            className="timeline-image w-full h-full object-cover"
+                                            style={{
+                                                transform: 'scale(1.15)',
+                                                opacity: 0,
+                                                willChange: 'transform, opacity'
+                                            }}
+                                        />
                                     </figure>
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent"></div>
+                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
                                 </div>
                             </div>
                         </div>
@@ -905,6 +811,8 @@ const HorizontalTimeline = () => {
  
         </section>
     );
-};
+});
+
+HorizontalTimeline.displayName = 'HorizontalTimeline';
 
 export default HorizontalTimeline;

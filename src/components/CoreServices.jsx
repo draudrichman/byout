@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, memo } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -218,7 +218,7 @@ const Preview = ({ data, isActive, onBack }) => {
 };
 
 // Main component
-const CoreServices = () => {
+const CoreServices = memo(() => {
   const [currentPreview, setCurrentPreview] = useState(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   
@@ -609,6 +609,7 @@ const CoreServices = () => {
                       alt="Core Services Icon" 
                       width={800}
                       height={800}
+                      loading="lazy"
                       className="relative z-10 opacity-90 filter brightness-110 contrast-105 drop-shadow-[0_0_15px_rgba(147,51,234,0.7)]"
                     />
                     {/* Additional animated glow */}
@@ -697,7 +698,9 @@ const CoreServices = () => {
       </section>
     </main>
   );
-};
+});
+
+CoreServices.displayName = 'CoreServices';
 
 export default CoreServices;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,13 +7,11 @@ import GlowCircle from './GlowCircle';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const GlobalPresence = () => {
+const GlobalPresence = memo(() => {
   const [animationPhase, setAnimationPhase] = useState(0);
-  const [scrollVelocity, setScrollVelocity] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
   const containerRef = useRef(null);
   const titleRef = useRef(null);
-  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimationPhase(1), 200);
@@ -285,30 +283,11 @@ const GlobalPresence = () => {
               >
                 {/* Image Container with enhanced shader effects */}
                 <div className="relative h-48 overflow-hidden rounded-t-xl">
-                  <div
-                    className="w-full h-full bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-110"
-                    style={{
-                      backgroundImage: `url(${location.image})`,
-                      filter: `
-                        blur(${Math.abs(scrollVelocity) * 2}px) 
-                        brightness(${0.8 - Math.abs(scrollVelocity) * 0.2}) 
-                        contrast(${1.2 + Math.abs(scrollVelocity) * 0.3})
-                        grayscale(${0.3 + Math.abs(scrollVelocity) * 0.4})
-                      `,
-                      transform: `scale(${1 + Math.abs(scrollVelocity) * 0.02})`
-                    }}
-                  />
-                  
-                  {/* Shader-inspired motion blur overlay */}
-                  <div 
-                    className="absolute inset-0 transition-opacity duration-200"
-                    style={{
-                      background: Math.abs(scrollVelocity) > 0.1 ? 
-                        `linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)` : 
-                        'transparent',
-                      opacity: Math.min(Math.abs(scrollVelocity) * 2, 0.6),
-                      transform: `translateX(${scrollVelocity > 0 ? '100%' : scrollVelocity < 0 ? '-100%' : '0%'})`
-                    }}
+                  <img
+                    src={location.image}
+                    alt={location.titleEnglish}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
                   />
                   
                   {/* Enhanced silver shine sweep */}
@@ -452,6 +431,8 @@ const GlobalPresence = () => {
       `}</style>
     </section>
   );
-};
+});
+
+GlobalPresence.displayName = 'GlobalPresence';
 
 export default GlobalPresence;
