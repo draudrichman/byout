@@ -20,8 +20,6 @@ import Prism from "./components/PrismaBackground.jsx";
 
 
 
-
-
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const fluidBgRef = useRef(null)
@@ -48,36 +46,55 @@ function App() {
   }
 
   return (
-    <ReactLenis 
-      root 
-      options={{
-        lerp: 0.1, // Lower lerp for smoother animation
-        duration: 1.2, // Slightly longer duration for smoother feel
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
-        normalizeWheel: true,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing for smoother feel
-        infinite: false,
-        autoResize: true,
-        syncTouch: true,
-        syncTouchLerp: 0.075,
-        touchInertiaMultiplier: 35,
-        releaseInertia: true,
-        breakpoint: 0,
-        disabled: false,
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smoothTouch: true,
-        mouseMultiplier: 1,
-        smooth: true,
-        class: 'lenis'
-      }}
-    >
-      <div className="App">
-        <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
+    <>
+      {/* Fixed background Prism for all pages - stays in place during scroll */}
+      <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-black" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0}}>
+        <Prism
+            animationType="3drotate"
+            timeScale={1}
+            height={2.5}
+            baseWidth={3.5}
+            hueShift={0.02}
+            colorFrequency={3}
+            noise={0.1}
+            glow={0.1}
+            scale={3.6}
+            colorScheme="champagne-chrome"
+        />
+      </div>
+      
+      <ReactLenis 
+        root 
+        options={{
+          lerp: 0.1, // Lower lerp for smoother animation
+          duration: 1.2, // Slightly longer duration for smoother feel
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 2,
+          normalizeWheel: true,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing for smoother feel
+          infinite: false,
+          autoResize: true,
+          syncTouch: true,
+          syncTouchLerp: 0.075,
+          touchInertiaMultiplier: 35,
+          releaseInertia: true,
+          breakpoint: 0,
+          disabled: false,
+          direction: 'vertical',
+          gestureDirection: 'vertical',
+          smoothTouch: true,
+          mouseMultiplier: 1,
+          smooth: true,
+          class: 'lenis'
+        }}
+      >
+        {/* Main content with higher z-index */}
+        <div className="relative z-10">
+          <div className="App">
+            <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
 
 <div 
   //  style={{
@@ -91,47 +108,29 @@ function App() {
 
 <Leva  hidden />
 
-        <AuroraBackground>
-          <LandingPage key="landing" />
-        </AuroraBackground>
-        <StatsPage/>
+            <AuroraBackground>
+              <LandingPage key="landing" />
+            </AuroraBackground>
+            <StatsPage/>
 
-        {/* Prism background only for CompanyIntroduction and ExperienceShowcase */}
-        <div className="relative">
-          {/* <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-black">
-            <Prism
-                 animationType="3drotate"
-                 timeScale={1}
-                 height={2.5}
-                 baseWidth={3.5}
-                 hueShift={0.02}
-                 colorFrequency={3}
-                 noise={0.1}
-                 glow={0.1}
-                 scale={3.6}
-                 colorScheme="champagne-chrome"
-            />
-          </div> */}
-          <div className="relative z-10">
             <CompanyIntroduction/>
             <ExperienceShowcase/>
+
+
+
+
+            <HorizontalTimeline/>
+            {/* <Timeline/> */}
+            <GlobalPresence/>
+            <CoreServices/>
+            {/* <TeamSection/> */}
+            {/* <GlobalPresence/> */}
+</div>
+            {/* <CompaniesIntro /> */}
           </div>
         </div>
-
-
-
-
-
-        <HorizontalTimeline/>
-        {/* <Timeline/> */}
-        <GlobalPresence/>
-        <CoreServices/>
-        {/* <TeamSection/> */}
-        {/* <GlobalPresence/> */}
-</div>
-        {/* <CompaniesIntro /> */}
-      </div>
-    </ReactLenis>
+      </ReactLenis>
+    </>
   )
 }
 

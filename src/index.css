@@ -1,5 +1,47 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Chinese-Font';
+  src: url('/Fonts/MFYueHei_Noncommercial-Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SciFi-Font';
+  src: url('/Fonts/Ethnocentric Rg.otf') format('opentype');
+  font-display: swap;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-chinese: 'Chinese-Font', 'MFYueHei', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+  --font-scifi: 'SciFi-Font', 'Ethnocentric', 'Orbitron', 'Exo 2', 'Rajdhani', monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-chinese: var(--font-chinese);
+  --font-scifi: var(--font-scifi);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+.font-chinese {
+  font-family: var(--font-chinese), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.font-scifi {
+  font-family: var(--font-scifi), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
 
 body{
   background: #000000;
@@ -7,6 +49,9 @@ body{
   overflow-x: hidden;
   /* Disable default scrolling for React Lenis */
   overflow-y: hidden;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), var(--font-chinese), Arial, Helvetica, sans-serif;
 }
 
 
