@@ -16,6 +16,8 @@ import { Leva } from 'leva'
 import ExperienceShowcase from './components/ExperienceShowcase'
 import CompanyIntroduction from './components/CompanyIntroduction'
 import Prism from "./components/PrismaBackground.jsx";
+import FounderStaff from './components/FounderStaff.jsx'
+import ContactForm from './components/ContactForm.jsx'
 
 
 
@@ -123,6 +125,8 @@ function App() {
             {/* <Timeline/> */}
             <GlobalPresence/>
             <CoreServices/>
+            <FounderStaff/>
+            <ContactForm/>
             {/* <TeamSection/> */}
             {/* <GlobalPresence/> */}
 </div>
