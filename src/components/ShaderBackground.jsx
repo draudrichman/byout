@@ -327,7 +327,8 @@ const ShaderBackground = ({ className = '', style = {}, opacity = 0.5 }) => {
   const rendererRef = useRef(null);
   const pointersRef = useRef(null);
   const frameRef = useRef(null);
-  const dprRef = useRef(Math.max(1, 0.5 * window.devicePixelRatio));
+  const dprRef = useRef(Math.min(1, window.devicePixelRatio * 0.75)); // Further reduced for performance
+  const isVisibleRef = useRef(true);
 
   const resize = () => {
     const canvas = canvasRef.current;
@@ -349,7 +350,7 @@ const ShaderBackground = ({ className = '', style = {}, opacity = 0.5 }) => {
   };
 
   const loop = (now) => {
-    if (!rendererRef.current || !pointersRef.current) return;
+    if (!rendererRef.current || !pointersRef.current || !isVisibleRef.current) return;
     
     rendererRef.current.updateMouse(pointersRef.current.first);
     rendererRef.current.updatePointerCount(pointersRef.current.count);
@@ -397,6 +398,30 @@ const ShaderBackground = ({ className = '', style = {}, opacity = 0.5 }) => {
       resizeObserver.observe(canvas.parentElement);
     }
 
+    // Add Intersection Observer for visibility-based rendering
+    let intersectionObserver;
+    if ('IntersectionObserver' in window) {
+      intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          isVisibleRef.current = entries[0].isIntersecting && !document.hidden;
+          if (isVisibleRef.current && !frameRef.current) {
+            loop(performance.now());
+          }
+        },
+        { rootMargin: '100px' }
+      );
+      intersectionObserver.observe(canvas);
+    }
+
+    // Add visibility change listener
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+      if (isVisibleRef.current && !frameRef.current) {
+        loop(performance.now());
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     // Cleanup
     return () => {
       if (frameRef.current) {
@@ -404,9 +429,14 @@ const ShaderBackground = ({ className = '', style = {}, opacity = 0.5 }) => {
       }
       canvas.removeEventListener('shader-error', handleShaderError);
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       
       if (resizeObserver) {
         resizeObserver.disconnect();
+      }
+      
+      if (intersectionObserver) {
+        intersectionObserver.disconnect();
       }
       
       if (rendererRef.current) {

@@ -1,51 +1,65 @@
-import { useState, useEffect, useRef } from 'react'
-
-import LandingPage from './components/LandingPage'
-// import './App.css'
-import { AuroraBackground } from './components/ui/aurora-background'
-import StatsPage from './components/StatsPage'
-import CompaniesIntro from './components/CompaniesIntro'
-import Timeline from './components/Timeline'
-import HorizontalTimeline from './components/HorizontalTimeline'
-import GlobalPresence from './components/GlobalPresence'
-import CoreServices from './components/CoreServices'
-import { ReactLenis, useLenis } from '@studio-freight/react-lenis'
-import TeamSection from './components/TeamSection.jsx';
-import { AestheticFluidBg } from "./components/js/AestheticFluidBg.module.js"
+import { useState, useEffect, useRef, lazy, Suspense, memo } from 'react'
+import { ReactLenis } from '@studio-freight/react-lenis'
 import { Leva } from 'leva'
-import ExperienceShowcase from './components/ExperienceShowcase'
-import CompanyIntroduction from './components/CompanyIntroduction'
+
+// Eager load critical above-the-fold components
+import LandingPage from './components/LandingPage'
+import { AuroraBackground } from './components/ui/aurora-background'
 import Prism from "./components/PrismaBackground.jsx";
-import FounderStaff from './components/FounderStaff.jsx'
-import ContactForm from './components/ContactForm.jsx'
+
+// Lazy load below-the-fold components for better initial load
+const StatsPage = lazy(() => import('./components/StatsPage').catch(() => ({ default: () => <div>Loading...</div> })))
+const LogoSection = lazy(() => import('./components/LogoSection').catch(() => ({ default: () => <div>Loading...</div> })))
+const CompanyIntroduction = lazy(() => import('./components/CompanyIntroduction').catch(() => ({ default: () => <div>Loading...</div> })))
+const ExperienceShowcase = lazy(() => import('./components/ExperienceShowcase').catch(() => ({ default: () => <div>Loading...</div> })))
+const HorizontalTimeline = lazy(() => import('./components/HorizontalTimeline').catch(() => ({ default: () => <div>Loading...</div> })))
+const GlobalPresence = lazy(() => import('./components/GlobalPresence').catch(() => ({ default: () => <div>Loading...</div> })))
+const CoreServices = lazy(() => import('./components/CoreServices').catch(() => ({ default: () => <div>Loading...</div> })))
+const FounderStaff = lazy(() => import('./components/FounderStaff').catch(() => ({ default: () => <div>Loading...</div> })))
+const ContactForm = lazy(() => import('./components/ContactForm').catch(() => ({ default: () => <div>Loading...</div> })))
+
+// Loading fallback component
+const LoadingFallback = memo(() => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+  </div>
+))
+
+LoadingFallback.displayName = 'LoadingFallback'
 
 
 
 
-function App() {
-  const [isLoading, setIsLoading] = useState(true)
+const App = memo(() => {
   const fluidBgRef = useRef(null)
 
-  // useEffect(() => {
-  //   if (fluidBgRef.current) {
-  //     const colorbg = new AestheticFluidBg({
-  //       dom: "fluid-bg",
-  //       colors: ["#846e8c","#93aaec","#131a25","#aa86ac","#212832","#8c8f97"],
-  //       loop: true
-  //     })
-
-  //     // Cleanup function to destroy the background when component unmounts
-  //     return () => {
-  //       if (colorbg && colorbg.destroy) {
-  //         colorbg.destroy()
-  //       }
-  //     }
-  //   }
-  // }, [])
-
-  const handlePreloaderComplete = () => {
-    setIsLoading(false)
-  }
+  // Performance monitoring (optional - disable if too noisy)
+  useEffect(() => {
+    if (typeof window === 'undefined' || process.env.NODE_ENV !== 'development') return;
+    
+    // Use PerformanceObserver instead of manual RAF for better accuracy
+    let observer;
+    
+    try {
+      observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          // Only log significant frame drops
+          if (entry.duration > 50) { // More than 50ms is significant
+            console.warn(`⚠️ Long task detected: ${entry.duration.toFixed(2)}ms`, entry.name);
+          }
+        }
+      });
+      
+      observer.observe({ entryTypes: ['measure', 'longtask'] });
+    } catch (e) {
+      // PerformanceObserver not supported, skip monitoring
+      console.log('Performance monitoring not available');
+    }
+    
+    return () => {
+      if (observer) observer.disconnect();
+    };
+  }, [])
 
   return (
     <>
@@ -98,44 +112,57 @@ function App() {
           <div className="App">
             <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
 
-<div 
-  //  style={{
-  //   background: `
-  //     // radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
-  //     linear-gradient(180deg, rgb(191, 191, 189), #000000f0 70%)
-  //   `
-  // }}
->
+            <div>
+              <Leva hidden />
 
-
-<Leva  hidden />
-
-            <AuroraBackground>
-              <LandingPage key="landing" />
-            </AuroraBackground>
-            <StatsPage/>
-
-            <CompanyIntroduction/>
-            <ExperienceShowcase/>
-
-
-
-
-            <HorizontalTimeline/>
-            {/* <Timeline/> */}
-            <GlobalPresence/>
-            <CoreServices/>
-            <FounderStaff/>
-            <ContactForm/>
-            {/* <TeamSection/> */}
-            {/* <GlobalPresence/> */}
-</div>
-            {/* <CompaniesIntro /> */}
+              <AuroraBackground>
+                <LandingPage key="landing" />
+              </AuroraBackground>
+              
+              {/* Lazy load below-the-fold components with Suspense */}
+              <Suspense fallback={<LoadingFallback />}>
+                <StatsPage />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <LogoSection />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <CompanyIntroduction />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <ExperienceShowcase />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <HorizontalTimeline />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <GlobalPresence />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <CoreServices />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <FounderStaff />
+              </Suspense>
+              
+              <Suspense fallback={<LoadingFallback />}>
+                <ContactForm />
+              </Suspense>
+            </div>
           </div>
         </div>
       </ReactLenis>
     </>
   )
-}
+})
+
+App.displayName = 'App'
 
 export default App

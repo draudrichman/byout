@@ -101,24 +101,24 @@ export default function BigLogo() {
         else if (ref && typeof ref === "object") ref.current = node;
         sectionRef.current = node;
       }}
-      className="relative w-full min-h-[90vh] flex items-center justify-center py-0 overflow-hidden"
+      className="relative w-full min-h-[90vh] bg-black flex items-center justify-center py-0 overflow-hidden"
     >
       {/* Main container: column on mobile, row on large screens */}
       <div className="w-full max-w-7xl mx-auto px-6 flex flex-col lg:flex-row lg:justify-between lg:items-start">
         {/* --- Text Content (Left on desktop, Top on mobile) --- */}
         <div className="lg:w-1/2 lg:pr-12 mb-10 mt-10 lg:mb-0 lg:mt-0">
           {/* Main Heading: "HONOR GROWTH" */}
-          <h1 className="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold text-[#3F0F6B] tracking-tight leading-none">
+          <h1 class="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold text-[#3F0F6B] tracking-tight leading-none">
             HONOR GROWTH
           </h1>
-          <p className="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-2xl text-gray-700 leading-relaxed">
+          <p class="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-2xl text-gray-700 leading-relaxed">
             我们是红点、iF、长城奖、TOP Digital等 <br />{" "}
             国内外大奖认可的新一代国际品牌
           </p>
 
           {/* Subheading in orange */}
-          <div className="mt-6 md:mt-8 text-center lg:text-left">
-            <p className="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-light tracking-wide leading-tight">
+          <div class="mt-6 md:mt-8 text-center lg:text-left">
+            <p class="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-light tracking-wide leading-tight">
               HONOR THE GROWTH OF A NEW GENERATION OF INTERNATIONAL BRANDS
             </p>
           </div>

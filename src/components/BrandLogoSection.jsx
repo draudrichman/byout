@@ -285,7 +285,7 @@ export default function BrandLogosSection() {
 
             {/* Desktop animated layout: centered and symmetric */}
             <div
-              className="hidden md:flex w-full relative items-center justify-center"
+              className="hidden item-logos  md:flex w-full relative items-center justify-center"
               style={{ height: "clamp(320px, 45vh, 560px)" }}
             >
               <div
@@ -340,6 +340,9 @@ export default function BrandLogosSection() {
                   );
                 })}
               </div>
+              
+              <div class="background-gradient-circle"></div>
+
             </div>
           </div>
         </div>

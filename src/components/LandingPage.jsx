@@ -251,7 +251,7 @@ style={{
         <div className="w-1/2 flex flex-col justify-center pl-24 pr-8">
           {/* Main Title */}
           <h1 className="text-white mb-12">
-      <img src="./img/logos/prism.svg" alt="" />
+      <img src="./img/logos/prism.svg" alt="Prism Logo" loading="eager" />
           </h1>
           
           {/* Morphing Subtitles */}

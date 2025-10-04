@@ -396,7 +396,7 @@ export function WebGLRendererConfig() {
 
   useEffect(() => {
     try {
-      gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap pixel ratio for performance
+      gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Further cap pixel ratio for performance
       gl.setSize(size.width, size.height);
       gl.setClearColor(0x000000, 0);
       
@@ -478,8 +478,8 @@ export function World(props) {
         position={lightPositions.directionalLeft}
         intensity={4.5} // Increased for stronger metallic reflections
         castShadow
-        shadow-mapSize-width={4096} // Higher resolution shadows for metallic arcs
-        shadow-mapSize-height={4096}
+        shadow-mapSize-width={2048} // Reduced for better performance
+        shadow-mapSize-height={2048}
         shadow-camera-far={2000}
         shadow-camera-left={-500}
         shadow-camera-right={500}
@@ -494,8 +494,8 @@ export function World(props) {
         position={lightPositions.directionalRight}
         intensity={3.5} // Increased for better metallic illumination
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
       />
       
       {/* Rim light for metallic edge definition */}
@@ -519,23 +519,23 @@ export function World(props) {
         intensity={1.8}
       />
       
-      {/* Main point light for metallic highlights */}
+      {/* Main point light for metallic highlights - shadow map reduced */}
       <pointLight
         color={globeConfig.pointLight || "#ffffff"}
         position={lightPositions.pointMain}
-        intensity={3.5} // Increased for stronger metallic highlights
+        intensity={3.5}
         distance={1500}
         decay={0.03}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
       />
       
-      {/* Accent lights for metallic color variation */}
+      {/* Keep only essential accent lights for performance */}
       <pointLight
         color="#ff6b35"
         position={lightPositions.pointAccent1}
-        intensity={2.0} // Increased for better metallic interaction
+        intensity={2.0}
         distance={1200}
         decay={0.08}
       />
@@ -543,60 +543,9 @@ export function World(props) {
       <pointLight
         color="#4ecdc4"
         position={lightPositions.pointAccent2}
-        intensity={1.8} // Increased for better metallic interaction
+        intensity={1.8}
         distance={1000}
         decay={0.12}
-      />
-
-      {/* Additional rim lights for HDR metallic effect */}
-      <pointLight
-        color="#f7b731"
-        position={[300, 200, -300]}
-        intensity={1.5} // Increased for metallic shine
-        distance={800}
-        decay={0.15}
-      />
-      
-      <pointLight
-        color="#a55eea"
-        position={[-300, -200, 300]}
-        intensity={1.2} // Increased for metallic shine
-        distance={700}
-        decay={0.18}
-      />
-      
-      {/* Additional lights specifically for arc enhancement */}
-      <pointLight
-        color="#ffffff"
-        position={[0, 400, 0]}
-        intensity={2.5}
-        distance={1000}
-        decay={0.1}
-      />
-      
-      <pointLight
-        color="#ffffff"
-        position={[0, -400, 0]}
-        intensity={2.0}
-        distance={1000}
-        decay={0.1}
-      />
-      
-      {/* Colored accent lights for iridescent metallic effects */}
-      <pointLight
-        color="#ff0080"
-        position={[400, 0, 400]}
-        intensity={1.0}
-        distance={600}
-        decay={0.2}
-      />
-      
-      <pointLight
-        color="#00ff88"
-        position={[-400, 0, 400]}
-        intensity={1.0}
-        distance={600}
-        decay={0.2}
       />
       
       <Globe {...props} />

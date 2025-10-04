@@ -81,8 +81,8 @@ const Prism = ({
     const HOVSTR = Math.max(0, hoverStrength || 1);
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    // Optimize DPR based on device capabilities
-    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+    // Optimize DPR based on device capabilities - cap at 1 for better performance
+    const dpr = Math.min(1, window.devicePixelRatio || 1);
     const renderer = new Renderer({
       dpr,
       alpha: transparent,
@@ -555,22 +555,33 @@ const Prism = ({
       }
     };
 
-    if (suspendWhenOffscreen) {
-      const io = new IntersectionObserver((entries) => {
-        const vis = entries.some((e) => e.isIntersecting);
-        if (vis) startRAF();
-        else stopRAF();
-      });
-      io.observe(container);
-      startRAF();
-      container.__prismIO = io;
-    } else {
-      startRAF();
-    }
+    // Always suspend when offscreen or tab hidden for better performance
+    const io = new IntersectionObserver((entries) => {
+      const vis = entries.some((e) => e.isIntersecting);
+      if (vis && !document.hidden) startRAF();
+      else stopRAF();
+    }, { rootMargin: '50px' });
+    io.observe(container);
+    
+    // Add visibility change listener
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopRAF();
+      } else {
+        const rect = container.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isVisible) startRAF();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    startRAF();
+    container.__prismIO = io;
 
     return () => {
       stopRAF();
       ro.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (animationType === "hover") {
         if (onPointerMove)
           window.removeEventListener(
@@ -580,11 +591,9 @@ const Prism = ({
         window.removeEventListener("mouseleave", onLeave);
         window.removeEventListener("blur", onBlur);
       }
-      if (suspendWhenOffscreen) {
-        const io = container.__prismIO;
-        if (io) io.disconnect();
-        delete container.__prismIO;
-      }
+      const io = container.__prismIO;
+      if (io) io.disconnect();
+      delete container.__prismIO;
       if (gl.canvas.parentElement === container)
         container.removeChild(gl.canvas);
     };

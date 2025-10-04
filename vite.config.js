@@ -16,6 +16,7 @@ export default defineConfig({
           'vendor-react': ['react', 'react-dom'],
           'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-animation': ['gsap', 'framer-motion'],
+          'vendor-lenis': ['@studio-freight/react-lenis'],
         }
       }
     },
@@ -27,11 +28,39 @@ export default defineConfig({
       compress: {
         drop_console: true, // Remove console.logs in production
         drop_debugger: true,
+        passes: 2, // Multiple compression passes for better results
+        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remove specific console methods
+      },
+      mangle: {
+        safari10: true,
+      },
+      format: {
+        comments: false, // Remove all comments
       }
-    }
+    },
+    // Additional optimizations
+    cssCodeSplit: true,
+    sourcemap: false, // Disable sourcemaps in production for smaller bundle
+    target: 'es2015', // Target modern browsers for better optimization
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'gsap'],
+    include: [
+      'react', 
+      'react-dom', 
+      'gsap', 
+      '@studio-freight/react-lenis',
+      '@react-three/fiber',
+      '@react-three/drei',
+      'three',
+      'three-globe'
+    ],
+    exclude: [], // Don't exclude anything - let Vite handle it
+  },
+  // Performance optimizations
+  server: {
+    hmr: {
+      overlay: false, // Disable error overlay for better performance
+    },
   },
 })

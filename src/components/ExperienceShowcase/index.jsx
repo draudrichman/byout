@@ -160,7 +160,7 @@ const ExperienceShowcase = memo(() => {
           />
 
         {/* Awards and Brands Section */}
-        <AwardsAndBrands />
+        {/* <AwardsAndBrands /> */}
       </div>
     </div>
   );
