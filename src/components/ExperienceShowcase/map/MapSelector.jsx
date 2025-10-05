@@ -23,12 +23,14 @@ export const MapSelector = ({
 
   const goToNext = useCallback(() => {
     const nextIndex = (currentIndex + 1) % flagItems.length;
-    onCountryChange?.(flagItems[nextIndex].country, nextIndex);
+    // Pass false to indicate this is auto-rotation, not a user click
+    onCountryChange?.(flagItems[nextIndex].country, nextIndex, false);
   }, [currentIndex, onCountryChange, flagItems]);
 
-  const goToIndex = useCallback((index) => {
+  const goToIndex = useCallback((index, isUserClick = true) => {
     if (index >= 0 && index < flagItems.length) {
-      onCountryChange?.(flagItems[index].country, index);
+      // Pass isUserClick flag to indicate if this was triggered by user interaction
+      onCountryChange?.(flagItems[index].country, index, isUserClick);
     }
   }, [onCountryChange, flagItems]);
 

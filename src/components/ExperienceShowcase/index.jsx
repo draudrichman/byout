@@ -21,8 +21,21 @@ const ExperienceShowcase = memo(() => {
   const mapSelectorRef = useRef(null);
   const hubTimeoutRef = useRef(null);
 
-  const handleCountryChange = useCallback((country, flagIndex) => {
-    if (country === selectedCountry || isTransitioning) return;
+  const handleCountryChange = useCallback((country, flagIndex, isUserClick = true) => {
+    // Allow reopening HUD for the same country if it's currently closed
+    if (country === selectedCountry && showHUD && isUserClick) {
+      if (isTransitioning) return;
+      // Just reset the auto-hide timer
+      if (hubTimeoutRef.current) {
+        clearTimeout(hubTimeoutRef.current);
+      }
+      hubTimeoutRef.current = setTimeout(() => {
+        setShowHUD(false);
+      }, 8000);
+      return;
+    }
+    
+    if (isTransitioning) return;
     
     // Update flag index for connector - both country and index should be synchronized
     setSelectedFlagIndex(flagIndex);
@@ -48,17 +61,19 @@ const ExperienceShowcase = memo(() => {
     
     timelineRef.current = tl;
     
-    // Simple country change with unified HUD display
+    // Simple country change
     tl.call(() => {
       setSelectedCountry(country);
-      // Show unified HUD overlay on map
-      setShowHUD(true);
-      // Auto-hide HUD after 8 seconds
-      hubTimeoutRef.current = setTimeout(() => {
-        setShowHUD(false);
-      }, 8000);
+      // Only show unified HUD overlay on map if triggered by user click
+      if (isUserClick) {
+        setShowHUD(true);
+        // Auto-hide HUD after 8 seconds
+        hubTimeoutRef.current = setTimeout(() => {
+          setShowHUD(false);
+        }, 8000);
+      }
     });
-  }, [selectedCountry, isTransitioning]);
+  }, [selectedCountry, isTransitioning, showHUD]);
 
 
   const handleHUDClose = useCallback(() => {
