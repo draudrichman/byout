@@ -4,6 +4,7 @@ import { Leva } from 'leva'
 
 // Eager load critical above-the-fold components
 import LandingPage from './components/LandingPage'
+import LoadingPage from './components/LoadingPage'
 import { AuroraBackground } from './components/ui/aurora-background'
 import Prism from "./components/PrismaBackground.jsx";
 
@@ -32,6 +33,12 @@ LoadingFallback.displayName = 'LoadingFallback'
 
 const App = memo(() => {
   const fluidBgRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Handle loading completion
+  const handleLoadingComplete = () => {
+    setIsLoading(false)
+  }
 
   // Performance monitoring (optional - disable if too noisy)
   useEffect(() => {
@@ -60,6 +67,11 @@ const App = memo(() => {
       if (observer) observer.disconnect();
     };
   }, [])
+
+  // Show loading page initially
+  if (isLoading) {
+    return <LoadingPage onComplete={handleLoadingComplete} duration={4000} />
+  }
 
   return (
     <>
