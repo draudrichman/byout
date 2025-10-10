@@ -1,12 +1,17 @@
 import { useState, useEffect, useRef, lazy, Suspense, memo } from 'react'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { ReactLenis } from '@studio-freight/react-lenis'
 import { Leva } from 'leva'
 
 // Eager load critical above-the-fold components
 import LandingPage from './components/LandingPage'
 import LoadingPage from './components/LoadingPage'
+import HomePage from './components/HomePage'
 import { AuroraBackground } from './components/ui/aurora-background'
 import Prism from "./components/PrismaBackground.jsx";
+import PageTransition from './components/PageTransition'
+import { useScrollPosition } from './hooks/useScrollPosition'
+import { usePageState } from './hooks/usePageState'
 
 // Lazy load below-the-fold components for better initial load
 const StatsPage = lazy(() => import('./components/StatsPage').catch(() => ({ default: () => <div>Loading...</div> })))
@@ -18,6 +23,7 @@ const GlobalPresence = lazy(() => import('./components/GlobalPresence').catch(()
 const CoreServices = lazy(() => import('./components/CoreServices').catch(() => ({ default: () => <div>Loading...</div> })))
 const FounderStaff = lazy(() => import('./components/FounderStaff').catch(() => ({ default: () => <div>Loading...</div> })))
 const ContactForm = lazy(() => import('./components/ContactForm').catch(() => ({ default: () => <div>Loading...</div> })))
+const TechPage = lazy(() => import('./components/TechPage').catch(() => ({ default: () => <div>Loading...</div> })))
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -31,14 +37,16 @@ LoadingFallback.displayName = 'LoadingFallback'
 
 
 
-const App = memo(() => {
+// Main App Content Component
+const AppContent = memo(() => {
   const fluidBgRef = useRef(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const location = useLocation()
 
-  // Handle loading completion
-  const handleLoadingComplete = () => {
-    setIsLoading(false)
-  }
+  // Use scroll position hook for proper restoration
+  useScrollPosition(location);
+  
+  // Use page state hook for complete state preservation
+  usePageState(location);
 
   // Performance monitoring (optional - disable if too noisy)
   useEffect(() => {
@@ -67,11 +75,6 @@ const App = memo(() => {
       if (observer) observer.disconnect();
     };
   }, [])
-
-  // Show loading page initially
-  if (isLoading) {
-    return <LoadingPage onComplete={handleLoadingComplete} duration={4000} />
-  }
 
   return (
     <>
@@ -121,57 +124,56 @@ const App = memo(() => {
       >
         {/* Main content with higher z-index */}
         <div className="relative z-10">
-          <div className="App">
-            <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
+          <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
 
-            <div>
-              <Leva hidden />
+          <div>
+            <Leva hidden />
 
-              <AuroraBackground>
-                <LandingPage key="landing" />
-              </AuroraBackground>
-              
-              {/* Lazy load below-the-fold components with Suspense */}
-              <Suspense fallback={<LoadingFallback />}>
-                <StatsPage />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <LogoSection />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <CompanyIntroduction />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <ExperienceShowcase />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <HorizontalTimeline />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <GlobalPresence />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <CoreServices />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <FounderStaff />
-              </Suspense>
-              
-              <Suspense fallback={<LoadingFallback />}>
-                <ContactForm />
-              </Suspense>
-            </div>
+            <PageTransition location={location}>
+              <Routes>
+                <Route path="/" element={
+                  <>
+                    <AuroraBackground>
+                      <LandingPage key="landing" />
+                    </AuroraBackground>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <HomePage />
+                    </Suspense>
+                  </>
+                } />
+                <Route path="/tech" element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <TechPage />
+                  </Suspense>
+                } />
+              </Routes>
+            </PageTransition>
           </div>
         </div>
       </ReactLenis>
     </>
+  )
+})
+
+AppContent.displayName = 'AppContent'
+
+const App = memo(() => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Handle loading completion
+  const handleLoadingComplete = () => {
+    setIsLoading(false)
+  }
+
+  // Show loading page initially
+  if (isLoading) {
+    return <LoadingPage onComplete={handleLoadingComplete} duration={4000} />
+  }
+
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   )
 })
 

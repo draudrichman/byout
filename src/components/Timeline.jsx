@@ -172,7 +172,6 @@ const Timeline = () => {
         // Cleanup function
         return () => {
             stickyTrigger.kill();
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
     }, [timelineData.length]);
 

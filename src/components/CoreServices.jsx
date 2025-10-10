@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -219,6 +220,7 @@ const Preview = ({ data, isActive, onBack }) => {
 
 // Main component
 const CoreServices = () => {
+  const navigate = useNavigate();
   const [currentPreview, setCurrentPreview] = useState(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   
@@ -416,12 +418,36 @@ const CoreServices = () => {
     };
   }, []);
 
+  // Handle navigation to tech page
+  const handleTechNavigation = () => {
+    // Store current scroll position before navigating
+    const currentScrollY = window.scrollY;
+    sessionStorage.setItem('scrollPosition', currentScrollY.toString());
+    
+    // Store complete page state
+    const state = {
+      scrollY: window.scrollY,
+      scrollX: window.scrollX,
+      timestamp: Date.now(),
+      bodyClasses: Array.from(document.body.classList),
+    };
+    sessionStorage.setItem('pageState', JSON.stringify(state));
+    
+    navigate('/tech');
+  };
+
   // Animation functions
   const openItem = (index) => {
     const item = itemsData[index];
     const preview = previewsRef.current[index];
     
     if (!preview) return;
+
+    // Check if it's the Technology card (index 1)
+    if (index === 1) {
+      handleTechNavigation();
+      return;
+    }
 
     setIsPreviewVisible(true);
     setCurrentPreview(index);

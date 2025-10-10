@@ -4,92 +4,72 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
   const canvasRef = useRef(null)
   const animationRef = useRef(null)
   const spaceRef = useRef(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [transitionProgress, setTransitionProgress] = useState(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    // Space particles animation class
-    class Space {
+    // Traveling through space animation class
+    class SpaceTravel {
       constructor(canvas) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d')
-        this.particles = []
-        this.ratio = window.innerHeight < 400 ? 0.6 : 1
-        this.r = 120
-        this.counter = 0
+        this.stars = []
+        this.numOfStars = 250
+        this.speed = 0.025
+        this.warpZ = 12
+        this.halfw = 0
+        this.halfh = 0
+        this.animationId = null
       }
 
       init() {
-        this.createElement()
+        this.setupCanvas()
+        this.createStars()
         this.loop()
       }
 
-      createElement() {
-        const scale = this.ratio
+      setupCanvas() {
         this.canvas.width = window.innerWidth
         this.canvas.height = window.innerHeight
         this.canvas.style.width = '100%'
         this.canvas.style.background = 'rgb(0, 0, 0)'
-        this.ctx.transform(scale, 0, 0, -scale, this.canvas.width / 2, this.canvas.height / 2)
         
-        for (let i = 0; i < 450; i++) {
-          this.createParticle()
+        this.halfw = this.canvas.width / 2
+        this.halfh = this.canvas.height / 2
+
+        // Fill with black background
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      }
+
+      rnd(num1, num2) {
+        return Math.floor(Math.random() * num2 * 2) + num1
+      }
+
+      getColor() {
+        return `hsla(200,100%, ${this.rnd(50, 100)}%, 1)`
+      }
+
+      createStars() {
+        this.stars = []
+        for (let i = 0; i < this.numOfStars; i++) {
+          this.stars.push(new Star(this))
         }
-      }
-
-      createParticle() {
-        this.particles.push({
-          color: Math.random() > 0.5 ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.4)",
-          radius: Math.random() * 5,
-          x: Math.cos(Math.random() * 7 + Math.PI) * this.r,
-          y: Math.sin(Math.random() * 7 + Math.PI) * this.r,
-          ring: Math.random() * this.r * 3,
-          move: ((Math.random() * 4) + 1) / 500,
-          random: Math.random() * 7
-        })
-      }
-
-      moveParticle(p) {
-        p.ring = Math.max(p.ring - 1, this.r)
-        p.random += p.move
-        p.x = Math.cos(p.random + Math.PI) * p.ring
-        p.y = Math.sin(p.random + Math.PI) * p.ring
-      }
-
-      resetParticle(p) {
-        p.ring = Math.random() * this.r * 3
-        p.radius = Math.random() * 5
-      }
-
-      disappear(p) {
-        if (p.radius < 0.8) {
-          this.resetParticle(p)
-        }
-        p.radius *= 0.994
-      }
-
-      draw(p) {
-        this.ctx.beginPath()
-        this.ctx.fillStyle = p.color
-        this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-        this.ctx.fill()
       }
 
       loop() {
-        this.ctx.clearRect(-this.canvas.width, -this.canvas.height, this.canvas.width * 2, this.canvas.height * 2)
-        if (this.counter < this.particles.length) {
-          this.counter++
-        }
+        // Create trailing effect
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0)
+        this.ctx.fillStyle = 'rgba(0,0,0,0.2)'
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
         
-        // Uncomment for glow effect (slower performance)
-        // this.ctx.shadowBlur = 20
-        // this.ctx.shadowColor = "#fff"
+        this.ctx.translate(this.halfw, this.halfh)
         
-        for (let i = 0; i < this.counter; i++) {
-          this.disappear(this.particles[i])
-          this.moveParticle(this.particles[i])
-          this.draw(this.particles[i])
+        for (let i = 0; i < this.stars.length; i++) {
+          this.stars[i].draw()
         }
         
         this.animationId = requestAnimationFrame(this.loop.bind(this))
@@ -100,32 +80,99 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
           cancelAnimationFrame(this.animationId)
         }
       }
+
+      resize() {
+        this.destroy()
+        this.setupCanvas()
+        this.createStars()
+        this.loop()
+      }
     }
 
-    // Initialize space animation
-    const space = new Space(canvas)
-    space.init()
-    spaceRef.current = space
-
-    // Auto-complete after duration
-    const timer = setTimeout(() => {
-      if (onComplete) {
-        onComplete()
+    // Star class for individual stars
+    class Star {
+      constructor(spaceTravel) {
+        this.spaceTravel = spaceTravel
+        this.reset()
       }
+
+      reset() {
+        this.x = this.spaceTravel.rnd(0 - this.spaceTravel.halfw, this.spaceTravel.halfw)
+        this.y = this.spaceTravel.rnd(0 - this.spaceTravel.halfh, this.spaceTravel.halfh)
+        this.z = this.spaceTravel.rnd(1, this.spaceTravel.warpZ)
+        this.color = this.spaceTravel.getColor()
+      }
+
+      draw() {
+        // Move star towards camera
+        this.z -= this.spaceTravel.speed
+        
+        // Calculate screen position
+        const x = this.x / this.z
+        const y = this.y / this.z
+        const x2 = this.x / (this.z + this.spaceTravel.speed * 0.50)
+        const y2 = this.y / (this.z + this.spaceTravel.speed * 0.50)
+        
+        // Draw star streak
+        this.spaceTravel.ctx.strokeStyle = this.color
+        this.spaceTravel.ctx.beginPath()
+        this.spaceTravel.ctx.moveTo(x, y)
+        this.spaceTravel.ctx.lineTo(x2, y2)
+        this.spaceTravel.ctx.stroke()
+        
+        // Reset star if it goes off screen or too close
+        if (x < 0 - this.spaceTravel.halfw || x > this.spaceTravel.halfw || 
+            y < 0 - this.spaceTravel.halfh || y > this.spaceTravel.halfh || this.z <= 0) {
+          this.reset()
+        }
+      }
+    }
+
+    // Initialize space travel animation
+    const spaceTravel = new SpaceTravel(canvas)
+    spaceTravel.init()
+    spaceRef.current = spaceTravel
+
+    // Start transition before completion
+    const transitionTimer = setTimeout(() => {
+      setIsTransitioning(true)
+      
+      // Animate transition progress
+      const startTime = Date.now()
+      const transitionDuration = 1000 // 1 second transition
+      
+      const animateTransition = () => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min(elapsed / transitionDuration, 1)
+        
+        // Ease out cubic for smooth animation
+        const easedProgress = 1 - Math.pow(1 - progress, 3)
+        setTransitionProgress(easedProgress)
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateTransition)
+        } else {
+          // Complete the transition
+          if (onComplete) {
+            onComplete()
+          }
+        }
+      }
+      
+      requestAnimationFrame(animateTransition)
     }, duration)
 
     // Handle window resize
     const handleResize = () => {
-      space.destroy()
-      const newSpace = new Space(canvas)
-      newSpace.init()
-      spaceRef.current = newSpace
+      if (spaceRef.current) {
+        spaceRef.current.resize()
+      }
     }
 
     window.addEventListener('resize', handleResize)
 
     return () => {
-      clearTimeout(timer)
+      clearTimeout(transitionTimer)
       window.removeEventListener('resize', handleResize)
       if (spaceRef.current) {
         spaceRef.current.destroy()
@@ -145,12 +192,19 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
       {/* Loading content overlay - Just the icon */}
       <div className="relative z-10 flex items-center justify-center min-h-screen">
         {/* Central icon */}
-        <div className="w-48 h-48 md:w-40 md:h-40 flex items-center justify-center">
+        <div 
+          className="w-48 h-48 md:w-40 md:h-40 flex items-center justify-center transition-all duration-1000 ease-out"
+          style={{
+            transform: isTransitioning 
+              ? `scale(${1 + transitionProgress * 2}) translateZ(0)` 
+              : 'scale(1)',
+            opacity: isTransitioning ? 1 - transitionProgress * 0.5 : 1
+          }}
+        >
           <svg 
-            className="w-full h-full " 
+            className="w-full h-full" 
             viewBox="0 0 957 842" 
             xmlns="http://www.w3.org/2000/svg"
-            // style={{ animationDuration: '3s' }}
           >
             <rect x="471.5" y="157.05" width="23.9" height="23.9" fill="white"/>
             <rect x="471.5" y="185.54" width="23.9" height="204.55" fill="white"/>
@@ -171,6 +225,29 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
           </svg>
         </div>
       </div>
+
+      {/* Transition overlay - Circle opening effect */}
+      {isTransitioning && (
+        <div 
+          className="absolute inset-0 z-20 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at center, transparent ${Math.max(0, 20 - transitionProgress * 25)}%, black ${Math.max(0, 25 - transitionProgress * 30)}%)`,
+            transition: 'all 0.1s ease-out'
+          }}
+        />
+      )}
+
+      {/* Camera zoom effect overlay */}
+      {isTransitioning && (
+        <div 
+          className="absolute inset-0 z-30 pointer-events-none"
+          style={{
+            background: 'black',
+            clipPath: `circle(${transitionProgress * 150}% at center)`,
+            transition: 'clip-path 0.1s ease-out'
+          }}
+        />
+      )}
     </div>
   )
 }
