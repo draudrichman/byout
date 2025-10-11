@@ -2,6 +2,7 @@ import React, { useEffect, useRef, memo } from 'react';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLenis } from '@studio-freight/react-lenis';
 import GlowCircle from './GlowCircle';
 
 // Register ScrollTrigger plugin
@@ -17,6 +18,9 @@ const HorizontalTimeline = memo(() => {
     const yearRefs = useRef([]);
     const itemRefs = useRef([]);
     const previousActiveIndex = useRef(-1); // Track previous active index
+    
+    // Get Lenis instance for smooth scroll integration
+    const lenis = useLenis();
 
     const timelineData = [
         {
@@ -154,6 +158,13 @@ const HorizontalTimeline = memo(() => {
         const items = itemRefs.current;
         const years = yearRefs.current;
 
+        // Configure ScrollTrigger to work with Lenis
+        // ReactLenis already handles RAF internally, we just need to update ScrollTrigger
+        if (lenis) {
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.lagSmoothing(0);
+        }
+
         // Set initial states - hide all items except the first (optimized for performance)
         gsap.set(items, { 
             opacity: 0,
@@ -267,14 +278,17 @@ const HorizontalTimeline = memo(() => {
             const scrollDistance = window.innerHeight * 2.5; // Slightly longer for smoother transitions
 
             // Create ScrollTrigger for pinning and content transitions
+            // Configure with proper scroller for Lenis compatibility
             return ScrollTrigger.create({
                 trigger: section,
                 start: "top top",
                 end: `+=${scrollDistance}`,
                 pin: true,
-                scrub: 0.3, // Optimized for better performance
+                pinSpacing: true,
+                scrub: 0.5, // Slightly increased for smoother integration with Lenis
                 invalidateOnRefresh: true,
                 anticipatePin: 1,
+                scroller: lenis ? document.body : window,
                 onUpdate: (self) => {
                     const progress = self.progress;
                     
@@ -456,8 +470,13 @@ const HorizontalTimeline = memo(() => {
             scrollTrigger.kill();
             window.removeEventListener('resize', debouncedResize);
             clearTimeout(resizeTimeout);
+            
+            // Clean up Lenis event listener
+            if (lenis) {
+                lenis.off('scroll', ScrollTrigger.update);
+            }
         };
-    }, []);
+    }, [lenis]);
 
     // Add optimized keyframes to document head
     useEffect(() => {
