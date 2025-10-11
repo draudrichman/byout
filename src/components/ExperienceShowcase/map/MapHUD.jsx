@@ -17,6 +17,8 @@ const MapHUD = ({
 }) => {
   const hudRef = useRef(null);
   const contentRef = useRef(null);
+  const isMountedRef = useRef(true);
+  const currentTimelineRef = useRef(null);
 
   // State for dynamic dimensions
   const [hudDimensions, setHudDimensions] = useState({
@@ -107,16 +109,50 @@ const MapHUD = ({
     };
   }, [mapContainerRef, calculateHudDimensions]);
 
+  // Cleanup on unmount
   useEffect(() => {
-    if (!hudRef.current || !contentRef.current) return;
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      // Kill any active timelines
+      if (currentTimelineRef.current) {
+        currentTimelineRef.current.kill();
+        currentTimelineRef.current = null;
+      }
+      // Kill all GSAP animations on these elements
+      if (hudRef.current) {
+        gsap.killTweensOf(hudRef.current);
+      }
+      if (contentRef.current) {
+        gsap.killTweensOf(contentRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hudRef.current || !contentRef.current || !isMountedRef.current) return;
+
+    // Kill previous timeline before starting new one
+    if (currentTimelineRef.current) {
+      currentTimelineRef.current.kill();
+      currentTimelineRef.current = null;
+    }
 
     if (isVisible) {
-      gsap.set(hudRef.current, { y: '-100%', opacity: 0, scale: 0.9 });
-      gsap.set(contentRef.current, { opacity: 0, y: 10 });
+      // Only set initial states if elements exist
+      if (hudRef.current && contentRef.current) {
+        gsap.set(hudRef.current, { y: '-100%', opacity: 0, scale: 0.9 });
+        gsap.set(contentRef.current, { opacity: 0, y: 10 });
+        hudRef.current.style.display = 'block';
+      }
 
-      hudRef.current.style.display = 'block';
-
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({
+        onComplete: () => {
+          currentTimelineRef.current = null;
+        }
+      });
+      
+      currentTimelineRef.current = tl;
       
       tl.to(hudRef.current, {
         y: '0%',
@@ -134,11 +170,14 @@ const MapHUD = ({
     } else {
       const tl = gsap.timeline({
         onComplete: () => {
-          if (hudRef.current) {
+          if (isMountedRef.current && hudRef.current) {
             hudRef.current.style.display = 'none';
           }
+          currentTimelineRef.current = null;
         }
       });
+      
+      currentTimelineRef.current = tl;
       
       tl.to(contentRef.current, {
         opacity: 0,

@@ -24,6 +24,8 @@ const HudConnector = ({
   const [showMarkers, setShowMarkers] = useState(!animated);
   const animationFrameRef = useRef(null);
   const lastPositionsRef = useRef({ from: null, to: null });
+  const isMountedRef = useRef(true);
+  const updateThrottleRef = useRef(null);
   
   const getElementPosition = useCallback((
     element,
@@ -211,6 +213,8 @@ const HudConnector = ({
   }, [colors.end]);
   
   const calculateConnector = useCallback(() => {
+    if (!isMountedRef.current) return;
+    
     const fromPos = getElementPosition(elements.from, positions.from || 'mid');
     const toPos = getElementPosition(elements.to, positions.to || 'mid');
     
@@ -262,14 +266,26 @@ const HudConnector = ({
   
   const startAnimationFrameTracking = useCallback(() => {
     const trackPositions = () => {
-      calculateConnector();
-      animationFrameRef.current = requestAnimationFrame(trackPositions);
+      if (!isMountedRef.current) return;
+      
+      // Throttle updates to every 16ms (60fps max)
+      const now = Date.now();
+      if (!updateThrottleRef.current || now - updateThrottleRef.current > 16) {
+        calculateConnector();
+        updateThrottleRef.current = now;
+      }
+      
+      if (isMountedRef.current) {
+        animationFrameRef.current = requestAnimationFrame(trackPositions);
+      }
     };
     
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
-    animationFrameRef.current = requestAnimationFrame(trackPositions);
+    if (isMountedRef.current) {
+      animationFrameRef.current = requestAnimationFrame(trackPositions);
+    }
   }, [calculateConnector]);
   
   const stopAnimationFrameTracking = useCallback(() => {
@@ -280,21 +296,55 @@ const HudConnector = ({
   }, []);
   
   useEffect(() => {
-    calculateConnector();
+    isMountedRef.current = true;
     
-    const handleResize = () => calculateConnector();
-    const handleScroll = () => calculateConnector();
+    // Delay initial calculation to ensure DOM is ready
+    const initialTimer = setTimeout(() => {
+      if (isMountedRef.current) {
+        calculateConnector();
+      }
+    }, 100);
+    
+    const handleResize = () => {
+      if (isMountedRef.current) calculateConnector();
+    };
+    const handleScroll = () => {
+      if (isMountedRef.current) calculateConnector();
+    };
+    
+    // Debounce resize and scroll events
+    let resizeTimeout;
+    let scrollTimeout;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(handleResize, 50);
+    };
+    const debouncedScroll = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(handleScroll, 16);
+    };
     
     // Start animation frame tracking for smooth position updates
     startAnimationFrameTracking();
     
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', debouncedResize);
+    window.addEventListener('scroll', debouncedScroll, { passive: true });
     
-    const resizeObserver = new ResizeObserver(() => calculateConnector());
+    const resizeObserver = new ResizeObserver(() => {
+      if (isMountedRef.current) calculateConnector();
+    });
     
-    // MutationObserver to track position changes from animations/transforms
-    const mutationObserver = new MutationObserver(() => calculateConnector());
+    // Reduce MutationObserver scope - only watch for critical changes
+    const mutationObserver = new MutationObserver((mutations) => {
+      // Filter out non-critical mutations
+      const hasCriticalChange = mutations.some(mutation => 
+        mutation.type === 'childList' || 
+        (mutation.type === 'attributes' && ['style', 'class'].includes(mutation.attributeName))
+      );
+      if (hasCriticalChange && isMountedRef.current) {
+        calculateConnector();
+      }
+    });
     
     // Set up observers for both elements
     const setupObservers = (element) => {
@@ -306,25 +356,20 @@ const HudConnector = ({
         el = element.current;
       }
       
-      if (el) {
-        resizeObserver.observe(el);
-        // Watch for attribute changes (like style, class) and child changes
-        mutationObserver.observe(el, {
-          attributes: true,
-          attributeFilter: ['style', 'class', 'transform'],
-          childList: true,
-          subtree: true
-        });
-        
-        // Also observe parent elements for layout changes
-        let parent = el.parentElement;
-        while (parent && parent !== document.body) {
-          mutationObserver.observe(parent, {
+      if (el && isMountedRef.current) {
+        try {
+          resizeObserver.observe(el);
+          // Watch only for critical attribute changes
+          mutationObserver.observe(el, {
             attributes: true,
-            attributeFilter: ['style', 'class', 'transform'],
-            childList: true
+            attributeFilter: ['style', 'class'],
+            childList: false, // Don't watch child changes to reduce noise
+            subtree: false
           });
-          parent = parent.parentElement;
+          
+          // Don't observe parent elements - too aggressive
+        } catch (error) {
+          console.warn('Error setting up observers:', error);
         }
       }
     };
@@ -333,8 +378,12 @@ const HudConnector = ({
     setupObservers(elements.to);
     
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
+      isMountedRef.current = false;
+      clearTimeout(initialTimer);
+      clearTimeout(resizeTimeout);
+      clearTimeout(scrollTimeout);
+      window.removeEventListener('resize', debouncedResize);
+      window.removeEventListener('scroll', debouncedScroll);
       resizeObserver.disconnect();
       mutationObserver.disconnect();
       stopAnimationFrameTracking();

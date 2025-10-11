@@ -1,53 +1,41 @@
-import React, { memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import './css/PageTransition.css';
+import { motion } from 'framer-motion'
 
-// Page transition variants - optimized for performance
 const pageVariants = {
   initial: {
     opacity: 0,
     scale: 0.98,
-    y: 20,
   },
-  in: {
+  enter: {
     opacity: 1,
     scale: 1,
-    y: 0,
     transition: {
-      duration: 0.5,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
-  out: {
+  exit: {
     opacity: 0,
     scale: 1.02,
-    y: -20,
     transition: {
       duration: 0.3,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: [0.22, 1, 0.36, 1],
     },
   },
-};
+}
 
-const PageTransition = memo(({ children, location }) => {
+const PageTransition = ({ children }) => {
   return (
-    <div className="page-transition-container">
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={location.pathname}
-          initial="initial"
-          animate="in"
-          exit="out"
-          variants={pageVariants}
-          className="w-full h-full"
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-});
+    <motion.div
+      initial="initial"
+      animate="enter"
+      exit="exit"
+      variants={pageVariants}
+      style={{ width: '100%', minHeight: '100vh' }}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
-PageTransition.displayName = 'PageTransition';
+export default PageTransition
 
-export default PageTransition;

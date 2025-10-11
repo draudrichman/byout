@@ -1,52 +1,49 @@
-import { useState, useEffect, useRef, lazy, Suspense, memo } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { useState, useEffect, useRef, memo } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { ReactLenis } from '@studio-freight/react-lenis'
-import { Leva } from 'leva'
-
-// Eager load critical above-the-fold components
-import LandingPage from './components/LandingPage'
 import LoadingPage from './components/LoadingPage'
-import HomePage from './components/HomePage'
-import { AuroraBackground } from './components/ui/aurora-background'
-import Prism from "./components/PrismaBackground.jsx";
+import Prism from "./components/PrismaBackground.jsx"
 import PageTransition from './components/PageTransition'
-import { useScrollPosition } from './hooks/useScrollPosition'
-import { usePageState } from './hooks/usePageState'
 
-// Lazy load below-the-fold components for better initial load
-const StatsPage = lazy(() => import('./components/StatsPage').catch(() => ({ default: () => <div>Loading...</div> })))
-const LogoSection = lazy(() => import('./components/LogoSection').catch(() => ({ default: () => <div>Loading...</div> })))
-const CompanyIntroduction = lazy(() => import('./components/CompanyIntroduction').catch(() => ({ default: () => <div>Loading...</div> })))
-const ExperienceShowcase = lazy(() => import('./components/ExperienceShowcase').catch(() => ({ default: () => <div>Loading...</div> })))
-const HorizontalTimeline = lazy(() => import('./components/HorizontalTimeline').catch(() => ({ default: () => <div>Loading...</div> })))
-const GlobalPresence = lazy(() => import('./components/GlobalPresence').catch(() => ({ default: () => <div>Loading...</div> })))
-const CoreServices = lazy(() => import('./components/CoreServices').catch(() => ({ default: () => <div>Loading...</div> })))
-const FounderStaff = lazy(() => import('./components/FounderStaff').catch(() => ({ default: () => <div>Loading...</div> })))
-const ContactForm = lazy(() => import('./components/ContactForm').catch(() => ({ default: () => <div>Loading...</div> })))
-const TechPage = lazy(() => import('./components/TechPage').catch(() => ({ default: () => <div>Loading...</div> })))
-
-// Loading fallback component
-const LoadingFallback = memo(() => (
-  <div className="flex items-center justify-center min-h-[50vh]">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-  </div>
-))
-
-LoadingFallback.displayName = 'LoadingFallback'
+// Pages
+import HomePage from './pages/HomePage'
+import TechPage from './pages/TechPage'
+import RetailChannelPage from './pages/RetailChannelPage'
 
 
 
 
-// Main App Content Component
 const AppContent = memo(() => {
+  const [currentPath, setCurrentPath] = useState(window.location.pathname)
   const fluidBgRef = useRef(null)
-  const location = useLocation()
-
-  // Use scroll position hook for proper restoration
-  useScrollPosition(location);
   
-  // Use page state hook for complete state preservation
-  usePageState(location);
+  // Update path on navigation
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname)
+    }
+    
+    // Listen for popstate (back/forward buttons)
+    window.addEventListener('popstate', handleLocationChange)
+    
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange)
+    }
+  }, [])
+  
+  // Determine which page to render based on current path
+  const getCurrentPage = () => {
+    if (currentPath.startsWith('/tech')) {
+      return <TechPage />
+    } else if (currentPath === '/retail' || currentPath.startsWith('/retail')) {
+      return <RetailChannelPage />
+    } else {
+      return <HomePage />
+    }
+  }
+  
+  // Disable smooth scroll on Tech and Retail pages
+  const isSpecialPage = currentPath.startsWith('/tech') || currentPath.startsWith('/retail')
 
   // Performance monitoring (optional - disable if too noisy)
   useEffect(() => {
@@ -78,34 +75,45 @@ const AppContent = memo(() => {
 
   return (
     <>
-      {/* Fixed background Prism for all pages - stays in place during scroll */}
-      <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-black" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0}}>
-        <Prism
-            animationType="3drotate"
-            timeScale={1}
-            height={2.5}
-            baseWidth={3.5}
-            hueShift={0.02}
-            colorFrequency={3}
-            noise={0.1}
-            glow={0.1}
-            scale={3.6}
-            colorScheme="champagne-chrome"
-        />
-      </div>
+      {/* Fixed background Prism for home page only */}
+      {!isSpecialPage && (
+        <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-black" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0}}>
+          <Prism
+              animationType="3drotate"
+              timeScale={1}
+              height={2.5}
+              baseWidth={3.5}
+              hueShift={0.02}
+              colorFrequency={3}
+              noise={0.1}
+              glow={0.1}
+              scale={3.6}
+              colorScheme="champagne-chrome"
+          />
+        </div>
+      )}
       
-      <ReactLenis 
-        root 
-        options={{
-          lerp: 0.1, // Lower lerp for smoother animation
-          duration: 1.2, // Slightly longer duration for smoother feel
+      {isSpecialPage ? (
+        // No smooth scroll for special pages
+        <div className="relative z-10">
+          <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
+          <AnimatePresence mode="wait">
+            <PageTransition key={currentPath}>
+              {getCurrentPage()}
+            </PageTransition>
+          </AnimatePresence>
+        </div>
+      ) : (
+        <ReactLenis root options={{
+          lerp: 0.1,
+          duration: 1.2,
           orientation: 'vertical',
           gestureOrientation: 'vertical',
           smoothWheel: true,
           wheelMultiplier: 1,
           touchMultiplier: 2,
           normalizeWheel: true,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing for smoother feel
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           infinite: false,
           autoResize: true,
           syncTouch: true,
@@ -120,37 +128,16 @@ const AppContent = memo(() => {
           mouseMultiplier: 1,
           smooth: true,
           class: 'lenis'
-        }}
-      >
-        {/* Main content with higher z-index */}
-        <div className="relative z-10">
-          <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
-
-          <div>
-            <Leva hidden />
-
-            <PageTransition location={location}>
-              <Routes>
-                <Route path="/" element={
-                  <>
-                    <AuroraBackground>
-                      <LandingPage key="landing" />
-                    </AuroraBackground>
-                    <Suspense fallback={<LoadingFallback />}>
-                      <HomePage />
-                    </Suspense>
-                  </>
-                } />
-                <Route path="/tech" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <TechPage />
-                  </Suspense>
-                } />
-              </Routes>
-            </PageTransition>
+        }} disabled={isSpecialPage}>
+          <div className="relative z-10">
+            <AnimatePresence mode="wait">
+              <PageTransition key={currentPath}>
+                {getCurrentPage()}
+              </PageTransition>
+            </AnimatePresence>
           </div>
-        </div>
-      </ReactLenis>
+        </ReactLenis>
+      )}
     </>
   )
 })
@@ -170,11 +157,7 @@ const App = memo(() => {
     return <LoadingPage onComplete={handleLoadingComplete} duration={4000} />
   }
 
-  return (
-    <Router>
-      <AppContent />
-    </Router>
-  )
+  return <AppContent />
 })
 
 App.displayName = 'App'

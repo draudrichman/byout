@@ -39,33 +39,48 @@ export const MapSelector = ({
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    if (mapImageRef.current && mapPointsRef.current) {
-      // Initial state - map and points are scaled down and faded
-      gsap.set([mapImageRef.current, mapPointsRef.current], {
-        scale: 0.8,
-        opacity: 0.3,
-        y: 30,
-        transformOrigin: "center center"
-      });
+    // Add delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      if (mapImageRef.current && mapPointsRef.current && mapContainerRef.current) {
+        try {
+          // Initial state - map and points are scaled down and faded
+          gsap.set([mapImageRef.current, mapPointsRef.current], {
+            scale: 0.8,
+            opacity: 0.3,
+            y: 30,
+            transformOrigin: "center center"
+          });
 
-      // Create scroll-triggered animation for both map and points
-      gsap.to([mapImageRef.current, mapPointsRef.current], {
-        scale: 1,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: mapContainerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          scrub: 1,
-          toggleActions: "play none none reverse"
+          // Create scroll-triggered animation for both map and points
+          gsap.to([mapImageRef.current, mapPointsRef.current], {
+            scale: 1,
+            opacity: 1,
+            duration: 1.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: mapContainerRef.current,
+              start: "top 80%",
+              end: "bottom 20%",
+              scrub: 1,
+              toggleActions: "play none none reverse"
+            }
+          });
+        } catch (error) {
+          console.warn('Error initializing GSAP ScrollTrigger:', error);
         }
-      });
-    }
+      }
+    }, 50);
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      clearTimeout(timer);
+      try {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      } catch (error) {
+        console.warn('Error cleaning up ScrollTrigger:', error);
+      }
+      // Kill any remaining animations
+      if (mapImageRef.current) gsap.killTweensOf(mapImageRef.current);
+      if (mapPointsRef.current) gsap.killTweensOf(mapPointsRef.current);
     };
   }, []);
 
@@ -100,15 +115,17 @@ export const MapSelector = ({
   }, [pauseOnHover]);
 
   const handlePointClick = useCallback((country) => {
-    const flagIndex = flagItems.findIndex(flag => flag.country === country);
+    if (!country || !flagItems) return;
+    const flagIndex = flagItems.findIndex(flag => flag?.country === country);
     if (flagIndex !== -1) {
       goToIndex(flagIndex);
     }
   }, [flagItems, goToIndex]);
 
   const handlePointHover = useCallback((country) => {
+    if (!country || !flagItems) return;
     if (pauseOnHover && isHovered) {
-      const flagIndex = flagItems.findIndex(flag => flag.country === country);
+      const flagIndex = flagItems.findIndex(flag => flag?.country === country);
       if (flagIndex !== -1) {
         goToIndex(flagIndex);
       }
@@ -161,7 +178,7 @@ export const MapSelector = ({
           className="absolute inset-0"
           style={{ zIndex: 60 }}
         >
-          {mapPoints.map((point) => (
+          {mapPoints && mapPoints.map((point) => point && point.country && (
             <MapPoint
               key={point.country}
               point={point}

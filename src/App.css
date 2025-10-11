@@ -9,21 +9,6 @@ html {
   scroll-behavior: auto;
 }
 
-/* Optimize Lenis performance */
-body {
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Prevent conflicts with Lenis */
-.lenis {
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

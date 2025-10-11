@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -220,7 +219,6 @@ const Preview = ({ data, isActive, onBack }) => {
 
 // Main component
 const CoreServices = () => {
-  const navigate = useNavigate();
   const [currentPreview, setCurrentPreview] = useState(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   
@@ -418,22 +416,22 @@ const CoreServices = () => {
     };
   }, []);
 
-  // Handle navigation to tech page
-  const handleTechNavigation = () => {
-    // Store current scroll position before navigating
-    const currentScrollY = window.scrollY;
-    sessionStorage.setItem('scrollPosition', currentScrollY.toString());
+  // Handle item click - navigate to page or open preview
+  const handleItemClick = (index) => {
+    // Index 1 = Technology, navigate to tech page
+    if (index === 1) {
+      window.location.href = '/tech';
+      return;
+    }
     
-    // Store complete page state
-    const state = {
-      scrollY: window.scrollY,
-      scrollX: window.scrollX,
-      timestamp: Date.now(),
-      bodyClasses: Array.from(document.body.classList),
-    };
-    sessionStorage.setItem('pageState', JSON.stringify(state));
+    // Index 2 = Retail Operations, navigate to retail page
+    if (index === 2) {
+      window.location.href = '/retail';
+      return;
+    }
     
-    navigate('/tech');
+    // For other items (Brand Development), open the preview
+    openItem(index);
   };
 
   // Animation functions
@@ -442,12 +440,6 @@ const CoreServices = () => {
     const preview = previewsRef.current[index];
     
     if (!preview) return;
-
-    // Check if it's the Technology card (index 1)
-    if (index === 1) {
-      handleTechNavigation();
-      return;
-    }
 
     setIsPreviewVisible(true);
     setCurrentPreview(index);
@@ -689,7 +681,7 @@ const CoreServices = () => {
             key={index}
             data={item}
             index={index}
-            onItemClick={openItem}
+            onItemClick={handleItemClick}
           />
         ))}
       </div>
@@ -725,9 +717,7 @@ const CoreServices = () => {
   );
 };
 
-export default CoreServices;
-
-// Add CSS for gradient animation
+export default CoreServices;// Add CSS for gradient animation
 const style = document.createElement('style');
 style.textContent = `
   @keyframes gradientShift {
@@ -746,3 +736,4 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
