@@ -28,11 +28,13 @@ const BackButton = () => {
 
 function RetailChannelPage() {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black" style={{ position: 'relative' }}>
       <BackButton />
-      <Hero />
-      <CardAnimation />
-      <Countries />
+      <div style={{ position: 'relative', overflow: 'visible' }}>
+        <Hero />
+        <CardAnimation />
+        <Countries />
+      </div>
     </div>
   )
 }

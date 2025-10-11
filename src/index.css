@@ -47,8 +47,8 @@ body{
   background: #000000;
   background-attachment: fixed;
   overflow-x: hidden;
-  /* Disable default scrolling for React Lenis */
-  overflow-y: hidden;
+  /* Enable scrolling - React Lenis handles smooth scroll only on homepage */
+  overflow-y: auto;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), var(--font-chinese), Arial, Helvetica, sans-serif;

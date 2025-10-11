@@ -94,8 +94,8 @@ const AppContent = memo(() => {
       )}
       
       {isSpecialPage ? (
-        // No smooth scroll for special pages
-        <div className="relative z-10">
+        // No smooth scroll for special pages - no overflow restrictions for sticky positioning
+        <div className="relative z-10 min-h-screen">
           <div id="fluid-bg" ref={fluidBgRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}></div>
           <AnimatePresence mode="wait">
             <PageTransition key={currentPath}>
