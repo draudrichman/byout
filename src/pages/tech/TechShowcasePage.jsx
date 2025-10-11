@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, memo } from 'react';
-import { hphCategories, pefCategories } from '../config/techCategories.js';
-import '../styles/pages/TechShowcasePage.css';
+import { hphCategories, pefCategories } from '../../config/tech/techCategories.js';
+import '../../styles/tech/pages/TechShowcasePage.css';
 
 const TechShowcasePage = ({ homeAnimationComplete }) => {
   const [focusedSection, setFocusedSection] = useState('pef'); // 默认聚焦PEF

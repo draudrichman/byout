@@ -1,9 +1,9 @@
 import { Suspense, lazy, useState, useEffect } from 'react'
 
 // Lazy-loaded components for code splitting
-const MainPage = lazy(() => import('../tech1/tech-page/src/pages/MainPage.jsx'))
-const HPHDetailPage = lazy(() => import('../tech1/tech-page/src/pages/HPHDetailPage.jsx'))
-const PEFDetailPage = lazy(() => import('../tech1/tech-page/src/pages/PEFDetailPage.jsx'))
+const MainPage = lazy(() => import('./tech/MainPage.jsx'))
+const HPHDetailPage = lazy(() => import('./tech/HPHDetailPage.jsx'))
+const PEFDetailPage = lazy(() => import('./tech/PEFDetailPage.jsx'))
 
 // Loading component
 const LoadingSpinner = () => (

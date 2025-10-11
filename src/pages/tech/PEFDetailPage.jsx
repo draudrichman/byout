@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import OptimizedImage from '../components/common/OptimizedImage.jsx';
-import '../styles/pages/DetailPage.css';
+import OptimizedImage from '../../components/tech-components/common/OptimizedImage.jsx';
+import '../../styles/tech/pages/DetailPage.css';
 
 function PEFDetailPage() {
 

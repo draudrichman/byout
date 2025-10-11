@@ -13,7 +13,7 @@ import {
   Mesh,
   DirectionalLight
 } from 'three';
-import '../styles/pages/HomePage.css';
+import '../../styles/tech/pages/HomePage.css';
 
 const HomePage = ({ onAnimationComplete }) => {
   const canvasRef = useRef(null);
