@@ -27,13 +27,13 @@ const HorizontalTimeline = memo(() => {
             year: 'Phase 1',
             phase: '第一阶段',
             title: '联合诊断与战略签约',
-            subtitle: 'Joint Diagnosis & Strategic Signing',
-            description: 'Mutual selection, clear strategy and investment, shared blueprint, laying the foundation for cooperation.',
+            subtitle: '(Phase 1: Joint Diagnosis & Strategic Signing)',
+            description: '目标：双向选择，明确战略与投入，共识蓝图，奠定合作基础。',
             keyPoints: [
-                '初步接洽与产品力初评：Brand submits company and product information. Service provider conducts preliminary assessment based on product commercial potential and channel matching degree.',
-                '深度产品评测与市场洞察：Brand sends product samples for evaluation. Both parties sign NDA. Service provider issues detailed Product Market Adaptability Assessment Report and Channel Entry Strategic Recommendations.',
-                '战略研讨会（线上/线下）：High-level meeting (≥3 hours) requiring participation from brand\'s founder and product lead. Core discussion on product optimization, market positioning, channel strategy, and financial models.',
-                '方案报价与合约签订：Service provider offers integrated Product-Channel Dual-Drive one-stop service solution and quotation. Upon brand confirmation, contract is signed with first installment payment.'
+                '1. 初步接洽与产品力初评：品牌商提交企业及产品资料。服务方（产品专家+渠道Broker）进行初步评估，从*产品商业潜力*与*渠道匹配度*两个维度给出专业意见，判断是否接单。',
+                '2. 深度产品评测与市场洞察：品牌商邮寄样品进行评测。双方签署保密协议（NDA）。服务方出具详细的《产品市场适配性评估报告》与《渠道进入战略建议》。',
+                '3. 战略研讨会（线上/线下）：安排高管会议（≥3小时）。品牌方创始人、产品负责人必须参与。会议核心：探讨产品优化重塑方向、市场定位、渠道策略、财务模型。',
+                '4. 方案报价与合约签订：服务方提供整合的《"品渠双驱"一站式服务方案与报价》。品牌商确认后，签署合同并支付首期款项。**付费节点一：支付战略咨询与启动费。**'
             ],
             image: "./img/phase_1.jpg"
         },
@@ -41,11 +41,11 @@ const HorizontalTimeline = memo(() => {
             year: 'Phase 2',
             phase: '第二阶段',
             title: '产品优化与准入准备',
-            subtitle: 'Product Optimization & Access Preparation',
-            description: 'To create innovative flagship products that meet North American market demands and complete all necessary access preparations.',
+            subtitle: '(Phase 2: Product Optimization & Access Preparation)',
+            description: '目标：打造符合北美市场需求的"大渠创新单品"，并完成所有准入基础建设。',
             keyPoints: [
-                '成立专项小组与产品优化：Specialized team formed including product designers, product managers, channel experts, and brokers. Guides brand to complete product optimization, design confirmation, and final proofing.',
-                '本地化与合规建设：Guides brand to register company, handle tax matters, and open bank accounts in target country. Completes product safety certifications (FCC, UL, CSA) and packaging label compliance. Prepares international logistics and warehousing solutions.'
+                '5. 成立专项小组与产品优化：成立含产品设计师、产品经理、渠道专家、Broker等专才项目组。指导品牌商完成产品优化、设计确认及最终打样。确保产品同时满足"创新性"、"文化匹配"、"市场锚定"和"渠道商超准入标准"。',
+                '6. 本地化与合规建设：指导品牌商在目标国（如加拿大）注册公司、办理税号、银行开户。完成产品安规认证（FCC, UL, CSA等）、包装标签合规化。筹备国际物流及仓储方案。'
             ],
             image: "./img/phase_2.jpg"
         },
@@ -53,11 +53,11 @@ const HorizontalTimeline = memo(() => {
             year: 'Phase 3',
             phase: '第三阶段',
             title: '技术赋能与价值重塑',
-            subtitle: 'Tech-Enablement & Value Remodeling',
-            description: 'To introduce world\'s top 1 exclusive patented technology, fundamentally enhancing product competitiveness and brand\'s international commercial value.',
+            subtitle: '(Phase 3: Tech-Enablement & Value Remodeling)',
+            description: '目标：世界top1首发独家专利技术，从根本上提升产品竞争力与品牌国际商业价值。',
             keyPoints: [
-                '技术方案植入与执行：HPH Technology Custom Application - ultra-high pressure nano-crushing for dynamic sterilization, nano-homogenization, extended shelf life, and optimized innovative taste and flavor.',
-                'PEF技术定制应用：PEF Technology Custom Application - planning terminal preservation solutions using F-pulse electric field non-thermal sterilization technology for smart cold chain cabinets and revolutionary product transport preservation.'
+                '7. 技术方案植入与执行：HPH技术定制应用：对产品进行超高压纳米破碎处理，实现动态灭菌、纳米均质、延长保质期，优化创新口感与风味。PEF技术定制应用：为产品规划终端保鲜方案，F脉冲电场非热式杀菌技术为后续渠道配备智能冰温柜、革命产品运输保鲜，渠道端损耗率等。',
+                '8. 样品重塑与验证：生产经技术赋能后的最终样品，并送交渠道买手进行体验和测试，获得反馈。'
             ],
             image: "./img/phase_3.jpg"
         },
@@ -65,11 +65,11 @@ const HorizontalTimeline = memo(() => {
             year: 'Phase 4',
             phase: '第四阶段',
             title: '渠道推进与订单获取',
-            subtitle: 'Channel Promotion & Order Acquisition',
-            description: 'To successfully recommend products into target channels.',
+            subtitle: '(Phase 4: Channel Promotion & Order Acquisition)',
+            description: '目标：成功将产品推荐进入落地目标渠道。',
             keyPoints: [
-                '正式渠道推荐与谈判：Professional Broker team recommends product to purchasing decision-makers at target supermarkets (e.g., Sams Club). Based on feedback, guides brand to adjust final product, price, or packaging.',
-                '试销与订单获取：Promotes supermarket to arrange trial orders (First Order). Assists brand and supermarket in signing formal Purchase Orders (PO). Second and third installment payments triggered after trial orders and formal contract signing.'
+                '9. 正式渠道推荐与谈判：由服务方专业Broker团队向目标商超（如Sams Club）采购决策人进行推荐。根据商超反馈，指导品牌商进行最后的产品、价格或包装调整。提供采购谈判策略与竞品分析支持。',
+                '10. 试销与订单获取：推动商超安排试销订单（First Order）。**付费节点二：获得试销订单后，支付二期服务费。**协助品牌商与商超签订正式采购合同（PO）。**付费节点三：签订正式合同后，支付三期服务费。**'
             ],
             image: "./img/phase_4.jpg"
         },
@@ -77,11 +77,11 @@ const HorizontalTimeline = memo(() => {
             year: 'Phase 5',
             phase: '第五阶段',
             title: '落地运营与持续增长',
-            subtitle: 'Landing Operation & Sustainable Growth',
-            description: 'To ensure stable supply, sales, and maintenance, and achieve sustainable growth.',
+            subtitle: '(Phase 5: Landing Operation & Sustainable Growth)',
+            description: '目标：确保稳定供应×销售×维护，并实现可持续增长。',
             keyPoints: [
-                '大货生产与入仓：Brand produces mass goods according to PO and delivers to supermarket\'s central warehouse (RDC) via designated logistics. Commission (Sales Share) activated upon successful warehouse entry.',
-                '长期运营与增值服务：Inventory Management including daily order processing and monitoring. Channel Maintenance with store visits and promotional activities. Customer Service handling returns and complaints. Growth Services including new product recommendations and channel expansion.'
+                '11. 大货生产与入仓：品牌商按PO生产大货，并通过指定物流送至商超中央仓库（RDC）。**佣金（销售分成）启动节点：商品成功入仓当日，按合同约定（如批发价15%）支付佣金。**',
+                '12. 长期运营与增值服务：**进销存管理**：日常订单处理、库存监控。**渠道维护**：巡店、货架陈列优化、促销活动执行（需品牌商预算支持）。**客户服务**：处理退换货、客户投诉沟通。**增长服务**：新品推荐、拓展新渠道、明星KOL代言推荐、年度策略复盘。'
             ],
             image: "./img/phase_5.jpg"
         }
@@ -285,9 +285,11 @@ const HorizontalTimeline = memo(() => {
                 end: `+=${scrollDistance}`,
                 pin: true,
                 pinSpacing: true,
-                scrub: 0.5, // Slightly increased for smoother integration with Lenis
+                scrub: 1, // Increased for smoother, less jerky transitions
                 invalidateOnRefresh: true,
-                anticipatePin: 1,
+                anticipatePin: 0, // Reduced to 0 to prevent premature pinning
+                fastScrollEnd: true, // Helps with smooth unpinning
+                preventOverlaps: true, // Prevents overlapping with other pinned sections
                 scroller: lenis ? document.body : window,
                 onUpdate: (self) => {
                     const progress = self.progress;
@@ -688,7 +690,7 @@ const HorizontalTimeline = memo(() => {
                                             关键要点 Key Points
                                         </h4>
                                         <ul className="space-y-2 max-w-lg">
-                                            {item.keyPoints.slice(0, 2).map((point, pointIndex) => (
+                                            {item.keyPoints.map((point, pointIndex) => (
                                                 <li key={pointIndex} className="timeline-keypoint text-sm text-gray-300 leading-relaxed flex items-start" style={{
                                                     opacity: 0,
                                                     transform: 'translateX(-10px)',
@@ -708,23 +710,25 @@ const HorizontalTimeline = memo(() => {
                             <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
                                 <div className="relative">
                                     <figure 
-                                        className="timeline-image-figure aspect-[4/3] rounded-2xl overflow-hidden bg-gray-800"
+                                        className="timeline-image-figure rounded-2xl overflow-hidden bg-gray-800"
                                         style={{
                                             margin: 0,
                                             padding: 0,
-                                            display: 'grid',
-                                            placeItems: 'center'
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
                                         }}
                                     >
                                         <img 
                                             src={item.image} 
                                             alt={item.title}
                                             loading="lazy"
-                                            className="timeline-image w-full h-full object-cover"
+                                            className="timeline-image w-full h-auto object-contain rounded-2xl"
                                             style={{
                                                 transform: 'scale(1.15)',
                                                 opacity: 0,
-                                                willChange: 'transform, opacity'
+                                                willChange: 'transform, opacity',
+                                                maxHeight: '500px'
                                             }}
                                         />
                                     </figure>

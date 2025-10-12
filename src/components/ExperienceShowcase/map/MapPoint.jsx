@@ -20,7 +20,7 @@ export const MapPoint = ({
   const radarRef3 = useRef(null);
   const [position, setPosition] = useState({ left: `${point.x}%`, top: `${point.y}%` });
 
-  // Calculate adjusted position accounting for container padding
+  // Calculate position relative to the map image area (accounting for container padding)
   const calculateAdjustedPosition = useCallback(() => {
     // If no container ref, use original position
     if (!containerRef?.current) {
@@ -41,15 +41,27 @@ export const MapPoint = ({
     
     // Get container dimensions
     const containerHeight = container.offsetHeight;
-    const effectiveMapHeight = containerHeight - paddingTop - paddingBottom;
+    const containerWidth = container.offsetWidth;
     
-    // Calculate adjusted Y position
-    // Map the point.y (0-100% of map) to the effective area within the container
+    // Calculate the effective map area (excluding padding)
+    const effectiveMapHeight = containerHeight - paddingTop - paddingBottom;
+    const effectiveMapWidth = containerWidth; // No horizontal padding
+    
+    // Ensure we have valid dimensions
+    if (effectiveMapHeight <= 0 || effectiveMapWidth <= 0) {
+      return { left: `${point.x}%`, top: `${point.y}%` };
+    }
+    
+    // Calculate adjusted positions
+    // X position: map point.x (0-100% of map width) to container width
+    const adjustedXPercent = point.x;
+    
+    // Y position: map point.y (0-100% of map height) to container height accounting for padding
     const adjustedYPixels = paddingTop + (point.y / 100) * effectiveMapHeight;
     const adjustedYPercent = (adjustedYPixels / containerHeight) * 100;
     
     return {
-      left: `${point.x}%`,
+      left: `${adjustedXPercent}%`,
       top: `${adjustedYPercent}%`
     };
   }, [containerRef, point.x, point.y]);
@@ -66,8 +78,20 @@ export const MapPoint = ({
     // Update on window resize
     window.addEventListener('resize', updatePosition);
 
+    // Use ResizeObserver to detect container size changes
+    let resizeObserver = null;
+    if (containerRef?.current && window.ResizeObserver) {
+      resizeObserver = new ResizeObserver(() => {
+        updatePosition();
+      });
+      resizeObserver.observe(containerRef.current);
+    }
+
     return () => {
       window.removeEventListener('resize', updatePosition);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
     };
   }, [containerRef, point.x, point.y, calculateAdjustedPosition]);
 
@@ -145,7 +169,7 @@ export const MapPoint = ({
       style={{
         left: position.left,
         top: position.top,
-        zIndex: isActive ? 60 : 10,
+        zIndex: isActive ? 55 : 45,
         opacity: containerOpacity
       }}
       data-country={point.country}

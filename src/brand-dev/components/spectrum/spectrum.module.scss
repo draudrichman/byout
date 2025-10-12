@@ -1,0 +1,207 @@
+.spectrum {
+  @apply font-mono text-12px uppercase tracking-0.5px bg-primary-bg overflow-hidden transition-colors duration-300 h-[250vh] flex flex-col relative;
+
+  .header {
+
+    nav {
+      @apply relative;
+
+      .navItem {
+        @apply absolute top-5 text-primary-text text-[5px] minTab:text-[8px] lg:text-[10px] xl:text-[14px] 2xlM:text-25px uppercase tracking-0.5px pointer-events-auto z-1000 transition-colors duration-300 opacity-0;
+
+        &.navBottomLeft,
+        &.navBottomRight {
+          @apply text-primary-text-lighter transition-colors duration-300;
+        }
+
+        &.navTopLeft {
+          @apply left-8;
+        }
+
+        &.navTopRight {
+          @apply right-8 flex items-center gap-1;
+        }
+
+        &.navBottomLeft {
+          @apply bottom-8 left-8;
+        }
+
+        &.navBottomRight {
+          @apply bottom-8 right-8;
+        }
+
+        &.navBottomCenter {
+          @apply bottom-8 left-1/2 -translate-x-1/2;
+        }
+      }
+
+    }
+  }
+
+  .emailLink {
+    @apply text-primary-text no-underline relative inline-block transition-colors duration-300;
+
+    &::after {
+      @apply absolute top-0 left-0 w-0 h-full -z-1 transition-all duration-300 content-[''] bg-primary-text;
+      transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    &:hover {
+      @apply relative z-1 text-primary-bg;
+
+      &::after {
+        @apply w-full;
+      }
+    }
+  }
+
+  .bgGradients {
+    @apply absolute top-0 left-0 w-full h-full pointer-events-none z-1 opacity-15;
+
+    .bgGradient {
+      @apply absolute blur-40px transition-opacity duration-500 will-change-opacity-filter;
+
+      &.bgGradient1 {
+        @apply -top-20% -left-10% w-600px h-600px;
+        background: radial-gradient(circle, var(--grad-color-1) 0%, var(--grad-color-2) 35%, transparent 70%);
+      }
+
+      &.bgGradient2 {
+        @apply top-30% -right-15% w-800px h-800px;
+        background: radial-gradient(circle, var(--grad-color-3) 0%, var(--grad-color-4) 40%, transparent 70%);
+      }
+
+      &.bgGradient3 {
+        @apply -bottom-25% left-20% w-700px h-700px;
+        background: radial-gradient(circle, var(--grad-color-5) 0%, var(--grad-color-6) 45%, transparent 75%);
+      }
+    }
+  }
+
+  .gradientOverlay {
+    @apply absolute top-0 left-0 w-full h-full pointer-events-none z-5 opacity-0 blur-60px transition-opacity duration-600 will-change-opacity-filter;
+  }
+
+  .heroSection {
+    @apply h-100vh w-full px-8 flex flex-col justify-center relative max-mSm:mt-28 mt-5 lg:mt-20;
+
+    .heroTitle {
+      @apply mt-10 minTab:mt-20 md:mt-10 lg:mt-20 2xl:mt-4 2xlM:mt-3 text-center uppercase font-medium text-primary-text transition-colors duration-300 flex justify-center items-center gap-5 minTab:gap-8 md:gap-14 2xl:gap-20 flex-nowrap whitespace-nowrap text-[4.5vw] tracking-[-0.02vw] font-sans;
+
+      .heroTitleMain,
+      .heroTitleChinese {
+        @apply inline-block;
+      }
+    }
+
+    .heroContent {
+      @apply flex flex-col minTab:flex-row justify-between items-start gap-8 mt-5 sm:mt-10 minTab:mt-16 lg:mt-10 2xl:mt-24;
+
+      .heroNav {
+        @apply flex flex-col gap-5 2xlM:gap-14 flex-shrink-0;
+
+        .heroNavItem {
+          @apply font-medium uppercase text-primary-text cursor-pointer leading-snug opacity-100 relative z-10 transition-all duration-400 font-sans;
+          transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+
+          .chinese,
+          .english {
+            @apply text-[5px] minTab:text-[10px] lg:text-xs xl:text-base 2xl:text-base 2xlM:text-22px;
+          }
+
+          &:hover {
+            @apply opacity-100 translate-x-2;
+            opacity: 1 !important;
+          }
+
+          &.active {
+            @apply opacity-100;
+            opacity: 1 !important;
+          }
+        }
+      }
+
+      .heroTextContent {
+        @apply flex flex-col minTab:flex-row gap-5 lg:gap-16 flex-1 justify-end;
+
+        .heroText {
+          @apply md:w-45% lg:w-35% 2xl:w-35% text-[6px] minTab:text-xs lg:text-xs 2xl:text-base 2xlM:text-25px font-mono uppercase tracking-0.5px xl:tracking-normal text-primary-text leading-relaxed 2xlM:leading-[3rem] overflow-hidden transition-colors duration-300 text-justify hyphens-auto text-wrap-balance;
+        }
+
+        .heroTextChinese {
+          @apply md:w-45% lg:w-35% 2xl:w-35% text-[6px] minTab:text-xs lg:text-xs 2xl:text-base 2xlM:text-[26px] font-mono uppercase tracking-0.5px xl:tracking-normal text-primary-text leading-relaxed 2xlM:leading-[3rem] text-justify overflow-hidden transition-colors duration-300;
+        }
+      }
+    }
+  }
+
+  .scrollSpace {
+    @apply h-50vh bg-primary-bg transition-colors duration-300;
+  }
+
+  .animationSection {
+    @apply h-100vh relative bg-primary-bg transition-colors duration-300;
+
+    .footerContainer {
+      @apply fixed bottom-0 left-0 right-0 h-100vh pointer-events-none z-10;
+
+      .svgContainer {
+        @apply absolute bottom-0 left-0 right-0 h-100vh origin-bottom opacity-0 z-15 will-change-transform-opacity-filter scale-y-[0.05] translate-y-[100vh];
+
+        .spectrumSvg {
+          @apply w-full h-full;
+        }
+      }
+
+      .textGrid {
+        @apply absolute bottom-0 left-0 right-0 h-100vh grid grid-cols-9 items-end z-20 opacity-0;
+
+        .textColumn {
+          @apply relative flex flex-col items-center justify-end h-full;
+
+          .wavelengthLabel {
+            @apply font-medium text-center inline-block leading-tight transition-colors duration-300 absolute left-1/2 -translate-x-1/2 whitespace-nowrap w-auto text-[#2d2d2d] text-[9px] minTab:text-[13px] md:text-[15px] lg:text-[22px] xl:text-[22px] 2xl:text-[28px] 2xlM:text-[40px];
+
+            &.level-1 {
+              @apply top-[55%] md:top-[60%] lg:top-[65%];
+            }
+
+            &.level-2 {
+              @apply top-[38%] md:top-[42%] lg:top-[47%];
+            }
+
+            &.level-3 {
+              @apply top-[23%] md:top-[28%] lg:top-[33%];
+            }
+
+            &.level-4 {
+              @apply top-[12%] md:top-[17%] lg:top-[23%];
+            }
+
+            &.level-5 {
+              @apply top-[7%] md:top-[10%] lg:top-[13%];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mainTitle {
+    @apply absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 text-center text-primary-text text-12px leading-snug z-20 opacity-0 transition-colors duration-300;
+  }
+
+  .splitText {
+    @apply overflow-visible;
+  }
+
+  .heroTitle :global(.char),
+  .heroTitle div,
+  .heroNavItem div,
+  .heroText div,
+  .wavelengthLabel div,
+  .mainTitle div,
+  .navBottomCenter :global(.char) {
+    @apply will-change-transform-opacity-filter-color;
+  }
+}

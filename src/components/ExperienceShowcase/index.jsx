@@ -11,28 +11,17 @@ import DecryptedText from './DecryptedText';
 import HudConnector from './HudConnector';
 import AwardsAndBrands from './AwardsAndBrands';
 
-const ExperienceShowcase = () => {
+const ExperienceShowcase = memo(() => {
   const [selectedCountry, setSelectedCountry] = useState("Canada");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedFlagIndex, setSelectedFlagIndex] = useState(0);
   const [showHUD, setShowHUD] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const showcaseContainerRef = useRef(null);
   const timelineRef = useRef(null);
   const mapSelectorRef = useRef(null);
   const hubTimeoutRef = useRef(null);
 
-  // Track mount state to prevent GSAP conflicts during initial render
-  useEffect(() => {
-    setIsMounted(true);
-    return () => {
-      setIsMounted(false);
-    };
-  }, []);
-
   const handleCountryChange = useCallback((country, flagIndex, isUserClick = true) => {
-    if (!isMounted) return;
-    
     // Allow reopening HUD for the same country if it's currently closed
     if (country === selectedCountry && showHUD && isUserClick) {
       if (isTransitioning) return;
@@ -41,7 +30,7 @@ const ExperienceShowcase = () => {
         clearTimeout(hubTimeoutRef.current);
       }
       hubTimeoutRef.current = setTimeout(() => {
-        if (isMounted) setShowHUD(false);
+        setShowHUD(false);
       }, 8000);
       return;
     }
@@ -65,10 +54,8 @@ const ExperienceShowcase = () => {
     
     const tl = gsap.timeline({
       onComplete: () => {
-        if (isMounted) {
-          setIsTransitioning(false);
-          timelineRef.current = null;
-        }
+        setIsTransitioning(false);
+        timelineRef.current = null;
       }
     });
     
@@ -76,18 +63,17 @@ const ExperienceShowcase = () => {
     
     // Simple country change
     tl.call(() => {
-      if (!isMounted) return;
       setSelectedCountry(country);
       // Only show unified HUD overlay on map if triggered by user click
       if (isUserClick) {
         setShowHUD(true);
         // Auto-hide HUD after 8 seconds
         hubTimeoutRef.current = setTimeout(() => {
-          if (isMounted) setShowHUD(false);
+          setShowHUD(false);
         }, 8000);
       }
     });
-  }, [selectedCountry, isTransitioning, showHUD, isMounted]);
+  }, [selectedCountry, isTransitioning, showHUD]);
 
 
   const handleHUDClose = useCallback(() => {
@@ -193,10 +179,8 @@ const ExperienceShowcase = () => {
       </div>
     </div>
   );
-};
+});
 
 ExperienceShowcase.displayName = 'ExperienceShowcase';
 
-// Named export for better lazy loading compatibility
-export { ExperienceShowcase };
 export default ExperienceShowcase;

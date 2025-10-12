@@ -35,7 +35,7 @@ const MapInfoPanel = ({
   return (
     <div 
       ref={containerRef}
-      className="mt-8 mb-12 min-h-[340px] sm:min-h-[240px] flex items-center"
+      className="mt-8 mb-12 min-h-[340px] sm:min-h-[240px] flex items-center relative z-20"
       data-map-info-panel="true"
     >
       <div className="w-full px-4 sm:px-8">

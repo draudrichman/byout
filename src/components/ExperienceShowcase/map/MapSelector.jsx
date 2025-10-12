@@ -176,7 +176,7 @@ export const MapSelector = ({
         <div 
           ref={mapPointsRef} 
           className="absolute inset-0"
-          style={{ zIndex: 60 }}
+          style={{ zIndex: 50 }}
         >
           {mapPoints && mapPoints.map((point) => point && point.country && (
             <MapPoint

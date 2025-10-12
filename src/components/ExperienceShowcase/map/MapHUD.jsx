@@ -202,7 +202,7 @@ const MapHUD = ({
   return (
     <div
       ref={hudRef}
-      className="absolute top-0 left-0 right-0 rounded-lg z-50 overflow-hidden"
+      className="absolute top-0 left-0 right-0 rounded-lg z-40 overflow-hidden"
       style={{ 
         display: 'none',
         width: `${hudDimensions.width}px`,

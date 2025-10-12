@@ -457,7 +457,7 @@ const HudConnector = ({
   return (
     <svg
       ref={svgRef}
-      className={`fixed pointer-events-none z-10 ${className}`}
+      className={`fixed pointer-events-none z-30 ${className}`}
       style={{
         left: svgDimensions.left,
         top: svgDimensions.top,
