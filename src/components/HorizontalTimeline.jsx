@@ -189,9 +189,9 @@ const HorizontalTimeline = memo(() => {
             const firstKeypointItems = items[0].querySelectorAll('.timeline-keypoint');
 
             if (firstImage) {
-                // Set initial states - simpler and smoother
+                // Set initial states - simpler and smoother (scale 1.35 for phase 1)
                 gsap.set(firstImage, {
-                    scale: 1.15,
+                    scale: 1.35,
                     opacity: 0
                 });
 
@@ -331,9 +331,10 @@ const HorizontalTimeline = memo(() => {
                                 const keypointItems = item.querySelectorAll('.timeline-keypoint');
 
                                 if (image) {
-                                    // Reset image - simple scale animation
+                                    // Reset image - simple scale animation with different scale for phases 1 & 3
+                                    const initialScale = (clampedIndex === 0 || clampedIndex === 2) ? 1.35 : 1.15;
                                     gsap.set(image, {
-                                        scale: 1.15,
+                                        scale: initialScale,
                                         opacity: 0
                                     });
 
@@ -612,12 +613,13 @@ const HorizontalTimeline = memo(() => {
 
 
       {/* Service Process Title */}
-      <div className="text-center pt-28">
-        <h2 className="text-7xl md:text-9xl font-bold mb-6 relative overflow-hidden">
+      <div className="text-center pt-16 md:pt-20 lg:pt-24">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 relative overflow-hidden">
                             <span ref={serviceTitleRef} className="text-white block">
                            Service Process
                             </span>
                         </h2>
+                        <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-300 tracking-wider">服务流程</p>
         </div>
 
             {/* Timeline Track - Centered Items */}
@@ -723,12 +725,13 @@ const HorizontalTimeline = memo(() => {
                                             src={item.image} 
                                             alt={item.title}
                                             loading="lazy"
-                                            className="timeline-image w-full h-auto object-contain rounded-2xl"
+                                            className="timeline-image w-full h-auto rounded-2xl"
                                             style={{
-                                                transform: 'scale(1.15)',
+                                                transform: index === 0 || index === 2 ? 'scale(1.35)' : 'scale(1.15)',
                                                 opacity: 0,
                                                 willChange: 'transform, opacity',
-                                                maxHeight: '500px'
+                                                maxHeight: '400px',
+                                                objectFit: index === 0 || index === 2 ? 'cover' : 'contain'
                                             }}
                                         />
                                     </figure>
