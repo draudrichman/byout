@@ -15,7 +15,7 @@ const ExperienceShowcase = memo(() => {
   const [selectedCountry, setSelectedCountry] = useState("Canada");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedFlagIndex, setSelectedFlagIndex] = useState(0);
-  const [showHUD, setShowHUD] = useState(false);
+  const [showHUD, setShowHUD] = useState(true);
   const showcaseContainerRef = useRef(null);
   const timelineRef = useRef(null);
   const mapSelectorRef = useRef(null);
