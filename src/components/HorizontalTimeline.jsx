@@ -21,6 +21,9 @@ const HorizontalTimeline = memo(() => {
     
     // Get Lenis instance for smooth scroll integration
     const lenis = useLenis();
+    
+    // Ref for intersection observer to detect approach to ServiceProcess section
+    const approachTriggerRef = useRef(null);
 
     const timelineData = [
         {
@@ -523,6 +526,37 @@ const HorizontalTimeline = memo(() => {
         };
     }, []);
 
+    // Intersection Observer to refresh ScrollTrigger when approaching ServiceProcess section
+    useEffect(() => {
+        if (!approachTriggerRef.current) return;
+
+        let hasRefreshed = false; // Flag to ensure we only refresh once
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !hasRefreshed) {
+                        // User is approaching the ServiceProcess section
+                        // Refresh ScrollTrigger only once to avoid lag
+                        ScrollTrigger.refresh();
+                        hasRefreshed = true;
+                    }
+                });
+            },
+            {
+                // Trigger when the element is 200px away from entering viewport
+                rootMargin: '200px 0px 0px 0px',
+                threshold: 0.1
+            }
+        );
+
+        observer.observe(approachTriggerRef.current);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
     return (
         <section 
             ref={sectionRef}
@@ -610,7 +644,12 @@ const HorizontalTimeline = memo(() => {
                 />
             </div>
       
-
+            {/* Approach Trigger - Invisible element to detect when user is approaching ServiceProcess section */}
+            <div 
+                ref={approachTriggerRef}
+                className="absolute top-0 left-0 w-full h-1 pointer-events-none"
+                style={{ zIndex: -999 }}
+            />
 
       {/* Service Process Title */}
       <div className="text-center pt-16 md:pt-20 lg:pt-24">

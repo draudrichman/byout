@@ -538,3 +538,8 @@ a:focus-visible {
     pointer-events: none;
     z-index: 0;
 }
+
+.timeline{
+	transition: 0s;
+	/* display: none; */
+}

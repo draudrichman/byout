@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import useResourceLoader from '../hooks/useResourceLoader'
 
 const LoadingPage = ({ onComplete, duration = 3000 }) => {
   const canvasRef = useRef(null)
@@ -6,6 +7,45 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
   const spaceRef = useRef(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [transitionProgress, setTransitionProgress] = useState(0)
+  
+  // Use the resource loader hook
+  const { loadingProgress, loadingPhase, isComplete } = useResourceLoader()
+
+  // Start transition when loading is complete
+  useEffect(() => {
+    if (isComplete && loadingProgress >= 100) {
+      // Wait a bit before starting transition
+      const transitionTimer = setTimeout(() => {
+        setIsTransitioning(true)
+        
+        // Animate transition progress
+        const startTime = Date.now()
+        const transitionDuration = 1000 // 1 second transition
+        
+        const animateTransition = () => {
+          const elapsed = Date.now() - startTime
+          const progress = Math.min(elapsed / transitionDuration, 1)
+          
+          // Ease out cubic for smooth animation
+          const easedProgress = 1 - Math.pow(1 - progress, 3)
+          setTransitionProgress(easedProgress)
+          
+          if (progress < 1) {
+            requestAnimationFrame(animateTransition)
+          } else {
+            // Complete the transition
+            if (onComplete) {
+              onComplete()
+            }
+          }
+        }
+        
+        requestAnimationFrame(animateTransition)
+      }, 500) // Small delay after completion
+
+      return () => clearTimeout(transitionTimer)
+    }
+  }, [isComplete, loadingProgress, onComplete])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -133,34 +173,7 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
     spaceTravel.init()
     spaceRef.current = spaceTravel
 
-    // Start transition before completion
-    const transitionTimer = setTimeout(() => {
-      setIsTransitioning(true)
-      
-      // Animate transition progress
-      const startTime = Date.now()
-      const transitionDuration = 1000 // 1 second transition
-      
-      const animateTransition = () => {
-        const elapsed = Date.now() - startTime
-        const progress = Math.min(elapsed / transitionDuration, 1)
-        
-        // Ease out cubic for smooth animation
-        const easedProgress = 1 - Math.pow(1 - progress, 3)
-        setTransitionProgress(easedProgress)
-        
-        if (progress < 1) {
-          requestAnimationFrame(animateTransition)
-        } else {
-          // Complete the transition
-          if (onComplete) {
-            onComplete()
-          }
-        }
-      }
-      
-      requestAnimationFrame(animateTransition)
-    }, duration)
+    // Cleanup function will be handled by the resource loader effect
 
     // Handle window resize
     const handleResize = () => {
@@ -172,7 +185,6 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
     window.addEventListener('resize', handleResize)
 
     return () => {
-      clearTimeout(transitionTimer)
       window.removeEventListener('resize', handleResize)
       if (spaceRef.current) {
         spaceRef.current.destroy()
@@ -189,11 +201,11 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
         style={{ background: 'rgb(0, 0, 0)' }}
       />
       
-      {/* Loading content overlay - Just the icon */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen">
+      {/* Loading content overlay */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
         {/* Central icon */}
         <div 
-          className="w-48 h-48 md:w-40 md:h-40 flex items-center justify-center transition-all duration-1000 ease-out"
+          className="w-48 h-48 md:w-40 md:h-40 flex items-center justify-center transition-all duration-1000 ease-out mb-8"
           style={{
             transform: isTransitioning 
               ? `scale(${1 + transitionProgress * 2}) translateZ(0)` 
@@ -223,6 +235,27 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
             <rect x="577.41" y="515.98" width="17.87" height="17.87" transform="translate(-199.88 559.38) rotate(-44.35)" fill="white"/>
             <rect x="532.16" y="428.83" width="17.87" height="100.37" transform="translate(-180.68 514.67) rotate(-44.35)" fill="white"/>
           </svg>
+        </div>
+
+        {/* Progress display */}
+        <div className="text-center">
+          {/* Progress percentage */}
+          <div className="text-4xl md:text-5xl font-bold text-white mb-2 font-mono">
+            {loadingProgress}%
+          </div>
+          
+          {/* Loading phase text */}
+          <div className="text-lg md:text-xl text-gray-300 mb-6 font-light">
+            {loadingPhase}
+          </div>
+          
+          {/* Progress bar */}
+          <div className="w-80 md:w-96 h-2 bg-gray-800 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
         </div>
       </div>
 

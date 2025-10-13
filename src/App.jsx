@@ -154,7 +154,7 @@ const App = memo(() => {
 
   // Show loading page initially
   if (isLoading) {
-    return <LoadingPage onComplete={handleLoadingComplete} duration={4000} />
+    return <LoadingPage onComplete={handleLoadingComplete} />
   }
 
   return <AppContent />

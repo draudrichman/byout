@@ -107,7 +107,7 @@ const ExperienceShowcase = memo(() => {
   const hubPosition = (mapPoint && mapPoint.x > 50) ? 'left' : 'right';
 
   return (
-    <div className="py-20 px-10 text-center bg-gradient-to-b from-transparent via-black/50 to-black" style={{backgroundImage: 'linear-gradient(to bottom, transparent 0%, black 33%, black 100%)'}}>
+    <div className="py-20 px-10 text-center bg-gradient-to-b from-transparent via-black/50 to-black" style={{backgroundImage: 'linear-gradient(to bottom, transparent 0%, black 33%, black 100%) ', transition: '0s', }}>
       <div ref={showcaseContainerRef} className="max-w-7xl mx-auto relative">
         {/* Title */}
         <h2 className="mb-12 text-2xl sm:text-3xl lg:text-5xl font-bold text-white uppercase font-scifi">
