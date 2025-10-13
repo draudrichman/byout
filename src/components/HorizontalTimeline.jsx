@@ -565,46 +565,7 @@ const HorizontalTimeline = memo(() => {
             {/* Background Effects */}
             <div className="absolute inset-0 pointer-events-none">
                 {/* Glow Circles */}
-                <GlowCircle 
-                    color="rgba(59, 130, 246, 0.15)" 
-                    size="600px" 
-                    blur="120px" 
-                    left="20%" 
-                    top="30%" 
-                    zIndex="-1"
-                    className="animate-pulse"
-                    style={{animationDuration: '6s'}}
-                />
-                <GlowCircle 
-                    color="rgba(147, 51, 234, 0.12)" 
-                    size="800px" 
-                    blur="150px" 
-                    left="80%" 
-                    top="70%" 
-                    zIndex="-1"
-                    className="animate-pulse"
-                    style={{animationDuration: '8s', animationDelay: '2s'}}
-                />
-                <GlowCircle 
-                    color="rgba(236, 72, 153, 0.1)" 
-                    size="500px" 
-                    blur="100px" 
-                    left="60%" 
-                    top="20%" 
-                    zIndex="-1"
-                    className="animate-pulse"
-                    style={{animationDuration: '10s', animationDelay: '4s'}}
-                />
-                <GlowCircle 
-                    color="rgba(34, 197, 94, 0.08)" 
-                    size="700px" 
-                    blur="140px" 
-                    left="10%" 
-                    top="80%" 
-                    zIndex="-1"
-                    className="animate-pulse"
-                    style={{animationDuration: '7s', animationDelay: '1s'}}
-                />
+    
                 
                 {/* Animated gradient overlay */}
                 <div 
@@ -655,10 +616,10 @@ const HorizontalTimeline = memo(() => {
       <div className="text-center pt-16 md:pt-20 lg:pt-24">
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 relative overflow-hidden">
                             <span ref={serviceTitleRef} className="text-white block">
-                           Service Process
+                           Service Process | 服务流程
                             </span>
                         </h2>
-                        <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-300 tracking-wider">服务流程</p>
+                        {/* <p className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-300 tracking-wider">服务流程</p> */}
         </div>
 
             {/* Timeline Track - Centered Items */}
