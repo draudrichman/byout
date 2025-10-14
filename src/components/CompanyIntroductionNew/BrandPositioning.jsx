@@ -44,7 +44,7 @@ const BrandPositioning = () => {
         start: "top bottom-=10%",
         end: "bottom center+=20%",
         scrub: 1,
-        markers: true,
+        // markers: true,
       },
     });
 

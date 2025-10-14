@@ -3,7 +3,12 @@ import { Leva } from "leva";
 import LandingPage from "../components/LandingPage";
 import { AuroraBackground } from "../components/ui/aurora-background";
 import ErrorBoundary from "../components/ErrorBoundary";
-import CompanyIntroduction from "../components/CompanyIntroduction copy";
+import CompanyIntroduction from "../components/CompanyIntroductionNew";
+import LogoSection from "../components/LogoSection";
+import StatsPage from "../components/StatsPage";
+import ExperienceShowcase from "../components/ExperienceShowcase";
+import FounderStaff from "../components/FounderStaff";
+import ContactForm from "../components/ContactForm";
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -12,6 +17,13 @@ const LoadingFallback = memo(() => (
   </div>
 ));
 
+// const LogoSection = lazy(() =>
+//   import("../components/LogoSection").catch((err) => {
+//     console.error("Failed to load LogoSection:", err);
+//     return { default: () => <div>Loading...</div> };
+//   })
+// );
+
 LoadingFallback.displayName = "LoadingFallback";
 
 const HomePage = memo(() => {
@@ -19,17 +31,15 @@ const HomePage = memo(() => {
     <div className="App">
       <Leva hidden />
 
-      {/* <AuroraBackground>
+      <AuroraBackground>
         <LandingPage key="landing" />
-      </AuroraBackground> */}
-
-      {/* <Suspense fallback={<LoadingFallback />}> */}
+      </AuroraBackground>
+      <StatsPage />
+      <LogoSection />
       <CompanyIntroduction />
-      {/* </Suspense> */}
-
-      {/* <AuroraBackground>
-        <LandingPage key="landing" />
-      </AuroraBackground> */}
+      <ExperienceShowcase />
+      <FounderStaff />
+      <ContactForm />
     </div>
   );
 });
