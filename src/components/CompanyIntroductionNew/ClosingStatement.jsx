@@ -36,7 +36,7 @@ const ClosingStatement = () => {
       scrollTrigger: {
         trigger: container,
         start: "top bottom-=15%",
-        end: "bottom center",
+        end: "bottom center+=25%",
         scrub: 1,
         markers: false,
       },
@@ -87,7 +87,7 @@ const ClosingStatement = () => {
         scrollTrigger: {
           trigger: container,
           start: "top bottom-=10%",
-          end: "top center",
+          end: "top center+=30%",
           scrub: false,
         },
       }

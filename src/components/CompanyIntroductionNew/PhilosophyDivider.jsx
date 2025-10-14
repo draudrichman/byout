@@ -35,8 +35,8 @@ const PhilosophyDivider = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: "top bottom-=20%",
-        end: "bottom center",
+        start: "top bottom",
+        end: "bottom center+=28%",
         scrub: 1,
         markers: false,
       },
@@ -85,8 +85,8 @@ const PhilosophyDivider = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: container,
-          start: "top bottom-=10%",
-          end: "top center",
+          start: "top bottom-=2%",
+          end: "top bottom",
           scrub: false,
         },
       }

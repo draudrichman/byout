@@ -79,7 +79,7 @@ const CompanyDescription = () => {
       scrollTrigger: {
         trigger: container,
         start: "top bottom-=10%",
-        end: "bottom center",
+        end: "bottom center+=28%",
         scrub: 1,
         markers: false,
       },
@@ -276,8 +276,8 @@ const CompanyDescription = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: container,
-          start: "top bottom-=5%",
-          end: "top center",
+          start: "top bottom",
+          end: "top center+=20%",
           scrub: false,
         },
       }
@@ -303,7 +303,7 @@ const CompanyDescription = () => {
       <div ref={containerRef} className="relative">
         <p
           ref={paragraph1Ref}
-          className="text-sm sm:text-base leading-6 sm:leading-7 text-white/80 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-left relative z-10"
+          className="text-sm sm:text-base md:text-xl leading-6 sm:leading-7 text-white/80 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-left relative z-10"
         >
           PRISM 瓴境是全球化时代背景下诞生的
           <strong className="text-white/95">
@@ -313,20 +313,20 @@ const CompanyDescription = () => {
         </p>
         <p
           ref={paragraph2Ref}
-          className="text-xs sm:text-sm leading-5 sm:leading-6 text-white/70 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-right relative z-10"
+          className="text-xs sm:text-sm md:text-xl leading-5 sm:leading-6 text-white/70 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-right relative z-10"
         >
           前身为BYOUT 年轻化创新集团，MDL买点论实验室
         </p>
         <p
           ref={paragraph3Ref}
-          className="text-sm sm:text-base leading-6 sm:leading-7 text-white/80 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-left relative z-10"
+          className="text-sm sm:text-base md:text-xl leading-6 sm:leading-7 text-white/80 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-left relative z-10"
         >
           独创从0到1的 产品全球化价值重构 到
           全球市场落地的全链路一体化增长方案。
         </p>
         <p
           ref={paragraph4Ref}
-          className="text-sm sm:text-base leading-6 sm:leading-7 text-white/80 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-right relative z-10"
+          className="text-sm sm:text-base md:text-xl leading-6 sm:leading-7 text-white/80 mb-4 sm:mb-6 max-w-4xl mx-auto font-chinese px-2 company-text-right relative z-10"
         >
           通过{" "}
           <strong className="text-white/95">
@@ -336,14 +336,14 @@ const CompanyDescription = () => {
         </p>
         <p
           ref={paragraph5Ref}
-          className="text-sm sm:text-base leading-6 sm:leading-7 text-white/80 mb-6 sm:mb-8 max-w-4xl mx-auto font-chinese px-2 company-text-left relative z-10"
+          className="text-sm sm:text-base md:text-xl leading-6 sm:leading-7 text-white/80 mb-6 sm:mb-8 max-w-4xl mx-auto font-chinese px-2 company-text-left relative z-10"
         >
           将您的品牌与产品从可持续发展的全球化市场影响力 x 竞争力 x 购买力
           的3个维度解构重塑革新
         </p>
         <p
           ref={paragraph6Ref}
-          className="text-sm sm:text-base leading-6 sm:leading-7 text-white/80 mb-8 sm:mb-12 max-w-4xl mx-auto font-chinese px-2 company-text-right relative z-10"
+          className="text-sm sm:text-base md:text-xl leading-6 sm:leading-7 text-white/80 mb-8 sm:mb-12 max-w-4xl mx-auto font-chinese px-2 company-text-right relative z-10"
         >
           将您的企业增长蓝图转化为实实在在的全球市场份额。
         </p>

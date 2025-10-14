@@ -68,7 +68,7 @@ const ValueProposition = () => {
       scrollTrigger: {
         trigger: container,
         start: "top bottom-=10%",
-        end: "bottom center",
+        end: "bottom center+=25%",
         scrub: 1,
         markers: false,
       },
@@ -184,7 +184,7 @@ const ValueProposition = () => {
         scrollTrigger: {
           trigger: container,
           start: "top bottom-=5%",
-          end: "top center",
+          end: "top center+=30%",
           scrub: false,
         },
       }
@@ -197,7 +197,10 @@ const ValueProposition = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="mb-12 sm:mb-16 overflow-hidden">
+    <div
+      ref={containerRef}
+      className="mb-12 sm:mb-16 overflow-hidden my-40 py-20"
+    >
       <p
         ref={titleRef}
         className="text-base sm:text-lg leading-7 sm:leading-8 text-white/90 mb-6 sm:mb-8 max-w-4xl mx-auto transition-all duration-300 font-chinese text-center px-2"

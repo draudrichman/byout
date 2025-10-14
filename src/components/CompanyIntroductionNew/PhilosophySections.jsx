@@ -97,8 +97,8 @@ const PhilosophySections = () => {
     const mainTl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: "top bottom-=10%",
-        end: "bottom center",
+        start: "top bottom-=2%",
+        end: "bottom center+=25%",
         scrub: 1,
         markers: false,
       },
@@ -127,7 +127,7 @@ const PhilosophySections = () => {
             scrollTrigger: {
               trigger: section,
               start: "top bottom-=20%",
-              end: "top center",
+              end: "top center+=20%",
               scrub: false,
             },
           }
@@ -343,7 +343,7 @@ const PhilosophySections = () => {
         scrollTrigger: {
           trigger: container,
           start: "top bottom-=5%",
-          end: "top center",
+          end: "top center+=20%",
           scrub: false,
         },
       }
@@ -369,7 +369,7 @@ const PhilosophySections = () => {
             scrollTrigger: {
               trigger: section,
               start: "top bottom-=10%",
-              end: "top center",
+              end: "top center+=15%",
               scrub: false,
             },
           }

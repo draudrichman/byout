@@ -42,7 +42,7 @@ const BrandPositioning = () => {
       scrollTrigger: {
         trigger: container,
         start: "top bottom-=10%",
-        end: "bottom center+=20%",
+        end: "bottom center+=28%",
         scrub: 1,
         // markers: true,
       },
@@ -155,9 +155,10 @@ const BrandPositioning = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: container,
-          start: "top bottom-=10%",
-          end: "top center",
+          start: "top bottom",
+          end: "top bottom",
           scrub: false,
+          // markers: true,
         },
       }
     );
@@ -169,31 +170,41 @@ const BrandPositioning = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="mb-8 sm:mb-10 overflow-hidden">
-      <p
-        ref={chineseText1Ref}
-        className="text-base sm:text-lg leading-6 sm:leading-7 text-white/90 mb-1 sm:mb-2 max-w-4xl mx-auto transition-all duration-300 font-chinese font-light"
-      >
-        品牌全球化价值重塑
-      </p>
-      <p
-        ref={chineseText2Ref}
-        className="text-base sm:text-lg leading-6 sm:leading-7 text-white/90 mb-2 sm:mb-3 max-w-4xl mx-auto transition-all duration-300 font-chinese font-light"
-      >
-        全域增长伙伴
-      </p>
-      <p
-        ref={englishText1Ref}
-        className="text-sm sm:text-base leading-5 sm:leading-6 text-white/70 mb-1 sm:mb-2 max-w-4xl mx-auto transition-all duration-300"
-      >
-        Global Brand Value
-      </p>
-      <p
-        ref={englishText2Ref}
-        className="text-sm sm:text-base leading-5 sm:leading-6 text-white/70 mb-12 sm:mb-16 max-w-4xl mx-auto transition-all duration-300"
-      >
-        Innovation & Growth Partner
-      </p>
+    <div
+      ref={containerRef}
+      className="mb-12 sm:mb-16 md:mb-20 overflow-hidden text-center"
+    >
+      <div className="space-y-4 sm:space-y-6 md:space-y-8">
+        <div className="space-y-2 sm:space-y-3 md:space-y-4">
+          <p
+            ref={chineseText1Ref}
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300 font-chinese font-light"
+          >
+            品牌全球化价值重塑
+          </p>
+          <p
+            ref={chineseText2Ref}
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300 font-chinese font-light"
+          >
+            全域增长伙伴
+          </p>
+        </div>
+
+        <div className="space-y-2 sm:space-y-3 md:space-y-4">
+          <p
+            ref={englishText1Ref}
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-relaxed text-white/70 max-w-6xl mx-auto transition-all duration-300"
+          >
+            Global Brand Value
+          </p>
+          <p
+            ref={englishText2Ref}
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-relaxed text-white/70 max-w-6xl mx-auto transition-all duration-300"
+          >
+            Innovation & Growth Partner
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
