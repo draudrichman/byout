@@ -171,19 +171,19 @@ const BrandPositioning = () => {
 
   return (
     <div
-      ref={containerRef}
+      // ref={containerRef}
       className="mb-12 sm:mb-16 md:mb-20 overflow-hidden text-center"
     >
       <div className="space-y-4 sm:space-y-6 md:space-y-8">
         <div className="space-y-2 sm:space-y-3 md:space-y-4">
           <p
-            ref={chineseText1Ref}
+            // ref={chineseText1Ref}
             className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300 font-chinese font-light"
           >
             品牌全球化价值重塑
           </p>
           <p
-            ref={chineseText2Ref}
+            // ref={chineseText2Ref}
             className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300 font-chinese font-light"
           >
             全域增长伙伴
@@ -192,13 +192,13 @@ const BrandPositioning = () => {
 
         <div className="space-y-2 sm:space-y-3 md:space-y-4">
           <p
-            ref={englishText1Ref}
+            // ref={englishText1Ref}
             className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-relaxed text-white/70 max-w-6xl mx-auto transition-all duration-300"
           >
             Global Brand Value
           </p>
           <p
-            ref={englishText2Ref}
+            // ref={englishText2Ref}
             className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-relaxed text-white/70 max-w-6xl mx-auto transition-all duration-300"
           >
             Innovation & Growth Partner

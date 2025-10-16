@@ -1,10 +1,9 @@
-import { lazy, Suspense, memo } from "react";
+import { memo } from "react";
 import { Leva } from "leva";
 import LandingPage from "../components/LandingPage";
 import { AuroraBackground } from "../components/ui/aurora-background";
 import ErrorBoundary from "../components/ErrorBoundary";
 import CompanyIntroduction from "../components/CompanyIntroductionNew";
-import LogoSection from "../components/LogoSection";
 import StatsPage from "../components/StatsPage";
 import ExperienceShowcase from "../components/ExperienceShowcase";
 import FounderStaff from "../components/FounderStaff";
@@ -38,7 +37,6 @@ const HomePage = memo(() => {
         <LandingPage key="landing" />
       </AuroraBackground>
       <StatsPage />
-      <LogoSection />
       <CompanyIntroduction />
       <ExperienceShowcase />
       <HorizontalTimeline />

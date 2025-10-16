@@ -199,7 +199,7 @@ const ValueProposition = () => {
   return (
     <div
       ref={containerRef}
-      className="mb-12 sm:mb-16 overflow-hidden my-40 py-20"
+      className="overflow-hidden"
     >
       <p
         ref={titleRef}
