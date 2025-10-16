@@ -1,116 +1,63 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const ClosingStatement = () => {
   const containerRef = useRef(null);
   const textRef = useRef(null);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
     const container = containerRef.current;
     const text = textRef.current;
     if (!container || !text) return;
 
-    // Split text function for character-by-character animation
-    const splitTextIntoSpans = (element) => {
-      if (!element) return;
-      const textContent = element.textContent;
-      element.innerHTML = textContent
-        .split("")
-        .map(
-          (char) =>
-            `<span class="inline-block char-span">${
-              char === " " ? "&nbsp;" : char
-            }</span>`
-        )
-        .join("");
-    };
-
-    splitTextIntoSpans(text);
-
-    // Create grand finale animation
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top bottom-=15%",
-        end: "bottom center+=25%",
-        scrub: 1,
-        markers: false,
-      },
+    // Set initial state
+    gsap.set(text, {
+      opacity: 0,
+      y: 30,
     });
 
-    // Majestic final statement entrance
-    tl.fromTo(
-      text.querySelectorAll(".char-span"),
-      {
-        opacity: 0,
-        y: 100,
-        scale: 0,
-        rotationY: 180,
-        transformOrigin: "center center",
-        filter: "blur(30px) hue-rotate(90deg)",
+    // Use IntersectionObserver to detect when panel becomes visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // When panel becomes visible and hasn't animated yet
+          if (
+            entry.isIntersecting &&
+            entry.intersectionRatio > 0.5 &&
+            !hasAnimatedRef.current
+          ) {
+            hasAnimatedRef.current = true;
+
+            // Animate text
+            gsap.to(text, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power2.out",
+            });
+          }
+          // Reset animation when panel is not visible
+          else if (!entry.isIntersecting && entry.intersectionRatio < 0.1) {
+            hasAnimatedRef.current = false;
+            gsap.set(text, {
+              opacity: 0,
+              y: 30,
+            });
+          }
+        });
       },
       {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        rotationY: 0,
-        filter: "blur(0px) hue-rotate(0deg)",
-        duration: 2.5,
-        ease: "expo.out",
-        stagger: {
-          each: 0.12,
-          from: "center",
-        },
+        threshold: [0, 0.1, 0.5, 1],
       }
     );
 
-    // Container magnificent entrance with glow
-    gsap.fromTo(
-      container,
-      {
-        opacity: 0,
-        scale: 0.8,
-        y: 60,
-        filter: "drop-shadow(0 0 0px rgba(255,255,255,0)) brightness(0.5)",
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        filter: "drop-shadow(0 0 40px rgba(255,255,255,0.4)) brightness(1)",
-        duration: 3,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: container,
-          start: "top bottom-=10%",
-          end: "top center+=30%",
-          scrub: false,
-        },
-      }
-    );
-
-    // Pulsing glow effect
-    gsap.to(container, {
-      filter: "drop-shadow(0 0 60px rgba(255,255,255,0.6)) brightness(1.1)",
-      duration: 2,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-      scrollTrigger: {
-        trigger: container,
-        start: "top center",
-        end: "bottom top",
-        scrub: false,
-      },
-    });
+    observer.observe(container);
 
     // Cleanup function
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      observer.disconnect();
     };
   }, []);
 
