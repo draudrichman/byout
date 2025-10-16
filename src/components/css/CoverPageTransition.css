@@ -84,6 +84,21 @@ body {
 	}
 }
 
+@keyframes gradientShift {
+	0% {
+		background: linear-gradient(45deg, #60a5fa, #a855f7, #ec4899);
+	}
+	33% {
+		background: linear-gradient(45deg, #34d399, #60a5fa, #a855f7);
+	}
+	66% {
+		background: linear-gradient(45deg, #fbbf24, #34d399, #60a5fa);
+	}
+	100% {
+		background: linear-gradient(45deg, #ec4899, #fbbf24, #34d399);
+	}
+}
+
 a {
 	text-decoration: none;
 	color: #ffffff;

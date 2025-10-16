@@ -9,6 +9,9 @@ import StatsPage from "../components/StatsPage";
 import ExperienceShowcase from "../components/ExperienceShowcase";
 import FounderStaff from "../components/FounderStaff";
 import ContactForm from "../components/ContactForm";
+import HorizontalTimeline from "../components/HorizontalTimeline";
+import GlobalPresence from "../components/GlobalPresence";
+import CoreServices from "../components/CoreServices";
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -34,10 +37,13 @@ const HomePage = memo(() => {
       <AuroraBackground>
         <LandingPage key="landing" />
       </AuroraBackground>
-      <StatsPage />
+      {/* <StatsPage />
       <LogoSection />
       <CompanyIntroduction />
       <ExperienceShowcase />
+      <HorizontalTimeline />
+      <GlobalPresence /> */}
+      <CoreServices />
       <FounderStaff />
       <ContactForm />
     </div>
