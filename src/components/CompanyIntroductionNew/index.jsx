@@ -31,8 +31,11 @@ const CompanyIntroduction = memo(() => {
       gsap.set(panels.slice(1), { autoAlpha: 0 });
 
       const tl = gsap.timeline({
-        defaults: { ease: "power2.inOut", duration: 0.6 },
+        // Use linear easing; rely on scrub smoothing for smooth feel
+        defaults: { ease: "none", duration: 0.6 },
       });
+      // Small buffer at the start to avoid abrupt first transition
+      tl.to({}, { duration: 0.3 });
       panels.forEach((panel, index) => {
         if (index === panels.length - 1) return;
         const next = panels[index + 1];
@@ -44,14 +47,18 @@ const CompanyIntroduction = memo(() => {
         );
       });
 
+      // Small buffer at the end to avoid abrupt finish
+      tl.to({}, { duration: 0.3 });
+
       ScrollTrigger.create({
         animation: tl,
         trigger: container,
         start: "top top",
         end: () => "+=" + panels.length * window.innerHeight,
-        scrub: true,
+        // Smooth the scrubbing for less snappy feel
+        scrub: 0.8,
         pin: true,
-        anticipatePin: 1,
+        anticipatePin: 2,
       });
 
       return () => {
