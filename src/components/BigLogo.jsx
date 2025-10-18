@@ -116,16 +116,17 @@ export default function BigLogo() {
             text="HONOR GROWTH"
             disabled={false}
             speed={2}
-            className="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold tracking-tight leading-none"
+            className="fade-item opacity-0 font-geniso text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold tracking-tight leading-none"
           />
-          <p class="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-2xl text-gray-700 leading-relaxed">
-            我们是红点、iF、长城奖、TOP Digital等 <br />{" "}
-            国内外大奖认可的新一代国际品牌
+          <p class="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-4xl font-jhenghei font-semibold text-gray-400 leading-relaxed">
+            我们是红点、iF、长城奖、
+            <br /> TOP Digital等 
+            <br /> 国内外大奖认可的新一代国际品牌
           </p>
 
           {/* Subheading in orange */}
           <div class="mt-6 md:mt-8 text-center lg:text-left">
-            <p class="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-light tracking-wide leading-tight">
+            <p class="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-semibold font-geniso tracking-wide leading-tight">
               HONOR THE GROWTH OF A NEW GENERATION OF INTERNATIONAL BRANDS
             </p>
           </div>

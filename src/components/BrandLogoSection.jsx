@@ -112,7 +112,7 @@ export default function BrandLogosSection() {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
           {/* Text column */}
           <div className="fade-item opacity-0 md:w-1/2 w-full text-center md:text-left flex flex-col justify-between md:min-h-[65vh]">
-            <p className="mt-2 text-lg sm:text-xl md:text-3xl text-gray-700 leading-relaxed self-center md:self-start">
+            <p className="mt-2 text-lg sm:text-xl md:text-4xl text-gray-400 font-jhenghei font-semibold leading-relaxed self-center md:self-start">
               我们是实战服务超过100家品牌的
               <br />
               专业品牌创意增量供应商
@@ -124,7 +124,7 @@ export default function BrandLogosSection() {
               text="BRANDS 100+"
               disabled={false}
               speed={2}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none self-center md:self-start"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-geniso font-bold tracking-tight leading-none self-center md:self-start"
             />
           </div>
 
