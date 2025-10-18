@@ -33,17 +33,17 @@ const HomePage = memo(() => {
     <div className="App">
       <Leva hidden />
 
-      <AuroraBackground>
+      {/* <AuroraBackground>
         <LandingPage key="landing" />
       </AuroraBackground>
-      <StatsPage />
+      <StatsPage /> */}
       <CompanyIntroduction />
-      <ExperienceShowcase />
+      {/* <ExperienceShowcase />
       <HorizontalTimeline />
       <GlobalPresence />
       <CoreServices />
       <FounderStaff />
-      <ContactForm />
+      <ContactForm /> */}
     </div>
   );
 });

@@ -105,9 +105,9 @@ const PhilosophyDivider = () => {
     >
       <p
         ref={textRef}
-        className="text-xl sm:text-2xl md:text-3xl leading-7 font-songti tracking-widest sm:leading-8 text-white/90 max-w-4xl mx-auto transition-all duration-300 text-center px-2"
+        className="text-xl sm:text-2xl md:text-4xl leading-7 font-songti tracking-[0.2em] md:tracking-[0.4em] sm:leading-8 text-white/90 max-w-4xl mx-auto transition-all duration-300 text-center px-2"
       >
-        破界有光 | 落地成境
+        破 界 有 光 | 落 地 成 境
       </p>
     </div>
   );
