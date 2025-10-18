@@ -11,6 +11,7 @@ import ContactForm from "../components/ContactForm";
 import HorizontalTimeline from "../components/HorizontalTimeline";
 import GlobalPresence from "../components/GlobalPresence";
 import CoreServices from "../components/CoreServices";
+import LogoSection from "../components/LogoSection";
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -33,17 +34,18 @@ const HomePage = memo(() => {
     <div className="App">
       <Leva hidden />
 
-      {/* <AuroraBackground>
+      <AuroraBackground>
         <LandingPage key="landing" />
       </AuroraBackground>
-      <StatsPage /> */}
+      <StatsPage />
+      <LogoSection />
       <CompanyIntroduction />
-      {/* <ExperienceShowcase />
+      <ExperienceShowcase />
       <HorizontalTimeline />
       <GlobalPresence />
       <CoreServices />
       <FounderStaff />
-      <ContactForm /> */}
+      <ContactForm />
     </div>
   );
 });

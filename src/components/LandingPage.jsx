@@ -34,6 +34,7 @@ const LandingPage = memo(() => {
   ];
 
   // Auto-cycling functionality
+  // eslint-disable-next-line no-unused-vars
   const startAutoCycle = (startFromIndex = null) => {
     if (intervalRef) {
       clearInterval(intervalRef);
@@ -116,18 +117,18 @@ const LandingPage = memo(() => {
   };
 
   const colors = [
-    "#343a40", // Medium silver, neutral metallic
-    "#343a40", // Very light silver, almost white
-    "#343a40", // Dark steel silver with blue undertone
-    "#343a40", // Warm silver with golden tint
-    "#343a40", // Light blue-gray silver
-    "#343a40", // Deep chrome blue, darker shade
-    "#343a40", // Bright, near-white silver
-    "#343a40", // Mid-dark silver, cool tone
-    "#343a40", // Light bronze-silver mix
-    "#343a40", // Dark charcoal silver
-    "#343a40", // Pale blue chrome
-    "#343a40", // Soft, neutral light silver
+    "#DDDDDD", // Medium silver, neutral metallic
+    "#DDDDDD", // Very light silver, almost white
+    "#DDDDDD", // Dark steel silver with blue undertone
+    "#DDDDDD", // Warm silver with golden tint
+    "#DDDDDD", // Light blue-gray silver
+    "#DDDDDD", // Deep chrome blue, darker shade
+    "#DDDDDD", // Bright, near-white silver
+    "#DDDDDD", // Mid-dark silver, cool tone
+    "#DDDDDD", // Light bronze-silver mix
+    "#DDDDDD", // Dark charcoal silver
+    "#DDDDDD", // Pale blue chrome
+    "#DDDDDD", // Soft, neutral light silver
   ];
 
   // Country coordinates

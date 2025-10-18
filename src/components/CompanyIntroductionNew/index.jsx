@@ -76,7 +76,7 @@ const CompanyIntroduction = memo(() => {
       <div className="relative z-10 w-full">
         <div
           ref={pinRef}
-          className="relative h-screen max-w-6xl mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 md:py-20"
+          className="relative h-screen max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 md:py-20"
         >
           <section className="snap-panel flex items-center justify-center h-full">
             <LogoSection />
