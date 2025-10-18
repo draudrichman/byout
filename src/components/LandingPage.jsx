@@ -237,14 +237,11 @@ const LandingPage = memo(() => {
               {/* Left Column */}
               <div className="flex flex-col space-y-1 sm:space-y-2 flex-1">
                 {/* Chinese text */}
-                <h2 className="text-white lg:text-[1.2vw] md:text-base sm:text-sm text-xs font-extralight lg:tracking-[0.15em] tracking-wide">
+                <h2 className="font-jhenghei text-white text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.15em] tracking-wide">
                   {current.line1} {/* 破界有光 */}
                 </h2>
                 {/* English text */}
-                <span
-                  className="text-gray-400 lg:text-xl md:text-xs sm:text-xs text-[10px] font-extralight tracking-wide whitespace-nowrap"
-                  style={{ fontFamily: "Orbitron, sans-serif" }}
-                >
+                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] tracking-wide whitespace-nowrap">
                   {current.line1English} {/* BREAK BOUNDARIES */}
                 </span>
               </div>
@@ -252,14 +249,11 @@ const LandingPage = memo(() => {
               {/* Right Column */}
               <div className="flex flex-col space-y-1 sm:space-y-2 flex-1 text-right">
                 {/* English text */}
-                <span
-                  className="text-gray-400 lg:text-xl md:text-xs sm:text-xs text-[10px] font-extralight tracking-wide whitespace-nowrap"
-                  style={{ fontFamily: "Orbitron, sans-serif" }}
-                >
+                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] tracking-wide whitespace-nowrap">
                   {current.line2} {/* REFRAME MARKETS */}
                 </span>
                 {/* Chinese text */}
-                <h2 className="text-white lg:text-[1.2vw] md:text-base sm:text-sm text-xs font-extralight lg:tracking-[0.15em] tracking-wide">
+                <h2 className="font-jhenghei text-white text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.15em] tracking-wide">
                   {current.line2Chinese} {/* 落地成境 */}
                 </h2>
               </div>
@@ -277,13 +271,13 @@ const LandingPage = memo(() => {
           }`}
         >
           <div className="space-y-4">
-            <div className="text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line1}
             </div>
-            <div className="text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
               {current.line2}
             </div>
-            <div className="text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
               {current.line3}
             </div>
           </div>
@@ -299,16 +293,16 @@ const LandingPage = memo(() => {
           }`}
         >
           <div className="space-y-4">
-            <div className="text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line1}
             </div>
-            <div className="text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line2}
             </div>
-            <div className="text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line3}
             </div>
-            <div className="text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line4}
             </div>
           </div>
