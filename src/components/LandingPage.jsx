@@ -241,7 +241,7 @@ const LandingPage = memo(() => {
                   {current.line1} {/* 破界有光 */}
                 </h2>
                 {/* English text */}
-                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] tracking-wide whitespace-nowrap">
+                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] font-bold tracking-wide whitespace-nowrap">
                   {current.line1English} {/* BREAK BOUNDARIES */}
                 </span>
               </div>
@@ -249,7 +249,7 @@ const LandingPage = memo(() => {
               {/* Right Column */}
               <div className="flex flex-col space-y-1 sm:space-y-2 flex-1 text-right">
                 {/* English text */}
-                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] tracking-wide whitespace-nowrap">
+                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] font-bold tracking-wide whitespace-nowrap">
                   {current.line2} {/* REFRAME MARKETS */}
                 </span>
                 {/* Chinese text */}

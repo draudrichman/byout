@@ -32,18 +32,13 @@ const ASPECT = 0.9;
 const CAMERA_Z = 300;
 const RING_UPDATE_INTERVAL = 1600; // Moderated frequency
 
-let numbersOfRings = [0];
+// Removed unused numbersOfRings variable
 
 export function Globe({ globeConfig, data }) {
   const globeRef = useRef(null);
   const groupRef = useRef();
-  const pointsGroupRef = useRef();
-  const ringsGlowGroupRef = useRef();
   const intervalRef = useRef(null);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const rotationRef = useRef({ x: 0, y: 0 });
-  const targetRotationRef = useRef({ x: 0, y: 0 });
 
   // Memoized default props to prevent unnecessary re-renders
   const defaultProps = useMemo(
@@ -83,17 +78,7 @@ export function Globe({ globeConfig, data }) {
         globeRef.current = new ThreeGlobe();
         groupRef.current.add(globeRef.current);
 
-        // Create points group for custom metallic points
-        if (!pointsGroupRef.current) {
-          pointsGroupRef.current = new Group();
-          groupRef.current.add(pointsGroupRef.current);
-        }
-
-        // Group for ring glow overlays
-        if (!ringsGlowGroupRef.current) {
-          ringsGlowGroupRef.current = new Group();
-          groupRef.current.add(ringsGlowGroupRef.current);
-        }
+        // Groups for glow effects removed - keeping only golden rings
 
         setIsInitialized(true);
       } catch (error) {
@@ -284,50 +269,48 @@ export function Globe({ globeConfig, data }) {
             new Vector3(endCoords.x, endCoords.y, endCoords.z)
           );
 
-          // Create tube geometry for thicker, more visible arcs
-          const tubeGeometry = new TubeGeometry(curve, 64, 1.2, 8, false);
+          // Create tube geometry for thicker, more visible arcs with glow
+          const tubeGeometry = new TubeGeometry(curve, 64, 1.8, 8, false);
 
-          // Create glassy, glowy, metallic material with enhanced properties
+          // Create enhanced glowing arc material
           const arcMaterial = new MeshPhysicalMaterial({
             color: new Color(d?.color || "#ffffff"),
-            metalness: 0.9, // Very high metallic property for mirror-like shine
-            roughness: 0.05, // Ultra-low roughness for perfect reflection
-            clearcoat: 1.0, // Full clearcoat for glass effect
-            clearcoatRoughness: 0.02, // Extremely smooth clearcoat
-            transmission: 0.4, // Enhanced glass-like transmission
+            metalness: 0.7, // Reduced for more glow effect
+            roughness: 0.1, // Slightly increased for better glow
+            clearcoat: 0.8, // Reduced clearcoat for more glow
+            clearcoatRoughness: 0.05,
+            transmission: 0.6, // Increased transmission for glow
             transparent: true,
-            opacity: 0, // Slightly more opaque for better visibility
+            opacity: 0.9, // More opaque for better glow visibility
             emissive: new Color(d?.color || "#ffffff"),
-            emissiveIntensity: 0.8, // Stronger glow for better visibility
-            envMapIntensity: 3.0, // Very strong environment reflections
-            reflectivity: 1.0,
-            refractionRatio: 0.92, // Adjusted for better glass effect
-            // Enhanced iridescence for premium metallic shine
-            iridescence: 1.0,
-            iridescenceIOR: 1.5, // Stronger iridescence
-            iridescenceThicknessRange: [50, 1000], // Wider range for more color variation
-            // Enhanced subsurface scattering for premium glass effect
-            thickness: 0.8, // Thicker for more pronounced glass effect
-            attenuationDistance: 0.3, // Shorter distance for more intense effect
+            emissiveIntensity: 1.5, // Much stronger glow
+            envMapIntensity: 2.0,
+            reflectivity: 0.8,
+            refractionRatio: 0.9,
+            // Enhanced glow properties
+            iridescence: 0.8,
+            iridescenceIOR: 1.3,
+            iridescenceThicknessRange: [100, 800],
+            thickness: 1.2, // Thicker for more glow
+            attenuationDistance: 0.2, // Shorter for more intense glow
             attenuationColor: new Color(d?.color || "#ffffff"),
-            // Additional properties for premium appearance
             sheenColor: new Color(d?.color || "#ffffff"),
-            sheen: 0.8, // Add sheen for fabric-like metallic reflection
-            sheenRoughness: 0.1,
-            specularIntensity: 1.0, // Maximum specular intensity
-            specularColor: new Color("#ffffff"), // White specular highlights
+            sheen: 0.9, // Higher sheen for glow
+            sheenRoughness: 0.05,
+            specularIntensity: 1.2, // Enhanced specular for glow
+            specularColor: new Color("#ffffff"),
           });
 
           const arcMesh = new Mesh(tubeGeometry, arcMaterial);
 
           // Add outer glow shell for enhanced glow effect
-          const glowGeometry = new TubeGeometry(curve, 32, 3.0, 6, false);
+          const glowGeometry = new TubeGeometry(curve, 32, 4.5, 6, false);
           const glowMaterial = new MeshStandardMaterial({
             color: new Color(d?.color || "#ffffff"),
             emissive: new Color(d?.color || "#ffffff"),
-            emissiveIntensity: 1.2, // Stronger glow intensity
+            emissiveIntensity: 2.0, // Much stronger glow intensity
             transparent: true,
-            opacity: 0.4, // Slightly more visible glow
+            opacity: 0.7, // More visible glow
             side: DoubleSide,
             blending: AdditiveBlending,
             depthWrite: false, // Prevent depth conflicts
@@ -335,13 +318,13 @@ export function Globe({ globeConfig, data }) {
           });
 
           // Add additional inner glow for layered effect
-          const innerGlowGeometry = new TubeGeometry(curve, 48, 1.8, 8, false);
+          const innerGlowGeometry = new TubeGeometry(curve, 48, 2.5, 8, false);
           const innerGlowMaterial = new MeshStandardMaterial({
             color: new Color(d?.color || "#ffffff"),
             emissive: new Color(d?.color || "#ffffff"),
-            emissiveIntensity: 0.6,
+            emissiveIntensity: 1.0, // Increased inner glow
             transparent: true,
-            opacity: 0.6,
+            opacity: 0.8, // More visible inner glow
             side: DoubleSide,
             blending: AdditiveBlending,
             depthWrite: false,
@@ -355,6 +338,18 @@ export function Globe({ globeConfig, data }) {
           arcGroup.add(arcMesh); // Main metallic arc
           arcGroup.add(innerGlowMesh); // Inner glow layer
           arcGroup.add(glowMesh); // Outer glow layer
+
+          // Add animation data for pulsing glow effect
+          arcGroup.userData = {
+            t: Math.random() * Math.PI * 2,
+            speed: 0.8 + Math.random() * 0.4,
+            baseEmissiveIntensity: 1.5,
+            baseGlowOpacity: 0.7,
+            baseInnerGlowOpacity: 0.8,
+            arcMesh: arcMesh,
+            glowMesh: glowMesh,
+            innerGlowMesh: innerGlowMesh,
+          };
 
           return arcGroup;
         });
@@ -393,127 +388,9 @@ export function Globe({ globeConfig, data }) {
     defaultRingColor,
   ]);
 
-  // Create subtle sprite-based endpoint markers when data changes
-  useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data || !Array.isArray(data))
-      return;
+  // Endpoint markers removed - keeping only golden rings
 
-    // Ensure group for endpoint markers exists
-    if (!pointsGroupRef.current) {
-      pointsGroupRef.current = new Group();
-      groupRef.current.add(pointsGroupRef.current);
-    }
-
-    // Clear previous markers
-    try {
-      const grp = pointsGroupRef.current;
-      while (grp.children.length) grp.remove(grp.children[0]);
-
-      // Create a single cached radial glow texture
-      const createGlowTexture = () => {
-        const size = 128;
-        const canvas = document.createElement("canvas");
-        canvas.width = canvas.height = size;
-        const ctx = canvas.getContext("2d");
-        const r = size / 2;
-        const g = ctx.createRadialGradient(r, r, 0, r, r, r);
-        g.addColorStop(0.0, "rgba(255,255,255,1)");
-        g.addColorStop(0.4, "rgba(255,255,255,0.6)");
-        g.addColorStop(1.0, "rgba(255,255,255,0)");
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, size, size);
-        const tex = new THREE.CanvasTexture(canvas);
-        tex.needsUpdate = true;
-        tex.minFilter = THREE.LinearFilter;
-        tex.magFilter = THREE.LinearFilter;
-        tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-        return tex;
-      };
-
-      const glowTexture = createGlowTexture();
-
-      const makeMarker = (lat, lng, color) => {
-        if (typeof lat !== "number" || typeof lng !== "number") return null;
-        // Position slightly above the surface
-        const c = globeRef.current.getCoords(lat, lng, 0.02);
-        const pos = new Vector3(c.x, c.y, c.z);
-
-        // Inner crisp glow sprite
-        const innerMat = new SpriteMaterial({
-          map: glowTexture,
-          color: new Color(color || "#00ff88"),
-          transparent: true,
-          opacity: 0.9,
-          blending: AdditiveBlending,
-          depthWrite: false,
-        });
-        const inner = new Sprite(innerMat);
-        inner.scale.setScalar(7);
-
-        // Outer soft halo sprite
-        const outerMat = new SpriteMaterial({
-          map: glowTexture,
-          color: new Color(color || "#00ff88"),
-          transparent: true,
-          opacity: 0.35,
-          blending: AdditiveBlending,
-          depthWrite: false,
-        });
-        const outer = new Sprite(outerMat);
-        outer.scale.setScalar(16);
-
-        const marker = new Group();
-        marker.add(outer);
-        marker.add(inner);
-        marker.position.copy(pos);
-        marker.userData = {
-          t: Math.random() * Math.PI * 2,
-          speed: 1.6 + Math.random() * 0.8,
-          baseInner: 7,
-          baseOuter: 16,
-          innerSprite: inner,
-          outerSprite: outer,
-        };
-
-        return marker;
-      };
-
-      // Create markers for each start and end point
-      for (let i = 0; i < data.length; i++) {
-        const d = data[i];
-        const color = d?.color || "#00ff88";
-        const m1 = makeMarker(d?.startLat, d?.startLng, color);
-        const m2 = makeMarker(d?.endLat, d?.endLng, color);
-        if (m1) grp.add(m1);
-        if (m2) grp.add(m2);
-      }
-    } catch (e) {
-      console.error("Failed to create endpoint markers:", e);
-    }
-  }, [isInitialized, data]);
-
-  // Animate endpoint markers to pulse for emphasis
-  useFrame((state, delta) => {
-    const grp = pointsGroupRef.current;
-    if (!grp || grp.children.length === 0) return;
-    for (let i = 0; i < grp.children.length; i++) {
-      const marker = grp.children[i];
-      const ud = marker.userData;
-      if (!ud) continue;
-      ud.t += delta * ud.speed;
-      const pulse = 0.9 + 0.25 * Math.abs(Math.sin(ud.t));
-      if (ud.outerSprite) ud.outerSprite.scale.setScalar(ud.baseOuter * pulse);
-      if (ud.innerSprite)
-        ud.innerSprite.scale.setScalar(
-          ud.baseInner * (0.98 + 0.05 * Math.abs(Math.sin(ud.t * 1.5)))
-        );
-      if (ud.outerSprite && ud.outerSprite.material) {
-        const op = 0.2 + 0.3 * Math.abs(Math.sin(ud.t));
-        ud.outerSprite.material.opacity = op;
-        ud.outerSprite.material.needsUpdate = true;
-      }
-    }
-  });
+  // Endpoint marker animation removed - keeping only golden rings
 
   // Enhanced rings animation with better cleanup and error handling
   useEffect(() => {
@@ -563,57 +440,7 @@ export function Globe({ globeConfig, data }) {
 
         globeRef.current.ringsData(ringsData).ringColor(() => defaultRingColor);
 
-        // Also add golden glow sprites that expand and fade with time
-        const glowGroup = ringsGlowGroupRef.current;
-        if (glowGroup) {
-          const addGlow = (lat, lng) => {
-            const c = globeRef.current.getCoords(lat, lng, 0.02);
-            const pos = new Vector3(c.x, c.y, c.z);
-            const size = 256;
-            const canvas = document.createElement("canvas");
-            canvas.width = canvas.height = size;
-            const ctx = canvas.getContext("2d");
-            const r = size / 2;
-            const grad = ctx.createRadialGradient(r, r, 0, r, r, r);
-            // center bright gold to soft transparent
-            grad.addColorStop(0.0, "rgba(255,215,0,0.9)");
-            grad.addColorStop(0.4, "rgba(255,215,0,0.45)");
-            grad.addColorStop(1.0, "rgba(255,215,0,0)");
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, size, size);
-            const tex = new THREE.CanvasTexture(canvas);
-            tex.needsUpdate = true;
-            tex.minFilter = THREE.LinearFilter;
-            tex.magFilter = THREE.LinearFilter;
-            tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-
-            const mat = new SpriteMaterial({
-              map: tex,
-              color: new Color(defaultRingColor),
-              transparent: true,
-              opacity: 0.6,
-              blending: AdditiveBlending,
-              depthWrite: false,
-            });
-            const sprite = new Sprite(mat);
-            sprite.position.copy(pos);
-            sprite.scale.setScalar(1);
-            sprite.userData = {
-              t: 0,
-              duration: 1.1, // seconds
-              maxScale: 20, // how large the glow grows
-              startOpacity: 0.6,
-              tex,
-            };
-            glowGroup.add(sprite);
-          };
-
-          // Add glow for each ring spawn point (limited to avoid overload)
-          for (let i = 0; i < ringsData.length; i++) {
-            const rd = ringsData[i];
-            addGlow(rd.lat, rd.lng);
-          }
-        }
+        // Glow sprites removed - keeping only golden rings
       } catch (error) {
         console.error("Failed to update rings:", error);
       }
@@ -633,31 +460,41 @@ export function Globe({ globeConfig, data }) {
     };
   }, [isInitialized, data, defaultRingColor]);
 
-  // Animate ring glow sprites (expand and fade out, then remove)
+  // Animate arc glow effects with pulsing
   useFrame((_, delta) => {
-    const g = ringsGlowGroupRef.current;
-    if (!g || g.children.length === 0) return;
-    for (let i = g.children.length - 1; i >= 0; i--) {
-      const s = g.children[i];
-      const ud = s.userData;
-      if (!ud) continue;
-      ud.t += delta;
-      const k = Math.min(1, ud.t / ud.duration);
-      // ease-out quad for smoother falloff
-      const ease = 1 - (1 - k) * (1 - k);
-      s.scale.setScalar(ud.maxScale * ease);
-      if (s.material) {
-        s.material.opacity = ud.startOpacity * (1 - k);
-        s.material.needsUpdate = true;
-      }
-      if (k >= 1) {
-        if (s.material && s.material.map) {
-          s.material.map.dispose();
+    if (!globeRef.current) return;
+
+    // Get all arc groups and animate their glow
+    globeRef.current.children.forEach((child) => {
+      if (child.userData && child.userData.arcMesh) {
+        const userData = child.userData;
+        userData.t += delta * userData.speed;
+
+        // Pulsing emissive intensity for main arc
+        const emissivePulse =
+          userData.baseEmissiveIntensity + 0.3 * Math.sin(userData.t);
+        if (userData.arcMesh.material) {
+          userData.arcMesh.material.emissiveIntensity = emissivePulse;
+          userData.arcMesh.material.needsUpdate = true;
         }
-        if (s.material) s.material.dispose();
-        g.remove(s);
+
+        // Pulsing opacity for glow layers
+        const glowPulse =
+          userData.baseGlowOpacity + 0.2 * Math.sin(userData.t * 1.2);
+        const innerGlowPulse =
+          userData.baseInnerGlowOpacity + 0.15 * Math.sin(userData.t * 0.8);
+
+        if (userData.glowMesh.material) {
+          userData.glowMesh.material.opacity = glowPulse;
+          userData.glowMesh.material.needsUpdate = true;
+        }
+
+        if (userData.innerGlowMesh.material) {
+          userData.innerGlowMesh.material.opacity = innerGlowPulse;
+          userData.innerGlowMesh.material.needsUpdate = true;
+        }
       }
-    }
+    });
   });
 
   // Cleanup on unmount
