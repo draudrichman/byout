@@ -116,18 +116,18 @@ const LandingPage = memo(() => {
   };
 
   const colors = [
-    "#A0A0A0", // Medium silver, neutral metallic
-    "#E8ECEF", // Very light silver, almost white
-    "#6E7B8B", // Dark steel silver with blue undertone
+    "#343a40", // Medium silver, neutral metallic
+    "#343a40", // Very light silver, almost white
+    "#343a40", // Dark steel silver with blue undertone
     "#343a40", // Warm silver with golden tint
-    "#B0BEC5", // Light blue-gray silver
-    "#6c757d", // Deep chrome blue, darker shade
-    "#F5F6F5", // Bright, near-white silver
-    "#8A8A8A", // Mid-dark silver, cool tone
-    "#C7BCA1", // Light bronze-silver mix
-    "#5C5C5C", // Dark charcoal silver
-    "#A3BFFA", // Pale blue chrome
-    "#D9D9D6", // Soft, neutral light silver
+    "#343a40", // Light blue-gray silver
+    "#343a40", // Deep chrome blue, darker shade
+    "#343a40", // Bright, near-white silver
+    "#343a40", // Mid-dark silver, cool tone
+    "#343a40", // Light bronze-silver mix
+    "#343a40", // Dark charcoal silver
+    "#343a40", // Pale blue chrome
+    "#343a40", // Soft, neutral light silver
   ];
 
   // Country coordinates

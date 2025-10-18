@@ -27,7 +27,7 @@ import countries from "../../data/globe.json";
 
 extend({ ThreeGlobe: ThreeGlobe });
 
-const RING_PROPAGATION_SPEED = 4; // Tasteful expansion speed
+const RING_PROPAGATION_SPEED = 2; // Tasteful expansion speed
 const ASPECT = 0.9;
 const CAMERA_Z = 300;
 const RING_UPDATE_INTERVAL = 1600; // Moderated frequency
@@ -58,14 +58,14 @@ export function Globe({ globeConfig, data }) {
       arcLength: 0.9,
       ringColor: "#000000",
       rings: 1,
-      maxRings: 3,
+      maxRings: 5,
       globeOpacity: globeConfig.globeOpacity || 0.4, // More visible glass
       chinaHexPolygonColor: globeConfig.chinaHexPolygonColor || "#ff0000",
       targetingCountriesColor: globeConfig.targetingCountriesColor || "#00ff88",
       // Rings theme and optional overrides
-      ringTheme: globeConfig.ringTheme || "gold", // 'gold' | 'chrome'
+      ringTheme: globeConfig.ringTheme || "chrome", // 'gold' | 'chrome'
       ringColorGold: globeConfig.ringColorGold, // e.g., '#D4AF37'
-      ringColorChrome: globeConfig.ringColorChrome, // e.g., '#D4AF37'
+      ringColorChrome: globeConfig.ringColorChrome, // e.g., '#24282c'
       ...globeConfig,
     }),
     [globeConfig]
@@ -208,7 +208,7 @@ export function Globe({ globeConfig, data }) {
   // Decide a stable default ring color (gold by default)
   const defaultRingColor = useMemo(() => {
     if (defaultProps.ringTheme === "chrome")
-      return defaultProps.ringColorChrome || "#C0C0C0"; // chrome grey
+      return defaultProps.ringColorChrome || "#24282c"; // chrome grey
     // default to a bright, glowing gold
     return defaultProps.ringColorGold || "#FFD700"; // golden
   }, [
@@ -281,7 +281,7 @@ export function Globe({ globeConfig, data }) {
             clearcoatRoughness: 0.05,
             transmission: 0.6, // Increased transmission for glow
             transparent: true,
-            opacity: 0.9, // More opaque for better glow visibility
+            opacity: 0.4, // More opaque for better glow visibility
             emissive: new Color(d?.color || "#ffffff"),
             emissiveIntensity: 1.5, // Much stronger glow
             envMapIntensity: 2.0,
@@ -324,7 +324,7 @@ export function Globe({ globeConfig, data }) {
             emissive: new Color(d?.color || "#ffffff"),
             emissiveIntensity: 1.0, // Increased inner glow
             transparent: true,
-            opacity: 0.8, // More visible inner glow
+            opacity: 0.4, // More visible inner glow
             side: DoubleSide,
             blending: AdditiveBlending,
             depthWrite: false,
@@ -366,8 +366,10 @@ export function Globe({ globeConfig, data }) {
       globeRef.current
         .ringsData([])
         .ringColor(() => defaultRingColor)
-        .ringMaxRadius(12) // Subtle, still visible
+        .ringMaxRadius(48) // Doubled from 12 to 24
         .ringPropagationSpeed(RING_PROPAGATION_SPEED)
+        .ringResolution(12) // Add ring resolution for better visibility
+        .ringRadius(24) // Set ring radius to 2 (doubled from default 1)
         .ringRepeatPeriod(
           Math.max(
             1200,
