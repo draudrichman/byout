@@ -68,7 +68,7 @@ const ClosingStatement = () => {
     >
       <p
         ref={textRef}
-        className="text-xl sm:text-2xl md:text-3xl leading-7 sm:leading-8 text-white/90 max-w-4xl mx-auto transition-all duration-300 font-chinese text-center tracking-widest px-2"
+        className="text-xl sm:text-2xl md:text-3xl leading-7 sm:leading-8 text-white/90 max-w-4xl mx-auto transition-all duration-300 font-songti text-center tracking-widest px-2"
       >
         与 光 同 行 | 破 界 升 维
       </p>

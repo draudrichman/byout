@@ -217,19 +217,19 @@ const LogoSection = () => {
         <div className="space-y-4 sm:space-y-5 md:space-y-6 text-center max-w-5xl">
           <p
             ref={text1Ref}
-            className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 font-light tracking-wide"
+            className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/80 font-light tracking-widest"
           >
             前身为 BYOUT 年轻化创新集团 | MDL买点论实验室
           </p>
           <p
             ref={text2Ref}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-normal tracking-wide leading-relaxed"
+            className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-normal tracking-widest leading-relaxed"
           >
             PRïSM瓴境是全球化时代背景下诞生的「技术驱动型品渠全域生态运营商」
           </p>
           <p
             ref={text3Ref}
-            className="text-sm sm:text-base md:text-lg lg:text-xl text-white/85 font-light tracking-wide leading-relaxed"
+            className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/85 font-light tracking-widest leading-relaxed"
           >
             独创从0到1的全球化「产品价值重构」与「渠道进驻落地」的全链路一体化增长方案
           </p>

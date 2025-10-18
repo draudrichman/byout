@@ -91,19 +91,19 @@ const CompanyDescription = () => {
       <div className="space-y-6 sm:space-y-8 md:space-y-10 max-w-5xl mx-auto px-4">
         <p
           ref={line1Ref}
-          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white/85 font-chinese font-light tracking-wide"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white/85 font-songti tracking-widest font-light"
         >
           我们始于战略的顶层设计 · 精于技术的深度赋能 · 成于渠道的精准落地
         </p>
         <p
           ref={line2Ref}
-          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white/85 font-chinese font-light tracking-wide"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white/85 font-songti tracking-widest font-light"
         >
           旨在解构并重塑您品牌与产品的全球影响力 · 行业竞争力 · 终端购买力
         </p>
         <p
           ref={line3Ref}
-          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white/85 font-chinese font-light tracking-wide"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white/85 font-songti tracking-widest font-light"
         >
           将您的企业增长蓝图转化为实实在在的全球市场份额
         </p>

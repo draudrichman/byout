@@ -93,13 +93,13 @@ const PhilosophySections = () => {
           <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white/20"></div>
           <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white/20"></div>
         </div>
-        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-chinese relative z-10 leading-tight">
+        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-songti relative z-10 leading-tight">
           破界{" "}
           <span className="text-white/70 text-sm sm:text-base font-normal">
             (Break Boundaries):
           </span>
         </h3>
-        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-chinese relative z-10">
+        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-songti relative z-10">
           破市场之界、技术之界、渠道之界、增长之界。
         </p>
       </div>
@@ -115,13 +115,13 @@ const PhilosophySections = () => {
           <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white/20"></div>
           <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white/20"></div>
         </div>
-        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-chinese relative z-10 leading-tight">
+        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-songti relative z-10 leading-tight">
           有光{" "}
           <span className="text-white/70 text-sm sm:text-base font-normal">
             (Guidance Light):
           </span>
         </h3>
-        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-chinese relative z-10">
+        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-songti relative z-10">
           以光破界，为破界之路提供指引之光（战略之光、技术之光、方法之光）。
         </p>
       </div>
@@ -137,13 +137,13 @@ const PhilosophySections = () => {
           <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white/20"></div>
           <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white/20"></div>
         </div>
-        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-chinese relative z-10 leading-tight">
+        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-songti relative z-10 leading-tight">
           落地{" "}
           <span className="text-white/70 text-sm sm:text-base font-normal">
             (Results Oriented):
           </span>
         </h3>
-        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-chinese relative z-10">
+        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-songti relative z-10">
           将全球化资源，认知，洞察转化为一步一脚印的扎实执行，实现知行合一。
         </p>
       </div>
@@ -159,13 +159,13 @@ const PhilosophySections = () => {
           <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white/20"></div>
           <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white/20"></div>
         </div>
-        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-chinese relative z-10 leading-tight">
+        <h3 className="text-base sm:text-lg font-medium text-white/90 mb-3 sm:mb-4 font-songti relative z-10 leading-tight">
           成境{" "}
           <span className="text-white/70 text-sm sm:text-base font-normal">
             (New Realms):
           </span>
         </h3>
-        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-chinese relative z-10">
+        <p className="text-sm sm:text-base leading-relaxed text-white/80 transition-all duration-300 font-songti relative z-10">
           我们最终为品牌开疆扩土，创造出一片可持续增长的新境界、新天地。
         </p>
       </div>

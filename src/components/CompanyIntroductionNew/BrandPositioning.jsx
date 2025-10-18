@@ -80,13 +80,13 @@ const BrandPositioning = () => {
         <div className="space-y-2 sm:space-y-3 md:space-y-4">
           <p
             ref={chineseText1Ref}
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300 font-chinese font-light"
+            className="text-xl font-songti tracking-widest sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300  font-light"
           >
             品牌全球化价值重塑
           </p>
           <p
             ref={chineseText2Ref}
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300 font-chinese font-light"
+            className="text-xl font-songti tracking-widest sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-relaxed text-white/90 max-w-6xl mx-auto transition-all duration-300  font-light"
           >
             全域增长伙伴
           </p>
