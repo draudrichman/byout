@@ -162,12 +162,12 @@ const HeroSection = ({ titleRef, descriptiveTextRef, chineseCharsRef }) => {
         <div className="w-full lg:w-1/2 lg:pr-8 mb-8 lg:mb-0 text-center lg:text-left">
           <h1
             ref={titleRef}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 lg:mb-8 text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold mb-6 lg:mb-8 text-white leading-tight"
           >
             CORE SERVICES
           </h1>
 
-          <div className="text-white space-y-3 lg:space-y-4 text-sm sm:text-base lg:text-lg xl:text-xl font-medium leading-relaxed">
+          <div className="text-white space-y-3 lg:space-y-4 text-sm sm:text-base lg:text-lg xl:text-xl font-medium font-songti leading-relaxed">
             <p
               ref={(el) => (descriptiveTextRef.current[0] = el)}
               className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start"
