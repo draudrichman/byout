@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
 // Utility functions
 function lerp(start, end, factor) {
@@ -11,6 +11,11 @@ function debounce(func, wait) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
+}
+
+// Clamp helper
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
 }
 
 // Card Component - Easy to customize
@@ -143,30 +148,39 @@ export default function MilitaryGallery() {
     { number: "03", title: "Retail Operations" },
   ];
 
-  const cardWidth = 400;
+  // Card sizing (responsive landscape aspect ratio)
+  const minWidth = 260;
+  const maxWidth = dimensions.width
+    ? Math.min(620, Math.round(dimensions.width * 0.9))
+    : 620;
+  const preferred = dimensions.width ? Math.round(dimensions.width * 0.7) : 620;
+  const cardWidth = clamp(preferred, minWidth, maxWidth);
+  const cardHeight = Math.round(cardWidth * 0.8);
   const cardGap = 100;
 
   // Snap to nearest card
-  const snapToNearest = useRef(
-    debounce(() => {
-      const scroll = scrollRef.current;
-      const itemIndex = Math.round(
-        Math.abs(scroll.current) / (cardWidth + cardGap)
-      );
-      const targetPosition = itemIndex * (cardWidth + cardGap);
-      const sign = scroll.current < 0 ? -1 : 1;
-      scroll.target = sign * targetPosition;
-    }, 120)
-  ).current;
+  const snapToNearest = useMemo(
+    () =>
+      debounce(() => {
+        const scroll = scrollRef.current;
+        const itemWidth = cardWidth + cardGap;
+        const maxScroll = (cards.length - 1) * itemWidth;
+        const itemIndex = Math.round(scroll.current / itemWidth);
+        const newTarget = clamp(itemIndex * itemWidth, 0, maxScroll);
+        scroll.target = newTarget;
+      }, 120),
+    [cardWidth, cardGap, cards.length]
+  );
 
   // Snap to nearest card (simplified like test.html)
-  const snapToNearestCard = () => {
+  const snapToNearestCard = useCallback(() => {
     const scroll = scrollRef.current;
     const itemWidth = cardWidth + cardGap;
-    const itemIndex = Math.round(Math.abs(scroll.target) / itemWidth);
-    const newTarget = itemWidth * itemIndex;
-    scroll.target = scroll.target < 0 ? -newTarget : newTarget;
-  };
+    const maxScroll = (cards.length - 1) * itemWidth;
+    const itemIndex = Math.round(scroll.target / itemWidth);
+    const newTarget = clamp(itemWidth * itemIndex, 0, maxScroll);
+    scroll.target = newTarget;
+  }, [cardWidth, cardGap, cards.length]);
 
   // Handle resize
   useEffect(() => {
@@ -183,43 +197,36 @@ export default function MilitaryGallery() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Animation loop (simplified like test.html)
+  // Animation loop (no wrap; clamped ends)
   useEffect(() => {
     let rafId;
     const animate = () => {
       const scroll = scrollRef.current;
+      const itemWidth = cardWidth + cardGap;
+      const maxScroll = (cards.length - 1) * itemWidth;
 
       // Smooth lerp animation
       scroll.current = lerp(scroll.current, scroll.target, scroll.ease);
+      // Hard clamp current and target
+      scroll.target = clamp(scroll.target, 0, maxScroll);
+      scroll.current = clamp(scroll.current, 0, maxScroll);
 
-      // Determine direction
-      const direction = scroll.current > scroll.last ? "right" : "left";
-
-      // Update each card with infinite loop logic
+      // Update each card position without wrapping
       cardsRef.current.forEach((cardEl, index) => {
         if (!cardEl) return;
 
-        const cardPosition = index * (cardWidth + cardGap);
+        const cardPosition = index * itemWidth;
         let x = cardPosition - scroll.current;
-
-        // Infinite loop wrapping
-        const viewportHalf = dimensions.width / 2;
-        const totalWidth = (cardWidth + cardGap) * cards.length;
-
-        if (direction === "right" && x + cardWidth / 2 < -viewportHalf) {
-          x += totalWidth;
-        }
-        if (direction === "left" && x - cardWidth / 2 > viewportHalf) {
-          x -= totalWidth;
-        }
 
         cardEl.style.transform = `translateX(${x}px)`;
       });
 
       // Update active card based on center position
-      const centerIndex =
-        Math.round(Math.abs(scroll.current) / (cardWidth + cardGap)) %
-        cards.length;
+      const centerIndex = clamp(
+        Math.round(scroll.current / itemWidth),
+        0,
+        cards.length - 1
+      );
       setActiveIndex(centerIndex);
 
       scroll.last = scroll.current;
@@ -238,19 +245,24 @@ export default function MilitaryGallery() {
     scroll.stop = scroll.start;
   }, []);
 
-  const onTouchMove = useCallback((event) => {
-    const scroll = scrollRef.current;
-    if (!scroll.isDown) return;
-    scroll.stop = event.touches ? event.touches[0].clientX : event.clientX;
-    const distance = scroll.start - scroll.stop;
-    scroll.target = scroll.position + distance;
-  }, []);
+  const onTouchMove = useCallback(
+    (event) => {
+      const scroll = scrollRef.current;
+      if (!scroll.isDown) return;
+      scroll.stop = event.touches ? event.touches[0].clientX : event.clientX;
+      const distance = scroll.start - scroll.stop;
+      const itemWidth = cardWidth + cardGap;
+      const maxScroll = (cards.length - 1) * itemWidth;
+      scroll.target = clamp(scroll.position + distance, 0, maxScroll);
+    },
+    [cardWidth, cardGap, cards.length]
+  );
 
   const onTouchUp = useCallback(() => {
     const scroll = scrollRef.current;
     scroll.isDown = false;
     snapToNearestCard();
-  }, []);
+  }, [snapToNearestCard]);
 
   // Click prevention when dragging (from test.html)
   const handleClick = useCallback((event) => {
@@ -294,12 +306,18 @@ export default function MilitaryGallery() {
 
   const handleWheel = (e) => {
     const delta = e.deltaY || e.wheelDelta || e.detail;
-    scrollRef.current.target += delta * 0.5;
+    const itemWidth = cardWidth + cardGap;
+    const maxScroll = (cards.length - 1) * itemWidth;
+    scrollRef.current.target = clamp(
+      scrollRef.current.target + delta * 0.5,
+      0,
+      maxScroll
+    );
     snapToNearest();
   };
 
   return (
-    <div className="w-full h-[70vh] overflow-hidden">
+    <div className="w-full h-[50vh] md:h-[80vh] overflow-hidden">
       {/* Top right corner decoration */}
 
       {/* Gallery container */}
@@ -324,9 +342,9 @@ export default function MilitaryGallery() {
               }
               style={{
                 width: `${cardWidth}px`,
-                height: `${cardWidth}px`,
+                height: `${cardHeight}px`,
                 left: `-${cardWidth / 2}px`,
-                top: `-${cardWidth / 2}px`,
+                top: `-${cardHeight / 2}px`,
                 willChange: "transform",
               }}
             >
@@ -349,7 +367,9 @@ export default function MilitaryGallery() {
           <button
             key={index}
             onClick={() => {
-              scrollRef.current.target = index * (cardWidth + cardGap);
+              const itemWidth = cardWidth + cardGap;
+              const maxScroll = (cards.length - 1) * itemWidth;
+              scrollRef.current.target = clamp(index * itemWidth, 0, maxScroll);
             }}
             className={`text-xs font-mono transition-all ${
               index === activeIndex
