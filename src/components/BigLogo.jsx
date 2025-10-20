@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import gsap from "gsap";
+import ShinyText from "./ui/shiny-text";
 
 const logos = [
   { name: "Brand 1", url: "/b/b1.svg" },
@@ -101,24 +102,31 @@ export default function BigLogo() {
         else if (ref && typeof ref === "object") ref.current = node;
         sectionRef.current = node;
       }}
-      className="relative w-full min-h-[90vh] bg-black flex items-center justify-center py-0 overflow-hidden"
+      className="relative w-full min-h-[90vh] flex items-center justify-center py-0 overflow-hidden"
     >
       {/* Main container: column on mobile, row on large screens */}
       <div className="w-full max-w-7xl mx-auto px-6 flex flex-col lg:flex-row lg:justify-between lg:items-start">
         {/* --- Text Content (Left on desktop, Top on mobile) --- */}
         <div className="lg:w-1/2 lg:pr-12 mb-10 mt-10 lg:mb-0 lg:mt-0">
           {/* Main Heading: "HONOR GROWTH" */}
-          <h1 class="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold text-[#3F0F6B] tracking-tight leading-none">
+          {/* <h1 class="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold text-[#3F0F6B] tracking-tight leading-none">
             HONOR GROWTH
-          </h1>
-          <p class="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-2xl text-gray-700 leading-relaxed">
-            我们是红点、iF、长城奖、TOP Digital等 <br />{" "}
-            国内外大奖认可的新一代国际品牌
+          </h1> */}
+          <ShinyText
+            text="HONOR GROWTH"
+            disabled={false}
+            speed={2}
+            className="fade-item opacity-0 font-geniso text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold tracking-tight leading-none"
+          />
+          <p class="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-4xl font-jhenghei font-semibold text-gray-400 leading-relaxed">
+            我们是红点、iF、长城奖、
+            <br /> TOP Digital等 
+            <br /> 国内外大奖认可的新一代国际品牌
           </p>
 
           {/* Subheading in orange */}
           <div class="mt-6 md:mt-8 text-center lg:text-left">
-            <p class="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-light tracking-wide leading-tight">
+            <p class="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-semibold font-geniso tracking-wide leading-tight">
               HONOR THE GROWTH OF A NEW GENERATION OF INTERNATIONAL BRANDS
             </p>
           </div>
@@ -147,26 +155,32 @@ export default function BigLogo() {
                 }}
               >
                 <div className="relative w-full h-full">
-                  <img
-                    // Using a placeholder image for stability since original local file paths might fail
-                    src={logo.url}
-                    alt={`Brand Logo ${index + 1}`}
-                    className="w-full h-full object-contain"
-                    crossOrigin="anonymous"
-                    onError={(e) => {
-                      // Fallback: hide broken image and optionally show text
-                      e.target.style.display = "none";
-                      const parent = e.target.closest(".logo-item");
-                      if (parent) {
-                        parent.textContent = `B${index + 1}`;
-                        parent.classList.add(
-                          "text-sm",
-                          "font-bold",
-                          "text-gray-500"
-                        );
-                      }
-                    }}
-                  />
+                  {/* White background container for logo visibility */}
+                  {/* <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg"></div> */}
+                  <div className="absolute inset-0 animate-shine bg-gradient-to-br from-gray-100 via-silver-300 to-gray-400 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg"></div>
+
+                  <div className="relative w-full h-full p-2 flex items-center justify-center">
+                    <img
+                      // Using a placeholder image for stability since original local file paths might fail
+                      src={logo.url}
+                      alt={`Brand Logo ${index + 1}`}
+                      className="w-full h-full object-contain filter contrast-110 saturate-110"
+                      crossOrigin="anonymous"
+                      onError={(e) => {
+                        // Fallback: hide broken image and optionally show text
+                        e.target.style.display = "none";
+                        const parent = e.target.closest(".logo-item");
+                        if (parent) {
+                          parent.textContent = `B${index + 1}`;
+                          parent.classList.add(
+                            "text-sm",
+                            "font-bold",
+                            "text-gray-800"
+                          );
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             ))}

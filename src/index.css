@@ -12,11 +12,42 @@
   font-display: swap;
 }
 
+/* Geniso font */
+@font-face {
+  font-family: 'Geniso-Font';
+  src: url('/Fonts/GENISO.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Microsoft JhengHei local embed */
+@font-face {
+  font-family: 'MicrosoftJhengHei-Local';
+  src: url('/Fonts/microsoft-jhenghei.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Songti-TC-Bold';
+  src: url('/Fonts/songti-tc-bold.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --font-chinese: 'Chinese-Font', 'MFYueHei', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
   --font-scifi: 'SciFi-Font', 'Ethnocentric', 'Orbitron', 'Exo 2', 'Rajdhani', monospace;
+  --font-geniso: 'Geniso-Font', 'GENISO', 'Orbitron', 'Exo 2', 'Rajdhani', sans-serif;
+  --font-jhenghei: 'MicrosoftJhengHei-Local', 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', 'PingFang SC', 'Noto Sans CJK', 'Noto Sans TC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  --font-songti: 'Songti-TC-Bold', 'Songti TC', '微軟正黑體', 'PingFang TC', 'PingFang SC', 'Noto Sans CJK', 'Noto Sans TC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
 @theme inline {
@@ -26,6 +57,9 @@
   --font-mono: var(--font-geist-mono);
   --font-chinese: var(--font-chinese);
   --font-scifi: var(--font-scifi);
+  --font-geniso: var(--font-geniso);
+  --font-jhenghei: var(--font-jhenghei);
+  --font-songti: var(--font-songti);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,6 +75,15 @@
 
 .font-scifi {
   font-family: var(--font-scifi), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+/* New font utility classes */
+.font-geniso {
+  font-family: var(--font-geniso), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.font-jhenghei {
+  font-family: var(--font-jhenghei), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 body{

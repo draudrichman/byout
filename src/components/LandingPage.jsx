@@ -1,14 +1,16 @@
+import React, { lazy, Suspense, useState, useEffect, memo } from "react";
+import Navbar from "./ui/Navbar";
+import WaveBackground from "./WaveBackground";
 
-import React, { lazy, Suspense, useState, useEffect, memo } from 'react';
-import  Navbar from './ui/Navbar';
-import WaveBackground from './WaveBackground';
-
-
-const World = lazy(() => import("../components/ui/globe").then((m) => ({ default: m.World })));
+const World = lazy(() =>
+  import("../components/ui/globe").then((m) => ({ default: m.World }))
+);
 
 const LandingPage = memo(() => {
-  const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
+  const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isUserHovering, setIsUserHovering] = useState(false);
+  const [intervalRef, setIntervalRef] = useState(null);
 
   // Define the three subtitle variations
   const subtitleVariations = [
@@ -16,33 +18,71 @@ const LandingPage = memo(() => {
       line1: "破界有光",
       line1English: "Break Boundaries",
       line2: "Reframe Markets",
-      line2Chinese: "落地成境"
+      line2Chinese: "落地成境",
     },
     {
       line1: "品牌产品解码重构｜全球顶层战略定位架构",
       line2: "× 独家创新专利技术赋能",
-      line3: "× 直通全球顶级零售渠道落地"
+      line3: "× 直通全球顶级零售渠道落地",
     },
     {
       line1: "0-1 助力中国品牌转化为世界品牌",
       line2: "为您构建穿越文化维度｜地理疆域的商业帝国",
       line3: "实现销量与品牌价值双增长",
-      line4: "为增长负责，为结果买单"
-    }
+      line4: "为增长负责，为结果买单",
+    },
   ];
 
-  // Auto-transition between subtitles
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentSubtitleIndex((prev) => (prev + 1) % subtitleVariations.length);
-        setIsTransitioning(false);
-      }, 300);
-    }, 4000); // Change every 4 seconds
+  // Auto-cycling functionality
+  // eslint-disable-next-line no-unused-vars
+  const startAutoCycle = (startFromIndex = null) => {
+    if (intervalRef) {
+      clearInterval(intervalRef);
+    }
 
-    return () => clearInterval(interval);
+    const newInterval = setInterval(() => {
+      if (!isUserHovering) {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentSubtitleIndex((prev) => {
+            // Cycle through: null -> 0 -> 1 -> 2 -> null -> ...
+            if (prev === null) return 0;
+            if (prev === 2) return null;
+            return prev + 1;
+          });
+          setIsTransitioning(false);
+        }, 300);
+      }
+    }, 4000);
+
+    setIntervalRef(newInterval);
+  };
+
+  // Initialize auto-cycling on mount
+  useEffect(() => {
+    startAutoCycle();
+    return () => {
+      if (intervalRef) {
+        clearInterval(intervalRef);
+      }
+    };
   }, []);
+
+  // Handle tab hover
+  const handleTabHover = (index) => {
+    setIsUserHovering(true);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentSubtitleIndex(index);
+      setIsTransitioning(false);
+    }, 150);
+  };
+
+  const handleTabLeave = () => {
+    setIsUserHovering(false);
+    // Reset auto-cycle from current position
+    startAutoCycle(currentSubtitleIndex);
+  };
 
   const globeConfig = {
     pointSize: 5,
@@ -77,8 +117,18 @@ const LandingPage = memo(() => {
   };
 
   const colors = [
-    "#ff0080", "#00ff88", "#0080ff", "#ff8000", "#8000ff", "#ff0088",
-    "#00ffff", "#ffff00", "#ff4000", "#40ff00", "#0040ff", "#ff0040"
+    "#DDDDDD", // Medium silver, neutral metallic
+    "#DDDDDD", // Very light silver, almost white
+    "#DDDDDD", // Dark steel silver with blue undertone
+    "#DDDDDD", // Warm silver with golden tint
+    "#DDDDDD", // Light blue-gray silver
+    "#DDDDDD", // Deep chrome blue, darker shade
+    "#DDDDDD", // Bright, near-white silver
+    "#DDDDDD", // Mid-dark silver, cool tone
+    "#DDDDDD", // Light bronze-silver mix
+    "#DDDDDD", // Dark charcoal silver
+    "#DDDDDD", // Pale blue chrome
+    "#DDDDDD", // Soft, neutral light silver
   ];
 
   // Country coordinates
@@ -89,13 +139,13 @@ const LandingPage = memo(() => {
   const canadaLat = 56.1304;
   const canadaLng = -106.3468;
   const cambodiaLat = 12.5657;
-  const cambodiaLng = 104.9910;
+  const cambodiaLng = 104.991;
   const japanLat = 36.2048;
   const japanLng = 138.2529;
   const australiaLat = -25.2744;
   const australiaLng = 133.7751;
   const newZealandLat = -40.9006;
-  const newZealandLng = 174.8860;
+  const newZealandLng = 174.886;
 
   const sampleArcs = [
     {
@@ -151,46 +201,84 @@ const LandingPage = memo(() => {
       endLng: newZealandLng,
       arcAlt: 0.3,
       color: colors[5],
-    }
+    },
   ];
 
   const renderSubtitle = () => {
+    // Show empty state when no tab is hovered
+    if (currentSubtitleIndex === null) {
+      return (
+        <div
+          className={`transition-all duration-300 ${
+            isTransitioning
+              ? "opacity-0 transform translate-y-2"
+              : "opacity-100 transform translate-y-0"
+          }`}
+        >
+          <div className="text-gray-500 text-2xl font-light tracking-wide leading-relaxed italic">
+            {/* Explore our innovative solutions */}
+          </div>
+        </div>
+      );
+    }
+
     const current = subtitleVariations[currentSubtitleIndex];
-    
+
     if (currentSubtitleIndex === 0) {
       return (
-        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
-          <div className="flex flex-col space-y-2">
-            <div className="flex items-baseline space-x-6">
-              <h2 className="text-white text-[2vw] font-extralight tracking-[0.2em]">
-                {current.line1}
-              </h2>
-              <span className="text-gray-400 text-4xl font-extralight tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                {current.line1English}
-              </span>
-            </div>
-            <div className="flex items-baseline space-x-6 pl-12">
-              <span className="text-gray-400 text-4xl font-extralight tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                {current.line2}
-              </span>
-              <h2 className="text-white text-[2vw] font-extralight tracking-[0.2em]">
-                {current.line2Chinese}
-              </h2>
+        <div
+          className={`transition-all duration-300 ${
+            isTransitioning
+              ? "opacity-0 transform translate-y-2"
+              : "opacity-100 transform translate-y-0"
+          }`}
+        >
+          <div className="flex flex-col lg:space-y-3 space-y-2 lg:items-start items-center">
+            <div className="flex lg:w-full w-[95%] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg gap-4 sm:gap-6 lg:gap-12">
+              {/* Left Column */}
+              <div className="flex flex-col space-y-1 sm:space-y-2 flex-1">
+                {/* Chinese text */}
+                <h2 className="font-jhenghei text-white text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.15em] tracking-wide">
+                  {current.line1} {/* 破界有光 */}
+                </h2>
+                {/* English text */}
+                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] font-bold tracking-wide whitespace-nowrap">
+                  {current.line1English} {/* BREAK BOUNDARIES */}
+                </span>
+              </div>
+
+              {/* Right Column */}
+              <div className="flex flex-col space-y-1 sm:space-y-2 flex-1 text-right">
+                {/* English text */}
+                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] font-bold tracking-wide whitespace-nowrap">
+                  {current.line2} {/* REFRAME MARKETS */}
+                </span>
+                {/* Chinese text */}
+                <h2 className="font-jhenghei text-white text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.15em] tracking-wide">
+                  {current.line2Chinese} {/* 落地成境 */}
+                </h2>
+              </div>
             </div>
           </div>
         </div>
       );
     } else if (currentSubtitleIndex === 1) {
       return (
-        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
-          <div className="space-y-6">
-            <div className="text-white text-4xl font-light tracking-wide leading-relaxed">
+        <div
+          className={`transition-all duration-300 ${
+            isTransitioning
+              ? "opacity-0 transform translate-y-2"
+              : "opacity-100 transform translate-y-0"
+          }`}
+        >
+          <div className="space-y-4">
+            <div className="font-jhenghei text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line1}
             </div>
-            <div className="text-gray-300 text-3xl font-light tracking-wide leading-relaxed pl-4">
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
               {current.line2}
             </div>
-            <div className="text-gray-300 text-3xl font-light tracking-wide leading-relaxed pl-4">
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
               {current.line3}
             </div>
           </div>
@@ -198,18 +286,24 @@ const LandingPage = memo(() => {
       );
     } else {
       return (
-        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
-          <div className="space-y-6">
-            <div className="text-white text-4xl font-light tracking-wide leading-relaxed">
+        <div
+          className={`transition-all duration-300 ${
+            isTransitioning
+              ? "opacity-0 transform translate-y-2"
+              : "opacity-100 transform translate-y-0"
+          }`}
+        >
+          <div className="space-y-4">
+            <div className="font-jhenghei text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line1}
             </div>
-            <div className="text-gray-100 text-3xl font-light tracking-wide leading-relaxed">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line2}
             </div>
-            <div className="text-gray-100 text-3xl font-light tracking-wide leading-relaxed">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line3}
             </div>
-            <div className="text-gray-100 text-3xl font-light tracking-wide leading-relaxed">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
               {current.line4}
             </div>
           </div>
@@ -219,19 +313,18 @@ const LandingPage = memo(() => {
   };
 
   return (
-    <div className='w-screen h-screen overflow-hidden relative'
-style={{
-  background: `
+    <div
+      className="w-screen lg:h-screen overflow-hidden relative"
+      style={{
+        background: `
   radial-gradient(circle at center, #141414 0, #cbcbcb00 100%), linear-gradient(2deg, #c7c7c7, transparent 40%)
-  `
-}}
-
+  `,
+      }}
     >
       {/* Navigation */}
       <Navbar />
       {/* radial-gradient(circle at center, #141414 0, transparent 100%), linear-gradient(
         2deg, #c9c9c9, transparent 40%) */}
-     
 
       {/* Background gradient */}
       {/* <div 
@@ -244,45 +337,52 @@ style={{
         }}
       /> */}
 
-      <div className="relative z-10 flex h-full"
-     
-      >
+      <div className="relative z-10 flex h-full lg:flex-row flex-col">
         {/* Content Section */}
-        <div className="w-1/2 flex flex-col justify-center pl-24 pr-8">
+        <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-24 lg:pr-8 px-6 lg:py-0 py-8 lg:pt-0 pt-35">
           {/* Main Title */}
-          <h1 className="text-white mb-12">
-      <img src="./img/logos/prism.svg" alt="Prism Logo" loading="eager" />
+          <h1 className="text-white lg:mb-12 mb-8 flex justify-center lg:justify-start">
+            <img
+              src="./img/logos/prism.svg"
+              alt="Prism Logo"
+              loading="eager"
+              className="lg:max-w-none max-w-[300px] w-auto h-auto"
+            />
           </h1>
-          
+
           {/* Morphing Subtitles */}
-          <div className="mb-16 pl-3 min-h-[200px]">
+          <div className="lg:mb-16 mb-8 lg:pl-3 px-0 lg:min-h-[200px] min-h-[150px] flex items-center lg:items-start">
             {renderSubtitle()}
           </div>
 
           {/* Vertical progress indicators for subtitle transitions */}
-          <div className="absolute left-8 top-[43%] h-1/2 flex flex-col gap-16">
+          <div className="lg:absolute lg:left-8 lg:top-[43%] lg:h-1/2 lg:flex-col lg:gap-16 static flex flex-row justify-center gap-8 lg:mb-0 mb-8">
             {subtitleVariations.map((_, index) => (
               <div
                 key={index}
-                className={`w-1 h-24 border border-gray-400 transition-all duration-500 ${
-                  index === currentSubtitleIndex 
-                    ? 'shadow-lg shadow-white/80 border-white bg-white' 
-                    : 'border-opacity-30'
+                className={`lg:w-1 lg:h-24 w-16 h-1 border border-gray-400 transition-all duration-500 cursor-pointer ${
+                  index === currentSubtitleIndex
+                    ? "shadow-lg shadow-white/80 border-white bg-white"
+                    : "border-opacity-30 hover:border-opacity-60 hover:border-gray-300"
                 }`}
+                onMouseEnter={() => handleTabHover(index)}
+                onMouseLeave={handleTabLeave}
               />
             ))}
           </div>
         </div>
 
         {/* Globe Section */}
-        <div className="w-1/2 flex items-center justify-center relative">
+        <div className="lg:w-1/2 w-full flex items-center justify-center relative lg:h-auto h-[60vh] min-h-[300px]">
           <div className="w-full h-full flex items-center justify-center">
-            <Suspense fallback={
-              <div className="flex items-center justify-center text-white">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                Loading Globe...
-              </div>
-            }>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center text-white">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
+                  Loading Globe...
+                </div>
+              }
+            >
               <World data={sampleArcs} globeConfig={globeConfig} />
             </Suspense>
           </div>
@@ -291,12 +391,10 @@ style={{
 
       {/* Wave Background at the bottom */}
       {/* <WaveBackground /> */}
-
     </div>
   );
 });
 
-LandingPage.displayName = 'LandingPage';
+LandingPage.displayName = "LandingPage";
 
 export default LandingPage;
-
