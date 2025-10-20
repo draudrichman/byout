@@ -35,7 +35,7 @@ const HomePage = memo(() => {
     <div className="App">
       <Leva hidden />
 
-      {/* <AuroraBackground>
+      <AuroraBackground>
         <LandingPage key="landing" />
       </AuroraBackground>
       <StatsPage />
@@ -44,10 +44,9 @@ const HomePage = memo(() => {
       <ExperienceShowcase />
       <HorizontalTimeline />
       <GlobalPresence />
-      <CoreServices /> */}
-      <CoreServicesNew />
-      {/* <FounderStaff />
-      <ContactForm /> */}
+      <CoreServices />
+      <FounderStaff />
+      <ContactForm />
     </div>
   );
 });

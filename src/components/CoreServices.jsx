@@ -5,6 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 import ShaderBackground from "./ShaderBackground";
 import "./css/CoverPageTransition.css";
+import CircularGallery from "./CircularGallery";
+
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -152,7 +154,7 @@ const HeroSection = ({ titleRef, descriptiveTextRef, chineseCharsRef }) => {
   return (
     <section className="relative w-full min-h-[50vh] lg:min-h-[45vh] overflow-hidden px-5 xl:px-30">
       <div className="absolute inset-0 w-full h-full">
-        <ShaderBackground opacity={0.8} />
+        {/* <ShaderBackground opacity={0.8} /> */}
       </div>
 
       <div className="relative z-10 w-full h-full flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-16 py-8 lg:py-16">
@@ -521,7 +523,7 @@ const CoreServices = () => {
       />
 
       {/* Services Grid */}
-      <section className="relative min-h-screen bg-black/90 py-12 lg:py-20">
+      {/* <section className="relative min-h-screen bg-black/90 py-12 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             {serviceData.map((service, index) => (
@@ -534,10 +536,10 @@ const CoreServices = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Overlay for animations */}
-      <div className="overlay">
+      {/* <div className="overlay">
         <div
           className="overlay__row"
           ref={(el) => (overlayRowsRef.current[0] = el)}
@@ -546,10 +548,10 @@ const CoreServices = () => {
           className="overlay__row"
           ref={(el) => (overlayRowsRef.current[1] = el)}
         />
-      </div>
+      </div> */}
 
       {/* Preview section */}
-      <section className="previews">
+      {/* <section className="previews">
         {serviceData.map((service, index) => (
           <div key={index} ref={(el) => (previewsRef.current[index] = el)}>
             <Preview
@@ -559,7 +561,13 @@ const CoreServices = () => {
             />
           </div>
         ))}
-      </section>
+      </section> */}
+      <CircularGallery
+        bend={3}
+        textColor="#A9A9A9"
+        borderRadius={0.0}
+        scrollEase={0.05}
+      />
     </main>
   );
 };

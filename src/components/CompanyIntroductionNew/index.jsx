@@ -164,7 +164,7 @@ const CompanyIntroduction = memo(() => {
             <CompanyDescription />
           </section>
           <section className="snap-panel flex flex-col items-center justify-center h-full relative">
-            <div className="philosophy-divider-container">
+            <div className="philosophy-divider-container w-full">
               <PhilosophyDivider />
             </div>
             <div className="philosophy-sections-container w-full">

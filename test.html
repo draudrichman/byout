@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSAP 3D Carousel Slider</title>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link  rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Noto+Sans+JP:wght@300;400;700&display=swap">
+<style>
+/* --- 基本スタイル --- */
+:root {
+  --main-brand: #6068b2;
+  --main-brand-secondary: #9a9ece;
+  --main-brand-transparent: #bac0e8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  background-color: #f0f0f0;
+  /* 背景を少し明るく */
+  color: #333;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- ヘッダーと説明文 --- */
+.header-content {
+  position: absolute;
+  top: 5vh;
+  left: 5vw;
+  z-index: 10;
+  max-width: 400px;
+}
+
+.header-content h1 {
+  font-family: 'Bad Script', cursive;
+  font-size: 3rem;
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: var(--main-brand);
+}
+
+.header-content p {
+  font-size: 1rem;
+  font-weight: 300;
+  margin-top: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* --- スライダーコンテナ --- */
+#slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+}
+
+#slider.move {
+  cursor: grabbing;
+}
+
+/* --- ビューポートとラッパー --- */
+.viewport {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 60vh;
+  will-change: transform;
+}
+
+.wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+/* --- 個々のスライドアイテム --- */
+.media {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  will-change: transform;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  -webkit-user-drag: none;
+  user-select: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+.media.media-hidden {
+  opacity: 0;
+}
+
+/* --- ユーザー提供CSSを参考にしたスタイル --- */
+.media .bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  /* 角を丸く */
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.media .circle {
+  width: 120%;
+  border-radius: 50%;
+  position: absolute;
+  left: -10%;
+  bottom: -60%;
+  padding-bottom: 120%;
+  /* 疑似要素の代わりにpaddingで高さを確保 */
+  height: 0;
+}
+
+.media .title {
+  font-size: 4.2em;
+  /* JSで動的に調整 */
+  text-transform: uppercase;
+  line-height: .8em;
+  position: absolute;
+  padding: .15em;
+  white-space: nowrap;
+  font-family: 'extrabold', 'Noto Sans JP', sans-serif;
+  /* フォントファミリーを追加 */
+  font-weight: 800;
+  /* extraboldの代替 */
+}
+
+.media .title span {
+  display: block;
+  color: #fff;
+}
+
+@supports (-webkit-text-stroke: 1px #fff) {
+  .media .title span:nth-child(2n-1) {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+}
+
+.media .description {
+  position: absolute;
+  background: #fff;
+  right: 2em;
+  bottom: 2em;
+  color: var(--main-brand);
+  padding: .5em .8em;
+  font-size: 1em;
+  /* JSで動的に調整 */
+  line-height: 1.1em;
+  text-transform: uppercase;
+  font-family: 'demibold', 'Noto Sans JP', sans-serif;
+  /* フォントファミリーを追加 */
+  font-weight: 600;
+  /* demiboldの代替 */
+  border-radius: .25em;
+}
+
+.media picture,
+.media img {
+  position: absolute;
+  left: -5%;
+  bottom: -5%;
+  width: 110%;
+  height: auto;
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- <header class="header-content">
+  <h1>3D Carousel Slider</h1>
+  <p>マウスホイール、ドラッグ、または矢印キーでスライドを操作できます。PCのみカーソルを画像に合わせるとパララックス効果が現れます。</p>
+</header> -->
+
+<main id="slider">
+  <div class="viewport">
+    <div class="wrapper">
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #9a9ece" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #6c71b1"></div>
+          <div class="title layer" data-range="0.15">
+            <span>butter</span><span>butter</span><span>butter</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2024/05/maslo4-2-q90-gd.webp" type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2024/05/maslo4-2.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="639" height="776"
+              src="https://www.bilo.ua/wp-content/uploads/2024/05/maslo4-2.png" alt="Butter">
+          </picture>
+          <div class="description layer" data-range="0.4">#grab a wave<br>BILOtaste1</div>
+        </div>
+      </a>
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #545aa5" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #898fc1"></div>
+          <div class="title layer" data-range="0.15">
+            <span>filladel</span><span>filladel</span><span>filladel</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2023/03/filladelbilo-q90-gd.webp"
+              type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2023/03/filladelbilo.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="639" height="786"
+              src="https://www.bilo.ua/wp-content/uploads/2023/03/filladelbilo.png" alt="Cream Cheese">
+          </picture>
+          <div class="description layer" data-range="0.4">#tender<br>cream cheese2</div>
+        </div>
+      </a>
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #545aa5" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #6c71b1"></div>
+          <div class="title layer" data-range="0.15">
+            <span>company</span><span>company</span><span>company</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2025/01/syr-bilo-5-350g-q90-gd.webp"
+              type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2025/01/syr-bilo-5-350g.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="700" height="688"
+              src="https://www.bilo.ua/wp-content/uploads/2025/01/syr-bilo-5-350g.png" alt="Company Cheese">
+          </picture>
+          <div class="description layer" data-range="0.4">#your stylish<br>dairy team3</div>
+        </div>
+      </a>
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #6c71b1" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #545aa5"></div>
+          <div class="title layer" data-range="0.15">
+            <span>cheese</span><span>cheese</span><span>cheese</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2025/01/sm1-3-q90-gd.webp" type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2025/01/sm1-3.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="633" height="776"
+              src="https://www.bilo.ua/wp-content/uploads/2025/01/sm1-3.png" alt="Lumps of Cheese">
+          </picture>
+          <div class="description layer" data-range="0.4">#lumps,<br>like clouds4</div>
+        </div>
+      </a>
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #4a509b" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #6c71b1"></div>
+          <div class="title layer" data-range="0.15">
+            <span>bilobilo</span><span>bilobilo</span><span>bilobilo</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2025/01/sm1-4-q90-gd.webp" type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2025/01/sm1-4.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="639" height="776"
+              src="https://www.bilo.ua/wp-content/uploads/2025/01/sm1-4.png" alt="Bilo Bilo">
+          </picture>
+          <div class="description layer" data-range="0.4">#everything<br>will be BILO5</div>
+        </div>
+      </a>
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #9a9ece" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #6c71b1"></div>
+          <div class="title layer" data-range="0.15">
+            <span>contacts</span><span>contacts</span><span>contacts</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2024/05/kont5-2-q90-gd.webp" type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2024/05/kont5-2.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="831" height="1020"
+              src="https://www.bilo.ua/wp-content/uploads/2024/05/kont5-2.png" alt="Contacts">
+          </picture>
+          <div class="description layer" data-range="0.4"># BILO<br>communication6</div>
+        </div>
+      </a>
+      <a href="https://example.com/" target="_blank" class="media" draggable="false">
+        <div class="bg layer" style="background: #6c71b1" data-range="0.25">
+          <div class="circle layer" data-range="0.1" style="background: #4a509b"></div>
+          <div class="title layer" data-range="0.15">
+            <span>melting</span><span>melting</span><span>melting</span>
+          </div>
+          <picture>
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2022/07/model-plavka-q90-gd.webp"
+              type="image/webp">
+            <source srcset="https://www.bilo.ua/wp-content/uploads/2022/07/model-plavka.png" type="image/png">
+            <img class="layer" data-range="-0.15" width="639" height="786"
+              src="https://www.bilo.ua/wp-content/uploads/2022/07/model-plavka.png" alt="Melting Cheese">
+          </picture>
+          <div class="description layer" data-range="0.4">#ExquisiteFlavors<br>of BILO processed cheese7</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- GSAP ライブラリ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+<!-- スライダーのスクリプト -->
+<script>
+'use strict';
+
+// --- ユーティリティ関数 ---
+
+// 線形補間: 値をスムーズに変化させるために使用
+const lerp = (start, end, amount) => (1 - amount) * start + amount * end;
+
+// モバイル端末かどうかの判定
+const isMobile = /iPad|iPhone|iPod|android/.test(navigator.userAgent) || ('MacIntel' === navigator.platform && navigator.maxTouchPoints > 1);
+
+// デバウンス: イベントが連続で発生した際に、最後の一回だけ処理を実行する
+function debounce(func, wait = 100, immediate = false) {
+  let timeout;
+  return function () {
+    const context = this, args = arguments;
+    const later = function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+// マウスカーソルの位置をグローバルに保持
+window.mousepos = { x: 0, y: 0 };
+window.addEventListener('mousemove', ev => {
+  window.mousepos = { x: ev.clientX, y: ev.clientY };
+});
+
+// ブラウザ間のマウスホイールイベントの差異を吸収し、正規化する
+function normalizeWheel(event) {
+  let spinX = 0, spinY = 0, pixelX = 0, pixelY = 0;
+  if ('detail' in event) { spinY = event.detail; }
+  if ('wheelDelta' in event) { spinY = -event.wheelDelta / 120; }
+  if ('wheelDeltaY' in event) { spinY = -event.wheelDeltaY / 120; }
+  if ('wheelDeltaX' in event) { spinX = -event.wheelDeltaX / 120; }
+  if ('axis' in event && event.axis === event.HORIZONTAL_AXIS) { spinX = spinY; spinY = 0; }
+  pixelX = spinX * 10;
+  pixelY = spinY * 10;
+  if ('deltaY' in event) { pixelY = event.deltaY; }
+  if ('deltaX' in event) { pixelX = event.deltaX; }
+  if ((pixelX || pixelY) && event.deltaMode) {
+    if (event.deltaMode === 1) { pixelX *= 40; pixelY *= 40; }
+    else { pixelX *= 800; pixelY *= 800; }
+  }
+  if (pixelX && !spinX) { spinX = (pixelX < 1) ? -1 : 1; }
+  if (pixelY && !spinY) { spinY = (pixelY < 1) ? -1 : 1; }
+  return { spinX, spinY, pixelX, pixelY };
+}
+
+// --- SliderItem クラス（個々のスライドを管理） ---
+class SliderItem {
+  constructor(element, index, length) {
+    this.hover = false;
+    this.DOM = {
+      el: element,
+      layers: element.querySelectorAll(".layer") // パララックス効果を適用する要素
+    };
+    // 各レイヤーの動く範囲をdata属性から取得
+    this.DOM.layers.forEach(layer => {
+      layer.range = parseFloat(layer.getAttribute("data-range"), 10) || 0;
+    });
+    this.index = index; // スライドのインデックス
+    this.length = length; // 全スライドの数
+    this.extra = 0; // 無限スクロール用のオフセット
+    this.clearState();
+    this.initEvents();
+  }
+
+  // 要素の画面上の位置とサイズを取得
+  calculatePosition() {
+    this.bounds = this.DOM.el.getBoundingClientRect();
+  }
+
+  // パララックス用の状態をリセット
+  clearState() {
+    this.renderedStyles = {
+      tx: { previous: 0, current: 0, amt: 0.1 },
+      ty: { previous: 0, current: 0, amt: 0.1 }
+    };
+  }
+
+  // イベントリスナーを初期化
+  initEvents() {
+    // マウスが乗った時の処理
+    this.mouseenterFn = () => { this.hover = true; };
+    // マウスが離れた時の処理
+    this.mouseleaveFn = () => {
+      this.hover = false;
+      // レイヤーを元の位置に戻す
+      this.DOM.layers.forEach(layer => {
+        gsap.to(layer, {
+          duration: 0.5,
+          x: 0,
+          y: 0,
+          ease: "elastic.out(1, 0.6)"
+        });
+        this.clearState();
+      });
+    };
+    this.DOM.el.addEventListener("mouseenter", this.mouseenterFn);
+    this.DOM.el.addEventListener("mouseleave", this.mouseleaveFn);
+  }
+
+  // ウィンドウリサイズ時の処理
+  onResize(viewport) {
+    this.viewport = viewport;
+    // 画面サイズに応じて各値を再計算
+    this.scale = viewport.height / 1500;
+    this.height = 900 * this.scale;
+    this.width = 740 * this.scale;
+    this.padding = this.width / 100 * 25;
+    this.widthTotal = (this.width + this.padding) * this.length;
+    this.x = (this.width + this.padding) * this.index;
+    this.r = 2 * this.widthTotal / (2 * Math.PI); // 円周の半径
+    // スタイルを適用
+    this.DOM.el.style.width = `${this.width}px`;
+    this.DOM.el.style.height = `${this.height}px`;
+    this.DOM.el.style.marginTop = `${-this.height / 2}px`;
+    this.DOM.el.style.marginLeft = `${-this.width / 2}px`;
+    this.DOM.el.style.fontSize = `${this.height / 27}px`;
+    this.extra = 0; // 無限スクロール用オフセットをリセット
+    this.calculatePosition(); // 位置を再計算
+  }
+
+  // 毎フレームの描画処理
+  update(scroll, direction, isDown, isSliderMoving) {
+    // スクロール位置に基づき、スライドの円周上の位置と角度を計算
+    const n = this.x - scroll.current - this.extra;
+    let h = Math.asin(n / this.r) * (180 / Math.PI);
+
+    // 画面外の要素は非表示に
+    if (isNaN(h)) {
+      this.DOM.el.classList.add("media-hidden");
+      h = 0;
+    } else {
+      this.DOM.el.classList.remove("media-hidden");
+    }
+
+    const a = this.r - Math.cos(h * (Math.PI / 180)) * this.r;
+    this.DOM.el.style.transform = `translate3d(${n}px, ${a}px, 0) rotate(${h}deg)`;
+
+    // 無限スクロールのための判定とオフセット調整
+    const d = this.width / 2;
+    const l = this.viewport.width;
+    this.isBefore = n + d < -l;
+    this.isAfter = n - d > l;
+    if (direction === "right" && this.isBefore) {
+      this.extra -= this.widthTotal;
+    }
+    if (direction === "left" && this.isAfter) {
+      this.extra += this.widthTotal;
+    }
+
+    // パララックス効果の計算と適用
+    if (!isDown && !isSliderMoving && this.hover && !isMobile) {
+      this.calculatePosition();
+      let tx = 0.3 * (window.mousepos.x - this.bounds.left - this.bounds.width / 2);
+      let ty = 0.3 * (window.mousepos.y - this.bounds.top - this.bounds.height / 2);
+
+      this.renderedStyles.tx.current = tx;
+      this.renderedStyles.ty.current = ty;
+
+      for (const key in this.renderedStyles) {
+        this.renderedStyles[key].previous = lerp(this.renderedStyles[key].previous, this.renderedStyles[key].current, this.renderedStyles[key].amt);
+      }
+
+      this.DOM.layers.forEach(layer => {
+        gsap.set(layer, {
+          x: this.renderedStyles.tx.previous * layer.range,
+          y: this.renderedStyles.ty.previous * layer.range
+        });
+      });
+    }
+  }
+}
+
+// --- Slider クラス（スライダー全体を管理） ---
+class Slider {
+  constructor(element) {
+    // 各種状態の初期化
+    this.wheelStart = true;
+    this.wheelTimeout = null;
+    this.start = 0; // ドラッグ開始点
+    this.stop = 0; // ドラッグ終了点
+    this.scroll = {
+      ease: isMobile ? 0.1 : 0.05,
+      current: 0,
+      target: 0,
+      last: 0
+    };
+    this.itemIndex = 0; // 現在表示しているアイテムのインデックス
+
+    this.DOM = {
+      el: element,
+      viewport: element.querySelector(".viewport"),
+      wrapper: element.querySelector(".wrapper"),
+      medias: element.querySelectorAll(".media")
+    };
+
+    this.createMedias();
+    this.addEventListeners();
+    this.onResize();
+    this.update();
+  }
+
+  // 無限スクロールのためにスライド要素を複製する
+  createMedias() {
+    const originalMedias = [...this.DOM.medias];
+    if (originalMedias.length === 0) {
+      this.medias = [];
+      return;
+    }
+
+    const fragment = new DocumentFragment();
+    let allMedias = [...originalMedias];
+
+    if (allMedias.length < 12) {
+      const needed = 12 - allMedias.length;
+      for (let i = 0; i < needed; i++) {
+        const clone = originalMedias[i % originalMedias.length].cloneNode(true);
+        fragment.appendChild(clone);
+        allMedias.push(clone);
+      }
+      this.DOM.wrapper.appendChild(fragment);
+    }
+
+    this.medias = allMedias.map((mediaEl, index) => new SliderItem(mediaEl, index, allMedias.length));
+  }
+
+  // ドラッグ（タッチ）開始時の処理
+  onTouchDown(event) {
+    this.isDown = true;
+    this.DOM.el.classList.add("move");
+    this.scroll.position = this.scroll.current;
+    this.start = event.touches ? event.touches[0].clientX : event.clientX;
+    this.stop = this.start;
+  }
+
+  // ドラッグ（タッチ）中の処理
+  onTouchMove(event) {
+    if (!this.isDown) return;
+    this.stop = event.touches ? event.touches[0].clientX : event.clientX;
+    const distance = this.start - this.stop;
+    this.scroll.target = this.scroll.position + distance;
+  }
+
+  // ドラッグ（タッチ）終了時の処理
+  onTouchUp(event) {
+    this.isDown = false;
+    this.DOM.el.classList.remove("move");
+    this.onCheck(); // 最寄りのスライドにスナップ
+  }
+
+  // マウスホイール操作の処理
+  onWheel(event) {
+    const { pixelY } = normalizeWheel(event);
+    this.scroll.target += pixelY * 0.5;
+
+    if (this.wheelStart) {
+      this.wheelStart = false;
+    }
+    // ホイール操作が止まったらスナップ処理を行う
+    if (this.wheelTimeout) clearTimeout(this.wheelTimeout);
+    this.wheelTimeout = setTimeout(() => {
+      this.wheelStart = true;
+      this.onCheck();
+    }, 500);
+  }
+
+  // 最寄りのスライドにスナップさせる処理
+  onCheck() {
+    if (!this.medias || this.medias.length === 0) return;
+    const itemWidth = this.medias[0].width + this.medias[0].padding;
+    this.itemIndex = Math.round(Math.abs(this.scroll.target) / itemWidth);
+    const newTarget = itemWidth * this.itemIndex;
+    this.scroll.target = this.scroll.target < 0 ? -newTarget : newTarget;
+  }
+
+  // 矢印キーでの移動処理
+  onMove(direction) {
+    if (!this.medias || this.medias.length === 0) return;
+    const itemWidth = this.medias[0].width + this.medias[0].padding;
+    this.itemIndex = direction === "left" ? this.itemIndex - 1 : this.itemIndex + 1;
+    this.scroll.target = itemWidth * this.itemIndex;
+  }
+  
+  // ウィンドウリサイズ時の処理
+  onResize() {
+    this.DOM.viewport.style.width = `${4 * this.DOM.viewport.getBoundingClientRect().height}px`;
+    const viewportBounds = this.DOM.viewport.getBoundingClientRect();
+    this.viewport = {
+      height: viewportBounds.height,
+      width: viewportBounds.width
+    };
+
+    if (this.medias && this.medias.length > 0) {
+      this.itemIndex = this.itemIndex % this.medias.length;
+
+      this.medias.forEach(media => media.onResize(this.viewport));
+
+      const itemWidth = this.medias[0].width + this.medias[0].padding;
+      this.scroll.target = itemWidth * this.itemIndex;
+      this.scroll.current = this.scroll.target;
+    }
+  }
+
+  // 毎フレームの描画ループ
+  update() {
+    // 現在のスクロール位置を目標値に近づける
+    this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
+
+    // スライダーが動いているかどうかのフラグ
+    const isMoving = Math.abs(this.scroll.current - this.scroll.target) > 0.1;
+
+    // スクロール方向の判定
+    this.direction = this.scroll.current > this.scroll.last ? "right" : "left";
+
+    // 各スライドアイテムのupdateを呼び出す
+    if (this.medias) {
+      this.medias.forEach(media => media.update(this.scroll, this.direction, this.isDown, isMoving));
+    }
+
+    this.scroll.last = this.scroll.current;
+    window.requestAnimationFrame(this.update.bind(this));
+  }
+  
+  // イベントリスナーのセットアップ
+  addEventListeners() {
+    this.debouncedOnResize = debounce(this.onResize.bind(this), 250);
+    window.addEventListener("resize", this.debouncedOnResize);
+    
+    this.DOM.el.addEventListener("mousewheel", this.onWheel.bind(this));
+    this.DOM.el.addEventListener("wheel", this.onWheel.bind(this));
+    this.DOM.el.addEventListener("mousedown", this.onTouchDown.bind(this));
+    window.addEventListener("mousemove", this.onTouchMove.bind(this));
+    window.addEventListener("mouseup", this.onTouchUp.bind(this));
+    this.DOM.el.addEventListener("touchstart", this.onTouchDown.bind(this));
+    window.addEventListener("touchmove", this.onTouchMove.bind(this));
+    window.addEventListener("touchend", this.onTouchUp.bind(this));
+
+    this.DOM.el.addEventListener("click", event => {
+      // ドラッグ距離をonTouchUpでリセットされる前の値で判定する
+      const dragDistance = Math.abs(this.start - this.stop);
+      if (dragDistance > 10) {
+        event.preventDefault();
+      }
+    }, true);
+
+    window.addEventListener("keydown", event => {
+      if (event.code === "ArrowLeft" || event.code === "ArrowDown") {
+        this.onMove("left");
+      } else if (event.code === "ArrowRight" || event.code === "ArrowUp") {
+        this.onMove("right");
+      }
+    });
+  }
+}
+
+// --- 初期化 ---
+document.addEventListener("DOMContentLoaded", () => {
+  const sliderElement = document.querySelector("#slider");
+  if (sliderElement) {
+    new Slider(sliderElement);
+  }
+});
+</script>
+</body>
+</html>

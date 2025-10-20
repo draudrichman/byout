@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 // Utility functions
 function lerp(start, end, factor) {
@@ -33,7 +33,7 @@ function Card({ data, isActive }) {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="0.5"
-                className="text-amber-500"
+                className="text-slate-500"
               />
             </pattern>
           </defs>
@@ -56,7 +56,7 @@ function Card({ data, isActive }) {
                   y2={y2}
                   stroke="currentColor"
                   strokeWidth="2"
-                  className="text-amber-500"
+                  className="text-slate-400"
                 />
               );
             })}
@@ -65,12 +65,39 @@ function Card({ data, isActive }) {
       </div>
 
       {/* Border frame */}
-      <div className="absolute inset-4 border-2 border-gray-600">
+      <div
+        className={
+          `absolute inset-4 border-2 ` +
+          (isActive
+            ? "border-slate-200/90 shadow-[0_0_20px_rgba(200,200,210,0.35)]"
+            : "border-gray-600")
+        }
+      >
         {/* Corner decorations */}
-        <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-amber-500" />
-        <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-amber-500" />
-        <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-amber-500" />
-        <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-amber-500" />
+        <div
+          className={
+            `absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 ` +
+            (isActive ? "border-slate-200" : "border-slate-400")
+          }
+        />
+        <div
+          className={
+            `absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 ` +
+            (isActive ? "border-slate-200" : "border-slate-400")
+          }
+        />
+        <div
+          className={
+            `absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 ` +
+            (isActive ? "border-slate-200" : "border-slate-400")
+          }
+        />
+        <div
+          className={
+            `absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 ` +
+            (isActive ? "border-slate-200" : "border-slate-400")
+          }
+        />
       </div>
 
       {/* Content */}
@@ -86,7 +113,7 @@ function Card({ data, isActive }) {
       {/* Active indicator */}
       {isActive && (
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+          <div className="w-2.5 h-2.5 bg-slate-300 rounded-full animate-pulse shadow-[0_0_12px_rgba(200,200,210,0.7)]" />
         </div>
       )}
     </div>
@@ -102,9 +129,10 @@ export default function MilitaryGallery() {
     target: 0,
     last: 0,
     ease: 0.08,
-    isDragging: false,
-    startX: 0,
-    dragStart: 0,
+    isDown: false,
+    start: 0,
+    stop: 0,
+    position: 0,
   });
   const [activeIndex, setActiveIndex] = useState(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -117,7 +145,6 @@ export default function MilitaryGallery() {
 
   const cardWidth = 400;
   const cardGap = 100;
-  const scrollSpeed = 2.5;
 
   // Snap to nearest card
   const snapToNearest = useRef(
@@ -132,25 +159,13 @@ export default function MilitaryGallery() {
     }, 120)
   ).current;
 
-  // Snap with momentum (for drag end)
-  const snapWithMomentum = () => {
+  // Snap to nearest card (simplified like test.html)
+  const snapToNearestCard = () => {
     const scroll = scrollRef.current;
-    const currentPos = Math.abs(scroll.current);
-    const targetPos = Math.abs(scroll.target);
-    const currentIndex = currentPos / (cardWidth + cardGap);
-    const delta = targetPos - currentPos;
-
-    let itemIndex;
-    if (Math.abs(delta) > (cardWidth + cardGap) * 0.15) {
-      itemIndex =
-        delta > 0 ? Math.ceil(currentIndex) : Math.floor(currentIndex);
-    } else {
-      itemIndex = Math.round(currentIndex);
-    }
-
-    const targetPosition = itemIndex * (cardWidth + cardGap);
-    const sign = scroll.current < 0 ? -1 : 1;
-    scroll.target = sign * targetPosition;
+    const itemWidth = cardWidth + cardGap;
+    const itemIndex = Math.round(Math.abs(scroll.target) / itemWidth);
+    const newTarget = itemWidth * itemIndex;
+    scroll.target = scroll.target < 0 ? -newTarget : newTarget;
   };
 
   // Handle resize
@@ -168,7 +183,7 @@ export default function MilitaryGallery() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Animation loop
+  // Animation loop (simplified like test.html)
   useEffect(() => {
     let rafId;
     const animate = () => {
@@ -214,95 +229,115 @@ export default function MilitaryGallery() {
     return () => cancelAnimationFrame(rafId);
   }, [dimensions.width, cards.length]);
 
-  // Mouse/Touch handlers
-  const handleStart = (clientX) => {
-    scrollRef.current.isDragging = true;
-    scrollRef.current.startX = clientX;
-    scrollRef.current.dragStart = scrollRef.current.target;
-  };
+  // Drag handlers (exact copy from test.html)
+  const onTouchDown = useCallback((event) => {
+    const scroll = scrollRef.current;
+    scroll.isDown = true;
+    scroll.position = scroll.current;
+    scroll.start = event.touches ? event.touches[0].clientX : event.clientX;
+    scroll.stop = scroll.start;
+  }, []);
 
-  const handleMove = (clientX) => {
-    if (!scrollRef.current.isDragging) return;
-    const delta = (scrollRef.current.startX - clientX) * 0.025 * scrollSpeed;
-    scrollRef.current.target = scrollRef.current.dragStart + delta;
-  };
+  const onTouchMove = useCallback((event) => {
+    const scroll = scrollRef.current;
+    if (!scroll.isDown) return;
+    scroll.stop = event.touches ? event.touches[0].clientX : event.clientX;
+    const distance = scroll.start - scroll.stop;
+    scroll.target = scroll.position + distance;
+  }, []);
 
-  const handleEnd = () => {
-    if (!scrollRef.current.isDragging) return;
-    scrollRef.current.isDragging = false;
-    snapWithMomentum();
-  };
+  const onTouchUp = useCallback(() => {
+    const scroll = scrollRef.current;
+    scroll.isDown = false;
+    snapToNearestCard();
+  }, []);
+
+  // Click prevention when dragging (from test.html)
+  const handleClick = useCallback((event) => {
+    const scroll = scrollRef.current;
+    const dragDistance = Math.abs(scroll.start - scroll.stop);
+    if (dragDistance > 10) {
+      event.preventDefault();
+    }
+  }, []);
+
+  // Global event listeners (exact copy from test.html)
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => {
+      onTouchMove(e);
+    };
+
+    const handleGlobalMouseUp = (e) => {
+      onTouchUp(e);
+    };
+
+    const handleGlobalTouchMove = (e) => {
+      onTouchMove(e);
+    };
+
+    const handleGlobalTouchUp = (e) => {
+      onTouchUp(e);
+    };
+
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+    window.addEventListener("touchmove", handleGlobalTouchMove);
+    window.addEventListener("touchend", handleGlobalTouchUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleGlobalMouseMove);
+      window.removeEventListener("mouseup", handleGlobalMouseUp);
+      window.removeEventListener("touchmove", handleGlobalTouchMove);
+      window.removeEventListener("touchend", handleGlobalTouchUp);
+    };
+  }, [onTouchMove, onTouchUp]);
 
   const handleWheel = (e) => {
     const delta = e.deltaY || e.wheelDelta || e.detail;
-    scrollRef.current.target += (delta > 0 ? scrollSpeed : -scrollSpeed) * 0.2;
+    scrollRef.current.target += delta * 0.5;
     snapToNearest();
   };
 
   return (
-    <div className="w-full h-screen overflow-hidden">
-      {/* Header */}
-      <div className="absolute top-8 left-8 z-20 flex items-center gap-4">
-        <div className="text-2xl font-bold tracking-widest text-gray-300">
-          STEM
-        </div>
-        <div className="px-3 py-1 bg-gray-700 text-gray-300 text-xs font-bold tracking-wider">
-          U.S. ARMY
-        </div>
-      </div>
-
+    <div className="w-full h-[70vh] overflow-hidden">
       {/* Top right corner decoration */}
-      <div className="absolute top-8 right-8 z-20">
-        <svg width="40" height="40" viewBox="0 0 40 40">
-          <circle
-            cx="20"
-            cy="20"
-            r="15"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-gray-600"
-          />
-          {[...Array(8)].map((_, i) => (
-            <circle
-              key={i}
-              cx={20 + Math.cos((i * Math.PI) / 4) * 18}
-              cy={20 + Math.sin((i * Math.PI) / 4) * 18}
-              r="2"
-              fill="currentColor"
-              className="text-gray-600"
-            />
-          ))}
-        </svg>
-      </div>
 
       {/* Gallery container */}
       <div
         ref={containerRef}
-        className="relative w-full h-full"
-        onMouseDown={(e) => handleStart(e.clientX)}
-        onMouseMove={(e) => handleMove(e.clientX)}
-        onMouseUp={handleEnd}
-        onMouseLeave={handleEnd}
-        onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-        onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-        onTouchEnd={handleEnd}
+        className="relative w-full h-full select-none"
+        onMouseDown={onTouchDown}
+        onTouchStart={onTouchDown}
         onWheel={handleWheel}
+        onClick={handleClick}
       >
         <div className="absolute top-1/2 left-1/2 -translate-y-1/2">
           {cards.map((card, index) => (
             <div
               key={index}
               ref={(el) => (cardsRef.current[index] = el)}
-              className="absolute top-0 flex-shrink-0 cursor-grab active:cursor-grabbing backdrop-blur-sm border border-gray-700"
+              className={
+                `absolute top-0 flex-shrink-0 cursor-grab active:cursor-grabbing backdrop-blur-sm ` +
+                (index === activeIndex
+                  ? "border border-slate-200 ring-1 ring-slate-200/60 shadow-[0_0_25px_rgba(200,200,210,0.45),0_0_50px_rgba(200,200,210,0.25)]"
+                  : "border border-gray-700")
+              }
               style={{
                 width: `${cardWidth}px`,
                 height: `${cardWidth}px`,
                 left: `-${cardWidth / 2}px`,
                 top: `-${cardWidth / 2}px`,
+                willChange: "transform",
               }}
             >
-              <Card data={card} isActive={index === activeIndex} />
+              <div
+                className={
+                  `h-full w-full transition-transform duration-300 ease-out ` +
+                  (index === activeIndex ? "scale-105" : "scale-[0.97]")
+                }
+              >
+                <Card data={card} isActive={index === activeIndex} />
+              </div>
             </div>
           ))}
         </div>
@@ -318,7 +353,7 @@ export default function MilitaryGallery() {
             }}
             className={`text-xs font-mono transition-all ${
               index === activeIndex
-                ? "text-amber-500 scale-125"
+                ? "text-slate-200 scale-125"
                 : "text-gray-600 hover:text-gray-400"
             }`}
           >
