@@ -1,0 +1,197 @@
+/* Art Gallery Hover Cards Styles */
+.art-gallery-container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.gallery-items {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.gallery-divider {
+  position: relative;
+  width: 1px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gallery-item {
+  position: relative;
+  width: 33.33%;
+  height: 100vh;
+  overflow: hidden;
+  transition: width 0.8s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.gallery-img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+  z-index: 1;
+}
+
+.gallery-item-wrapper:hover .gallery-img-overlay {
+  top: -100%;
+}
+
+.gallery-item img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.2);
+  transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.gallery-item-wrapper:hover img {
+  transform: scale(1);
+}
+
+.gallery-item-copy {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4em 2em;
+  font-family: inherit;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff;
+  z-index: 2;
+  transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.gallery-item-name {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 600;
+  text-align: center;
+  background: linear-gradient(135deg, #fff, #ccc);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gallery-item-name span {
+  font-family: inherit;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+  line-height: 1.4;
+  text-transform: none;
+  display: block;
+  margin-top: 1rem;
+  color: #ccc;
+  -webkit-text-fill-color: #ccc;
+}
+
+.gallery-item-wrapper:hover .gallery-item-copy {
+  color: #fff;
+}
+
+.gallery-item-wrapper:hover .gallery-item-name {
+  background: linear-gradient(135deg, #fff, #f0f0f0);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gallery-id {
+  color: rgba(147, 51, 234, 0.8);
+  font-size: clamp(4rem, 12vw, 8rem);
+  font-weight: 500;
+  text-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+}
+
+/* Hover effects for card expansion */
+.gallery-items:hover .gallery-item {
+  width: 16.67%; /* Shrink non-hovered items */
+}
+
+.gallery-items:hover .gallery-item:hover {
+  width: 66.66%; /* Expand hovered item to take 2/3 of the gallery width */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Stack layout vertically on mobile */
+  .w-1\/3 {
+    width: 100% !important;
+    height: 40vh !important;
+  }
+  
+  .w-2\/3 {
+    width: 100% !important;
+    height: 60vh !important;
+  }
+  
+  .gallery-items {
+    flex-direction: column;
+    height: 60vh;
+  }
+  
+  .gallery-item {
+    width: 100% !important;
+    height: 33.33%;
+  }
+  
+  .gallery-items:hover .gallery-item {
+    width: 100% !important;
+    height: 20%;
+  }
+  
+  .gallery-items:hover .gallery-item:hover {
+    width: 100% !important;
+    height: 60%;
+  }
+  
+  .gallery-divider {
+    width: 100%;
+    height: 1px;
+  }
+  
+  .gallery-item-copy {
+    padding: 1em;
+  }
+  
+  .gallery-item-name {
+    font-size: clamp(1rem, 3vw, 1.5rem) !important;
+  }
+  
+  .gallery-id {
+    font-size: clamp(2rem, 8vw, 4rem) !important;
+  }
+}
+
+/* Additional animations and effects */
+.gallery-item-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.gallery-item-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(147, 51, 234, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.gallery-item-wrapper:hover::after {
+  opacity: 1;
+}
