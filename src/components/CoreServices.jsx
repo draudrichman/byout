@@ -556,8 +556,8 @@ const CoreServices = () => {
       {/* Column Layout: Left 1/3 Content + Right 2/3 Gallery */}
       <section className="w-full h-screen flex flex-col md:flex-row">
         {/* Left Column - Core Services Content (1/3) */}
-        <div className="w-full md:w-1/3 h-2/5 md:h-full flex flex-col justify-center items-center px-8">
-          <div className="max-w-md text-center">
+        <div className="w-full md:w-1/3 h-2/5 md:h-full flex flex-col justify-start items-center md:items-start px-8 pt-16 md:pt-20">
+          <div className="max-w-md text-center md:text-left w-full">
             {/* Core Services Title */}
             <h1
               ref={titleRef}
@@ -567,7 +567,7 @@ const CoreServices = () => {
             </h1>
 
             {/* Four Lines of Chinese Text */}
-            <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-songti leading-relaxed mb-6 md:mb-8">
+            <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-songti leading-relaxed mb-8 md:mb-12">
               <p
                 ref={(el) => (descriptiveTextRef.current[0] = el)}
                 className="tracking-wider"
@@ -595,10 +595,10 @@ const CoreServices = () => {
             </div>
 
             {/* Symbol/Icon */}
-            <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
+            <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto mt-20">
               {/* Center Icon */}
               <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="relative scale-[600%] md:scale-[800%]">
+                <div className="relative scale-[700%] md:scale-[900%] lg:scale-[1000%]">
                   <div className="relative">
                     <div className="absolute inset-0 opacity-80 animate-pulse">
                       <div
@@ -628,34 +628,34 @@ const CoreServices = () => {
 
               {/* Character grid */}
               <div className="grid grid-cols-2 grid-rows-2 w-full h-full">
-                <div className="flex items-center justify-center pr-1 pb-1">
+                <div className="flex items-center justify-center pr-10 pb-10">
                   <span
                     ref={(el) => (chineseCharsRef.current[0] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
                   >
                     核
                   </span>
                 </div>
-                <div className="flex items-center justify-center pl-1 pb-1">
+                <div className="flex items-center justify-center pl-10 pb-10">
                   <span
                     ref={(el) => (chineseCharsRef.current[1] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
                   >
                     心
                   </span>
                 </div>
-                <div className="flex items-center justify-center pr-1 pt-1">
+                <div className="flex items-center justify-center pr-10 pt-10">
                   <span
                     ref={(el) => (chineseCharsRef.current[2] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
                   >
                     服
                   </span>
                 </div>
-                <div className="flex items-center justify-center pl-1 pt-1">
+                <div className="flex items-center justify-center pl-10 pt-10">
                   <span
                     ref={(el) => (chineseCharsRef.current[3] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
                   >
                     务
                   </span>
