@@ -148,259 +148,6 @@ const serviceData = [
   },
 ];
 
-// Hero Section Component
-const HeroSection = ({ titleRef, descriptiveTextRef, chineseCharsRef }) => {
-  return (
-    <section className="relative w-full min-h-[50vh] lg:min-h-[45vh] overflow-hidden px-5 xl:px-30">
-      <div className="absolute inset-0 w-full h-full">
-        {/* <ShaderBackground opacity={0.8} /> */}
-      </div>
-
-      <div className="relative z-10 w-full h-full flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-16 py-8 lg:py-16">
-        {/* Left side - English text */}
-        <div className="w-full lg:w-1/2 lg:pr-8 mb-8 lg:mb-0 text-center lg:text-left">
-          <h1
-            ref={titleRef}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold mb-6 lg:mb-8 text-white leading-tight"
-          >
-            CORE SERVICES
-          </h1>
-
-          <div className="text-white space-y-3 lg:space-y-4 text-sm sm:text-base lg:text-lg xl:text-xl font-medium font-songti leading-relaxed">
-            <p
-              ref={(el) => (descriptiveTextRef.current[0] = el)}
-              className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start"
-            >
-              <span>以"光"为引的「穿越化」买点论</span>
-              <span>( Prismaeon™ )</span>
-            </p>
-            <p
-              className="tracking-wider"
-              ref={(el) => (descriptiveTextRef.current[1] = el)}
-            >
-              开创前策 x 科技 x 渠道落地的三位一体服务
-            </p>
-            <p
-              className="tracking-wider"
-              ref={(el) => (descriptiveTextRef.current[2] = el)}
-            >
-              突破文化·国界·时间周期的市场及维度局限
-            </p>
-            <p
-              className="tracking-wider"
-              ref={(el) => (descriptiveTextRef.current[3] = el)}
-            >
-              打造具备穿越化性质的超级品牌&产品
-            </p>
-          </div>
-        </div>
-
-        {/* Right side - Chinese characters grid */}
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end items-center">
-          <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80">
-            {/* Center Icon */}
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-              <div className="relative scale-[500%] sm:scale-[600%] lg:scale-[1200%] xl:scale-[550%]">
-                <div className="relative">
-                  <div className="absolute inset-0 opacity-80 animate-pulse">
-                    <div
-                      className="w-full h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
-                      style={{
-                        maskImage: "url(/img/logos/icon.svg)",
-                        WebkitMaskImage: "url(/img/logos/icon.svg)",
-                        maskSize: "contain",
-                        WebkitMaskSize: "contain",
-                        maskRepeat: "no-repeat",
-                        WebkitMaskRepeat: "no-repeat",
-                        maskPosition: "center",
-                        WebkitMaskPosition: "center",
-                        animation:
-                          "gradientShift 3s ease-in-out infinite alternate",
-                      }}
-                    />
-                  </div>
-                  <img
-                    src="/img/logos/icon.svg"
-                    alt="Core Services Icon"
-                    className="relative z-10 opacity-90 filter brightness-110 contrast-105 w-8 h-8"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Character grid */}
-            <div className="grid grid-cols-2 grid-rows-2 w-full h-full">
-              <div className="flex items-center justify-center pr-2 pb-1">
-                <span
-                  ref={(el) => (chineseCharsRef.current[0] = el)}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white"
-                >
-                  核
-                </span>
-              </div>
-              <div className="flex items-center justify-center pl-2 pb-1">
-                <span
-                  ref={(el) => (chineseCharsRef.current[1] = el)}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white"
-                >
-                  心
-                </span>
-              </div>
-              <div className="flex items-center justify-center pr-2 pt-1">
-                <span
-                  ref={(el) => (chineseCharsRef.current[2] = el)}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white"
-                >
-                  服
-                </span>
-              </div>
-              <div className="flex items-center justify-center pl-2 pt-1">
-                <span
-                  ref={(el) => (chineseCharsRef.current[3] = el)}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white"
-                >
-                  务
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Service Card Component
-const ServiceCard = ({ data, index, onItemClick }) => {
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const handleMouseEnter = () => {
-      gsap.to(card.querySelector("img"), {
-        duration: 0.6,
-        scale: 1.05,
-        ease: "power2.out",
-      });
-      gsap.to(card, {
-        duration: 0.6,
-        y: -8,
-        ease: "power2.out",
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(card.querySelector("img"), {
-        duration: 0.6,
-        scale: 1,
-        ease: "power2.out",
-      });
-      gsap.to(card, {
-        duration: 0.6,
-        y: 0,
-        ease: "power2.out",
-      });
-    };
-
-    card.addEventListener("mouseenter", handleMouseEnter);
-    card.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      card.removeEventListener("mouseenter", handleMouseEnter);
-      card.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={cardRef}
-      className="group relative bg-black/20 backdrop-blur-sm border border-white/10 rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:border-white/20"
-    >
-      {/* Background gradient effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-      <div className="relative z-10 flex flex-col items-center space-y-6">
-        {/* Image */}
-        <div className="w-full aspect-[4/3] overflow-hidden rounded-2xl">
-          <img
-            className="w-full h-full object-cover"
-            src={data.image}
-            alt={data.name}
-            loading="lazy"
-          />
-        </div>
-
-        {/* Content */}
-        <div className="text-center space-y-4">
-          <div className="space-y-2">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
-              {data.name}
-            </h3>
-            <p className="text-sm sm:text-base text-gray-300 font-light leading-relaxed">
-              {data.description}
-            </p>
-          </div>
-
-          <button
-            onClick={() => onItemClick(index)}
-            className="inline-flex items-center justify-center px-8 py-3 border-2 border-gray-400 text-gray-200 rounded-full font-semibold tracking-wide uppercase text-sm transition-all duration-300 hover:bg-gray-400 hover:text-black hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-black"
-          >
-            View Details
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-// Simplified Preview component
-const Preview = ({ data, isActive, onBack }) => {
-  const previewRef = useRef(null);
-
-  return (
-    <div
-      className={`preview ${isActive ? "preview--current" : ""}`}
-      ref={previewRef}
-    >
-      <div className="preview__img">
-        <div
-          className="preview__img-inner"
-          style={{ backgroundImage: `url(${data.bigImage})` }}
-        />
-      </div>
-      <h2 className="preview__title oh">
-        <span className="oh__inner">{data.name}</span>
-      </h2>
-      <div className="preview__column preview__column--start">
-        <span className="preview__column-title preview__column-title--main oh">
-          <span className="oh__inner">{data.name}</span>
-        </span>
-      </div>
-      <div className="preview__column">
-        <h3 className="preview__column-title oh">
-          <span className="oh__inner">Description</span>
-        </h3>
-        <p>{data.location}</p>
-      </div>
-      <div className="preview__column">
-        <h3 className="preview__column-title oh">
-          <span className="oh__inner">Details</span>
-        </h3>
-        <p>{data.material}</p>
-      </div>
-      <button className="unbutton preview__back" onClick={onBack}>
-        <svg width="100px" height="18px" viewBox="0 0 50 9">
-          <path
-            vectorEffect="non-scaling-stroke"
-            d="m0 4.5 5-3m-5 3 5 3m45-3h-77"
-          ></path>
-        </svg>
-      </button>
-    </div>
-  );
-};
-
 // Main CoreServices component
 const CoreServices = () => {
   const [currentPreview, setCurrentPreview] = useState(null);
@@ -666,25 +413,24 @@ const CoreServices = () => {
         </div>
 
         {/* Right Column - Art Gallery Hover Cards (2/3) */}
-        <div
-          className="w-full md:w-2/3 h-3/5 md:h-full overflow-hidden"
-          ref={galleryContainerRef}
-        >
+        <div className="ml-10 flex-1 flex" ref={galleryContainerRef}>
           <div className="w-full h-full flex flex-col md:flex-row">
             <div
               className="relative w-full md:w-1/3 h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              style={{ transform: "skewX(-25deg)" }}
               ref={(el) => (galleryCardsRef.current[0] = el)}
             >
               <div
                 className="gallery-item-wrapper relative w-full h-full cursor-pointer"
+                style={{ transform: "skewX(25deg)" }}
                 onClick={() => handleItemClick(0)}
               >
                 <img
-                  src={serviceData[0].image}
+                  src={serviceData[0].image || "/placeholder.svg"}
                   alt={serviceData[0].name}
-                  className="absolute w-full h-full object-cover transform scale-110 transition-all duration-1000 ease-out group-hover:scale-100 grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-250 transition-transform duration-1000 ease-out group-hover:scale-175 grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-full"></div>
+                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[250%] transform scale-250"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 mb-2 md:mb-4">
@@ -698,26 +444,28 @@ const CoreServices = () => {
                     </div>
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
               </div>
             </div>
 
-            <div className="w-full md:w-px h-px md:h-full bg-white/10"></div>
+            {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
               className="relative w-full md:w-1/3 h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              style={{ transform: "skewX(-25deg)" }}
               ref={(el) => (galleryCardsRef.current[1] = el)}
             >
               <div
                 className="gallery-item-wrapper relative w-full h-full cursor-pointer"
+                style={{ transform: "skewX(25deg)" }}
                 onClick={() => handleItemClick(1)}
               >
                 <img
-                  src={serviceData[1].image}
+                  src={serviceData[1].image || "/placeholder.svg"}
                   alt={serviceData[1].name}
-                  className="absolute w-full h-full object-cover transform scale-110 transition-all duration-1000 ease-out group-hover:scale-100 grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-250 transition-transform duration-1000 ease-out group-hover:scale-175 grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-full"></div>
+                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[250%] transform scale-250"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 mb-2 md:mb-4">
@@ -731,26 +479,28 @@ const CoreServices = () => {
                     </div>
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
               </div>
             </div>
 
-            <div className="w-full md:w-px h-px md:h-full bg-white/10"></div>
+            {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
               className="relative w-full md:w-1/3 h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              style={{ transform: "skewX(-25deg)" }}
               ref={(el) => (galleryCardsRef.current[2] = el)}
             >
               <div
                 className="gallery-item-wrapper relative w-full h-full cursor-pointer"
+                style={{ transform: "skewX(25deg)" }}
                 onClick={() => handleItemClick(2)}
               >
                 <img
-                  src={serviceData[2].image}
+                  src={serviceData[2].image || "/placeholder.svg"}
                   alt={serviceData[2].name}
-                  className="absolute w-full h-full object-cover transform scale-110 transition-all duration-1000 ease-out group-hover:scale-100 grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-250 transition-transform duration-1000 ease-out group-hover:scale-175 grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-full"></div>
+                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[250%] transform scale-250"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 mb-2 md:mb-4">
@@ -764,7 +514,7 @@ const CoreServices = () => {
                     </div>
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
               </div>
             </div>
           </div>
