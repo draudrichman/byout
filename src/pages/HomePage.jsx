@@ -33,7 +33,7 @@ LoadingFallback.displayName = "LoadingFallback";
 const HomePage = memo(() => {
   return (
     <div className="App">
-      <Leva hidden />
+      {/* <Leva hidden />
 
       <AuroraBackground>
         <LandingPage key="landing" />
@@ -43,10 +43,10 @@ const HomePage = memo(() => {
       <CompanyIntroduction />
       <ExperienceShowcase />
       <HorizontalTimeline />
-      <GlobalPresence />
+      <GlobalPresence /> */}
       <CoreServices />
-      <FounderStaff />
-      <ContactForm />
+      {/* <FounderStaff />
+      <ContactForm /> */}
     </div>
   );
 });

@@ -38,7 +38,13 @@
   font-display: swap;
 }
 
-
+@font-face {
+  font-family: 'BNKGOTHL';
+  src: url('/Fonts/BNKGOTHL.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --background: #ffffff;
@@ -48,6 +54,7 @@
   --font-geniso: 'Geniso-Font', 'GENISO', 'Orbitron', 'Exo 2', 'Rajdhani', sans-serif;
   --font-jhenghei: 'MicrosoftJhengHei-Local', 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', 'PingFang SC', 'Noto Sans CJK', 'Noto Sans TC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
   --font-songti: 'Songti-TC-Bold', 'Songti TC', '微軟正黑體', 'PingFang TC', 'PingFang SC', 'Noto Sans CJK', 'Noto Sans TC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  --font-bnkgothl: 'BNKGOTHL', 'BNKGOTHL', '微軟正黑體', 'PingFang TC', 'PingFang SC', 'Noto Sans CJK', 'Noto Sans TC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
 @theme inline {
@@ -60,6 +67,7 @@
   --font-geniso: var(--font-geniso);
   --font-jhenghei: var(--font-jhenghei);
   --font-songti: var(--font-songti);
+  --font-bnkgothl: var(--font-bnkgothl);
 }
 
 @media (prefers-color-scheme: dark) {

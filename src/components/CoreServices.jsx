@@ -116,7 +116,7 @@ const serviceData = [
     image:
       "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1000&format=pjpg&exif=0&iptc=0",
     bigImage:
-      "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1000&format=pjpg&exif=0&iptc=0",
+      "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1600",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -303,144 +303,106 @@ const CoreServices = () => {
       {/* Column Layout: Left 1/3 Content + Right 2/3 Gallery */}
       <section className="w-full h-screen flex flex-col md:flex-row">
         {/* Left Column - Core Services Content (1/3) */}
-        <div className="w-full md:w-1/3 h-2/5 md:h-full flex flex-col justify-center items-center px-8">
-          <div className="max-w-md text-center">
+        <div className="w-full md:w-1/3 h-2/5 md:h-full flex flex-col justify-center items-end px-8">
+          <div className="max-w-md text-left">
+            {/* Chinese Characters */}
+            <div className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-medium mb-4 tracking-[0.30em]">
+              核 心 服 务
+            </div>
+
             {/* Core Services Title */}
             <h1
               ref={titleRef}
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold mb-6 md:mb-8 text-white leading-tight"
+              className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-6 md:mb-8 text-white leading-tight"
             >
               CORE SERVICES
             </h1>
 
+            {/* SVG Logos */}
+            <div className="flex justify-start items-center gap-6 mb-6">
+              <img
+                src="/Logos/coreservices/22.svg"
+                alt="Logo 22"
+                className="w-12 h-12 md:w-16 md:h-16"
+              />
+              <img
+                src="/Logos/coreservices/58.svg"
+                alt="Logo 58"
+                className="w-12 h-12 md:w-16 md:h-16"
+              />
+            </div>
+
+            {/* Divider Line */}
+            <div className="w-full h-px bg-white/30 mb-6 md:mb-8"></div>
+
             {/* Four Lines of Chinese Text */}
-            <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-songti leading-relaxed mb-6 md:mb-8">
+            <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-songti leading-relaxed mb-6 md:mb-8 text-left">
               <p
                 ref={(el) => (descriptiveTextRef.current[0] = el)}
                 className="tracking-wider"
               >
-                以"光"为引的「穿越化」买点论 ( Prismaeon™ )
+                以"光"为引的「穿越化」买点论 ( Prismaeon )
               </p>
               <p
                 className="tracking-wider"
                 ref={(el) => (descriptiveTextRef.current[1] = el)}
               >
-                开创前策 x 科技 x 渠道落地的三位一体服务
+                开创前策x科技x渠道落地的三位一体服务突破
               </p>
               <p
                 className="tracking-wider"
                 ref={(el) => (descriptiveTextRef.current[2] = el)}
               >
-                突破文化·国界·时间周期的市场及维度局限
+                文化·国界·时间周期的市场及维度局限
               </p>
               <p
                 className="tracking-wider"
                 ref={(el) => (descriptiveTextRef.current[3] = el)}
               >
-                打造具备穿越化性质的超级品牌&产品
+                打造具备 穿越化 性质的
               </p>
-            </div>
-
-            {/* Symbol/Icon */}
-            <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto">
-              {/* Center Icon */}
-              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="relative scale-[600%] md:scale-[800%]">
-                  <div className="relative">
-                    <div className="absolute inset-0 opacity-80 animate-pulse">
-                      <div
-                        className="w-full h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
-                        style={{
-                          maskImage: "url(/img/logos/icon.svg)",
-                          WebkitMaskImage: "url(/img/logos/icon.svg)",
-                          maskSize: "contain",
-                          WebkitMaskSize: "contain",
-                          maskRepeat: "no-repeat",
-                          WebkitMaskRepeat: "no-repeat",
-                          maskPosition: "center",
-                          WebkitMaskPosition: "center",
-                          animation:
-                            "gradientShift 3s ease-in-out infinite alternate",
-                        }}
-                      />
-                    </div>
-                    <img
-                      src="/img/logos/icon.svg"
-                      alt="Core Services Icon"
-                      className="relative z-10 opacity-90 filter brightness-110 contrast-105 drop-shadow-[0_0_15px_rgba(147,51,234,0.7)] w-8 h-8"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Character grid */}
-              <div className="grid grid-cols-2 grid-rows-2 w-full h-full">
-                <div className="flex items-center justify-center pr-1 pb-1">
-                  <span
-                    ref={(el) => (chineseCharsRef.current[0] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
-                  >
-                    核
-                  </span>
-                </div>
-                <div className="flex items-center justify-center pl-1 pb-1">
-                  <span
-                    ref={(el) => (chineseCharsRef.current[1] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
-                  >
-                    心
-                  </span>
-                </div>
-                <div className="flex items-center justify-center pr-1 pt-1">
-                  <span
-                    ref={(el) => (chineseCharsRef.current[2] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
-                  >
-                    服
-                  </span>
-                </div>
-                <div className="flex items-center justify-center pl-1 pt-1">
-                  <span
-                    ref={(el) => (chineseCharsRef.current[3] = el)}
-                    className="text-2xl md:text-3xl font-bold text-white"
-                  >
-                    务
-                  </span>
-                </div>
-              </div>
+              <p
+                className="tracking-wider"
+                ref={(el) => (descriptiveTextRef.current[4] = el)}
+              >
+                超级品牌 & 产品
+              </p>
             </div>
           </div>
         </div>
 
         {/* Right Column - Art Gallery Hover Cards (2/3) */}
-        <div className="ml-10 flex-1 flex" ref={galleryContainerRef}>
+        <div className="ml-0 md:ml-60 flex-1 flex" ref={galleryContainerRef}>
           <div className="w-full h-full flex flex-col md:flex-row">
             <div
-              className="relative w-full md:w-1/3 h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
-              style={{ transform: "skewX(-25deg)" }}
+              className="relative w-full md:w-[250px] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              style={{ transform: "skewX(-30deg)" }}
               ref={(el) => (galleryCardsRef.current[0] = el)}
             >
               <div
                 className="gallery-item-wrapper relative w-full h-full cursor-pointer"
-                style={{ transform: "skewX(25deg)" }}
+                style={{ transform: "skewX(30deg)" }}
                 onClick={() => handleItemClick(0)}
               >
                 <img
-                  src={serviceData[0].image || "/placeholder.svg"}
+                  src={serviceData[0].bigImage || "/placeholder.svg"}
                   alt={serviceData[0].name}
-                  className="absolute w-full h-full object-cover transform scale-250 transition-transform duration-1000 ease-out group-hover:scale-175 grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[250%] transform scale-250"></div>
-                <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-center">
-                    <div className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 mb-2 md:mb-4">
+                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
+                <div className="absolute w-full h-full flex lg:mt-15 flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
+                  <div className="text-left -ml-10">
+                    <div className="text-2xl md:text-3xl lg:text-7xl font-bnkgothl font-semibold text-gray-100 mb-2 md:mb-0">
                       01
                     </div>
-                    <div className="text-base md:text-lg lg:text-xl xl:text-2xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100">
-                      {serviceData[0].name}
-                      <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
+                    <div className="tracking-[0.2em] whitespace-nowrap text-base md:text-lg lg:text-xl xl:text-4xl font-jhenghei font-medium">
+                      品牌策划
+                    </div>
+                    <div className="text-base md:text-lg lg:text-xl xl:text-xl font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100">
+                      Brnd Dev
+                      {/* <span className="block text-xs md:text-sm lg:text-lg normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
                         {serviceData[0].description}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
@@ -451,31 +413,34 @@ const CoreServices = () => {
             {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
-              className="relative w-full md:w-1/3 h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
-              style={{ transform: "skewX(-25deg)" }}
+              className="relative w-full md:w-[250px] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              style={{ transform: "skewX(-30deg)" }}
               ref={(el) => (galleryCardsRef.current[1] = el)}
             >
               <div
                 className="gallery-item-wrapper relative w-full h-full cursor-pointer"
-                style={{ transform: "skewX(25deg)" }}
+                style={{ transform: "skewX(30deg)" }}
                 onClick={() => handleItemClick(1)}
               >
                 <img
-                  src={serviceData[1].image || "/placeholder.svg"}
+                  src={serviceData[1].bigImage || "/placeholder.svg"}
                   alt={serviceData[1].name}
-                  className="absolute w-full h-full object-cover transform scale-250 transition-transform duration-1000 ease-out group-hover:scale-175 grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[250%] transform scale-250"></div>
-                <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-center">
-                    <div className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 mb-2 md:mb-4">
+                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
+                <div className="absolute w-full h-full flex flex-col justify-center lg:mt-15 items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
+                  <div className="text-left -ml-10">
+                    <div className="text-2xl md:text-3xl lg:text-7xl font-bnkgothl font-semibold text-gray-100 mb-2 md:mb-0">
                       02
                     </div>
-                    <div className="text-base md:text-lg lg:text-xl xl:text-2xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100">
-                      {serviceData[1].name}
-                      <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
+                    <div className="tracking-[0.2em] text-base whitespace-nowrap md:text-lg lg:text-xl xl:text-4xl font-jhenghei font-medium">
+                      技术赋能
+                    </div>
+                    <div className="text-base md:text-lg lg:text-xl xl:text-xl font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100">
+                      Technology
+                      {/* <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
                         {serviceData[1].description}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
@@ -486,31 +451,34 @@ const CoreServices = () => {
             {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
-              className="relative w-full md:w-1/3 h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
-              style={{ transform: "skewX(-25deg)" }}
+              className="relative w-full md:w-[250px] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              style={{ transform: "skewX(-30deg)" }}
               ref={(el) => (galleryCardsRef.current[2] = el)}
             >
               <div
                 className="gallery-item-wrapper relative w-full h-full cursor-pointer"
-                style={{ transform: "skewX(25deg)" }}
+                style={{ transform: "skewX(30deg)" }}
                 onClick={() => handleItemClick(2)}
               >
                 <img
-                  src={serviceData[2].image || "/placeholder.svg"}
+                  src={serviceData[2].bigImage || "/placeholder.svg"}
                   alt={serviceData[2].name}
-                  className="absolute w-full h-full object-cover transform scale-250 transition-transform duration-1000 ease-out group-hover:scale-175 grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[250%] transform scale-250"></div>
-                <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-center">
-                    <div className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 mb-2 md:mb-4">
+                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
+                <div className="absolute w-full h-full flex flex-col justify-center lg:mt-15 items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
+                  <div className="text-left -ml-10">
+                    <div className="text-2xl md:text-3xl lg:text-7xl font-bnkgothl font-semibold text-gray-100 mb-2 md:mb-0">
                       03
                     </div>
-                    <div className="text-base md:text-lg lg:text-xl xl:text-2xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100">
-                      {serviceData[2].name}
-                      <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
+                    <div className="tracking-[0.2em] text-base whitespace-nowrap md:text-lg lg:text-xl xl:text-4xl font-jhenghei font-medium">
+                      渠道入驻
+                    </div>
+                    <div className="text-base md:text-lg lg:text-xl xl:text-xl font-bnkgothl font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100">
+                      Retail Ops
+                      {/* <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
                         {serviceData[2].description}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
