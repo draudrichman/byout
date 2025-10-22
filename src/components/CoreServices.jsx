@@ -339,30 +339,30 @@ const CoreServices = () => {
             <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-jhenghei leading-relaxed mb-6 md:mb-8 text-left">
               <p
                 ref={(el) => (descriptiveTextRef.current[0] = el)}
-                className="tracking-wider"
+                className="tracking-wider whitespace-nowrap"
               >
                 以"光"为引的「穿越化」买点论 ( Prismaeon )
               </p>
               <p
-                className="tracking-wider"
+                className="tracking-wider whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[1] = el)}
               >
                 开创前策x科技x渠道落地的三位一体服务突破
               </p>
               <p
-                className="tracking-wider"
+                className="tracking-wider whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[2] = el)}
               >
                 文化·国界·时间周期的市场及维度局限
               </p>
               <p
-                className="tracking-wider"
+                className="tracking-wider whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[3] = el)}
               >
                 打造具备 穿越化 性质的
               </p>
               <p
-                className="tracking-wider"
+                className="tracking-wider whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[4] = el)}
               >
                 超级品牌 & 产品
@@ -375,7 +375,7 @@ const CoreServices = () => {
         <div className="ml-0 md:ml-60 flex-1 flex" ref={galleryContainerRef}>
           <div className="w-full h-full flex flex-col md:flex-row">
             <div
-              className="relative w-full md:w-[250px] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              className="relative w-full md:w-[28%] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
               style={{ transform: "skewX(-30deg)" }}
               ref={(el) => (galleryCardsRef.current[0] = el)}
             >
@@ -390,8 +390,8 @@ const CoreServices = () => {
                   className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
-                <div className="absolute w-full h-full flex lg:mt-15 flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-10">
+                <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
+                  <div className="text-left -ml-14">
                     <div className="text-2xl md:text-3xl lg:text-7xl font-bnkgothl font-semibold text-gray-100 mb-2 md:mb-0">
                       01
                     </div>
@@ -413,7 +413,7 @@ const CoreServices = () => {
             {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
-              className="relative w-full md:w-[250px] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              className="relative w-full md:w-[28%] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
               style={{ transform: "skewX(-30deg)" }}
               ref={(el) => (galleryCardsRef.current[1] = el)}
             >
@@ -428,8 +428,8 @@ const CoreServices = () => {
                   className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
-                <div className="absolute w-full h-full flex flex-col justify-center lg:mt-15 items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-10">
+                <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
+                  <div className="text-left -ml-14">
                     <div className="text-2xl md:text-3xl lg:text-7xl font-bnkgothl font-semibold text-gray-100 mb-2 md:mb-0">
                       02
                     </div>
@@ -451,7 +451,7 @@ const CoreServices = () => {
             {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
-              className="relative w-full md:w-[250px] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
+              className="relative w-full md:w-[28%] h-1/3 md:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 md:hover:h-full md:hover:w-2/3 group"
               style={{ transform: "skewX(-30deg)" }}
               ref={(el) => (galleryCardsRef.current[2] = el)}
             >
@@ -466,8 +466,8 @@ const CoreServices = () => {
                   className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
-                <div className="absolute w-full h-full flex flex-col justify-center lg:mt-15 items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-10">
+                <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 md:px-8 py-8 md:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
+                  <div className="text-left -ml-14">
                     <div className="text-2xl md:text-3xl lg:text-7xl font-bnkgothl font-semibold text-gray-100 mb-2 md:mb-0">
                       03
                     </div>
