@@ -306,7 +306,7 @@ const CoreServices = () => {
         <div className="w-full md:w-1/3 h-2/5 md:h-full flex flex-col justify-center items-end px-8">
           <div className="max-w-md text-left">
             {/* Chinese Characters */}
-            <div className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-medium mb-4 tracking-[0.30em]">
+            <div className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-jhenghei font-medium mb-4 tracking-[0.30em]">
               核 心 服 务
             </div>
 
@@ -336,7 +336,7 @@ const CoreServices = () => {
             <div className="w-full h-px bg-white/30 mb-6 md:mb-8"></div>
 
             {/* Four Lines of Chinese Text */}
-            <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-songti leading-relaxed mb-6 md:mb-8 text-left">
+            <div className="text-white space-y-3 md:space-y-4 text-sm md:text-base lg:text-lg font-medium font-jhenghei leading-relaxed mb-6 md:mb-8 text-left">
               <p
                 ref={(el) => (descriptiveTextRef.current[0] = el)}
                 className="tracking-wider"
