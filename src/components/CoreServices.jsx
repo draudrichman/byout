@@ -422,17 +422,14 @@ const CoreServices = () => {
                       style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
                     >
                       Brnd Dev
-                      {/* <span className="block text-xs md:text-sm lg:text-lg normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
-                        {serviceData[0].description}
-                      </span> */}
                     </div>
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
+                {/* Yellow accent at bottom third */}
+                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-green-800 via-green-600 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 lg:[transform:skewX(-30deg)]"></div>
               </div>
             </div>
-
-            {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
               className="relative w-full lg:w-[28%] h-1/3 lg:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 lg:hover:h-full lg:hover:w-2/3 group lg:[transform:skewX(-30deg)]"
@@ -469,17 +466,14 @@ const CoreServices = () => {
                       style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
                     >
                       Technology
-                      {/* <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
-                        {serviceData[1].description}
-                      </span> */}
                     </div>
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
+                {/* Yellow accent at bottom third */}
+                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-gray-800 via-gray-600 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 lg:[transform:skewX(-30deg)]"></div>
               </div>
             </div>
-
-            {/* <div className="w-full md:w-px h-px md:h-full bg-white/10"></div> */}
 
             <div
               className="relative w-full lg:w-[28%] h-1/3 lg:h-full overflow-hidden transition-all duration-700 ease-out hover:h-3/5 lg:hover:h-full lg:hover:w-2/3 group lg:[transform:skewX(-30deg)]"
@@ -516,13 +510,12 @@ const CoreServices = () => {
                       style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
                     >
                       Retail Ops
-                      {/* <span className="block text-xs md:text-sm lg:text-base normal-case mt-2 md:mt-4 text-gray-300 font-normal leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity group-hover:duration-500 duration-0 group-hover:delay-0 delay-0 ease-out">
-                        {serviceData[2].description}
-                      </span> */}
                     </div>
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
+                {/* Yellow accent at bottom third */}
+                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-yellow-800 via-yellow-600 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 lg:[transform:skewX(-30deg)]"></div>
               </div>
             </div>
           </div>
