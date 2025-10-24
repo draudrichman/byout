@@ -399,7 +399,7 @@ const CoreServices = () => {
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/40 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
                 {/* Content */}
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-12">
+                  <div className="text-left -ml-12 backdrop-blur-sm bg-black/20 border border-white/10 rounded-lg p-4 lg:p-6 shadow-lg">
                     <div
                       className="font-bnkgothl font-semibold text-gray-100 mb-2 lg:mb-0"
                       style={{ fontSize: "clamp(1.5rem, 6vw, 4.5rem)" }}
@@ -442,7 +442,7 @@ const CoreServices = () => {
                 {/* Inner left shadow */}
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/40 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-12">
+                  <div className="text-left -ml-12 backdrop-blur-sm bg-black/20 border border-white/10 rounded-lg p-4 lg:p-6 shadow-lg">
                     <div
                       className="font-bnkgothl font-semibold text-gray-100 mb-2 lg:mb-0"
                       style={{ fontSize: "clamp(1.5rem, 6vw, 4.5rem)" }}
@@ -486,7 +486,7 @@ const CoreServices = () => {
                 {/* Inner left shadow */}
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/80 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-12">
+                  <div className="text-left -ml-12 backdrop-blur-sm bg-black/20 border border-white/10 rounded-lg p-4 lg:p-6 shadow-lg">
                     <div
                       className="font-bnkgothl font-semibold text-gray-100 mb-2 lg:mb-0"
                       style={{ fontSize: "clamp(1.5rem, 6vw, 4.5rem)" }}
