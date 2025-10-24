@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import ShaderBackground from "./ShaderBackground";
 // import "./css/CoverPageTransition.css";
 import CircularGallery from "./CircularGallery";
+import Button from "./Button";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -394,29 +395,43 @@ const CoreServices = () => {
                   alt={serviceData[0].name}
                   className="absolute w-full h-full object-cover transform scale-100 lg:[transform:skewX(-30deg)] transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
-                <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
+                <div className="absolute  w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
                 {/* Inner left shadow */}
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/40 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
                 {/* Content */}
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-12 backdrop-blur-sm bg-black/20 border border-white/10 rounded-lg p-4 lg:p-6 shadow-lg">
-                    <div
-                      className="font-bnkgothl font-semibold text-gray-100 mb-2 lg:mb-0"
-                      style={{ fontSize: "clamp(1.5rem, 6vw, 4.5rem)" }}
-                    >
-                      01
-                    </div>
-                    <div
-                      className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
-                      style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
-                    >
-                      品牌策划
-                    </div>
-                    <div
-                      className="font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100"
-                      style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
-                    >
-                      Brnd Dev
+                  <div className="relative text-left -ml-6">
+                    <div className="lg:[transform:skewX(-30deg)] absolute inset-0 -left-10 -right-15 backdrop-blur-sm bg-black/20 border border-white/10 shadow-lg rounded-lg p-4 lg:p-6"></div>
+                    <div className="relative p-4 lg:p-6">
+                      <div
+                        className="font-bnkgothl font-medium text-gray-100 mb-2 lg:mb-0 lg:-ml-3"
+                        style={{
+                          fontSize: "clamp(1.5rem, 6vw, 4.5rem)",
+                          transform: "scaleY(1.3)",
+                        }}
+                      >
+                        01
+                      </div>
+                      <div
+                        className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
+                        style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
+                      >
+                        品牌策划
+                      </div>
+                      <div
+                        className="font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100 mb-4"
+                        style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
+                      >
+                        Brnd Dev
+                      </div>
+                      <Button
+                        text="EXPLORE"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleItemClick(0);
+                        }}
+                        className="text-xs"
+                      />
                     </div>
                   </div>
                 </div>
@@ -442,24 +457,38 @@ const CoreServices = () => {
                 {/* Inner left shadow */}
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/40 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-12 backdrop-blur-sm bg-black/20 border border-white/10 rounded-lg p-4 lg:p-6 shadow-lg">
-                    <div
-                      className="font-bnkgothl font-semibold text-gray-100 mb-2 lg:mb-0"
-                      style={{ fontSize: "clamp(1.5rem, 6vw, 4.5rem)" }}
-                    >
-                      02
-                    </div>
-                    <div
-                      className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
-                      style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
-                    >
-                      技术赋能
-                    </div>
-                    <div
-                      className="font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100"
-                      style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
-                    >
-                      Technology
+                  <div className="relative text-left -ml-6">
+                    <div className="lg:[transform:skewX(-30deg)] absolute inset-0 -left-10 -right-15 backdrop-blur-sm bg-black/20 border border-white/10 shadow-lg rounded-lg p-4 lg:p-6"></div>
+                    <div className="relative p-4 lg:p-6">
+                      <div
+                        className="font-bnkgothl font-medium text-gray-100 mb-2 lg:mb-0 lg:-ml-3"
+                        style={{
+                          fontSize: "clamp(1.5rem, 6vw, 4.5rem)",
+                          transform: "scaleY(1.3)",
+                        }}
+                      >
+                        02
+                      </div>
+                      <div
+                        className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
+                        style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
+                      >
+                        技术赋能
+                      </div>
+                      <div
+                        className="font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100 mb-4"
+                        style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
+                      >
+                        Technology
+                      </div>
+                      <Button
+                        text="EXPLORE"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleItemClick(1);
+                        }}
+                        className="text-xs"
+                      />
                     </div>
                   </div>
                 </div>
@@ -486,24 +515,38 @@ const CoreServices = () => {
                 {/* Inner left shadow */}
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/80 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
-                  <div className="text-left -ml-12 backdrop-blur-sm bg-black/20 border border-white/10 rounded-lg p-4 lg:p-6 shadow-lg">
-                    <div
-                      className="font-bnkgothl font-semibold text-gray-100 mb-2 lg:mb-0"
-                      style={{ fontSize: "clamp(1.5rem, 6vw, 4.5rem)" }}
-                    >
-                      03
-                    </div>
-                    <div
-                      className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
-                      style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
-                    >
-                      渠道入驻
-                    </div>
-                    <div
-                      className="font-bnkgothl font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100"
-                      style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
-                    >
-                      Retail Ops
+                  <div className="relative text-left -ml-6">
+                    <div className="lg:[transform:skewX(-30deg)] absolute inset-0 -left-10 -right-15 backdrop-blur-sm bg-black/20 border border-white/10 shadow-lg rounded-lg p-4 lg:p-6"></div>
+                    <div className="relative p-4 lg:p-6">
+                      <div
+                        className="font-bnkgothl font-medium text-gray-100 mb-2 lg:mb-0 lg:-ml-3"
+                        style={{
+                          fontSize: "clamp(1.5rem, 6vw, 4.5rem)",
+                          transform: "scaleY(1.3)",
+                        }}
+                      >
+                        03
+                      </div>
+                      <div
+                        className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
+                        style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
+                      >
+                        渠道入驻
+                      </div>
+                      <div
+                        className="font-bnkgothl font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100 mb-4"
+                        style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
+                      >
+                        Retail Ops
+                      </div>
+                      <Button
+                        text="EXPLORE"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleItemClick(2);
+                        }}
+                        className="text-xs"
+                      />
                     </div>
                   </div>
                 </div>
