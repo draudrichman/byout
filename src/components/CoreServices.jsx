@@ -113,10 +113,8 @@ const serviceData = [
   {
     name: "Brand Development",
     description: "Comprehensive brand strategy and identity development",
-    image:
-      "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1000&format=pjpg&exif=0&iptc=0",
-    bigImage:
-      "https://burst.shopifycdn.com/photos/macbook-air-on-desk.jpg?width=1600",
+    image: "",
+    bigImage: "/core/1.webp",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -125,10 +123,8 @@ const serviceData = [
   {
     name: "Technology",
     description: "Cutting-edge technology solutions and digital transformation",
-    image:
-      "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1640&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    bigImage:
-      "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1640&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/core/2.webp",
+    bigImage: "/core/2.webp",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -137,10 +133,8 @@ const serviceData = [
   {
     name: "Retail Operations",
     description: "End-to-end retail solutions and channel optimization",
-    image:
-      "https://images.unsplash.com/photo-1644088379091-d574269d422f?q=80&w=2186&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    bigImage:
-      "https://images.unsplash.com/photo-1644088379091-d574269d422f?q=80&w=2186&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/core/3.webp",
+    bigImage: "/core/3.webp",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -398,11 +392,12 @@ const CoreServices = () => {
                 <img
                   src={serviceData[0].bigImage || "/placeholder.svg"}
                   alt={serviceData[0].name}
-                  className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-100 lg:[transform:skewX(-30deg)] transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
                 {/* Inner left shadow */}
                 <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black/40 to-transparent z-15 pointer-events-none lg:[transform:skewX(-30deg)]"></div>
+                {/* Content */}
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="text-left -ml-12">
                     <div
@@ -426,8 +421,7 @@ const CoreServices = () => {
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
-                {/* Yellow accent at bottom third */}
-                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-green-800 via-green-600 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 lg:[transform:skewX(-30deg)]"></div>
+                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-gray-600 via-gray-300 to-transparent opacity-0 translate-y-full transition-all duration-700 delay-300 ease-out z-10 group-hover:opacity-100 group-hover:translate-y-0 lg:[transform:skewX(-30deg)]"></div>
               </div>
             </div>
 
@@ -442,7 +436,7 @@ const CoreServices = () => {
                 <img
                   src={serviceData[1].bigImage || "/placeholder.svg"}
                   alt={serviceData[1].name}
-                  className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-100 lg:[transform:skewX(-30deg)] transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
                 {/* Inner left shadow */}
@@ -471,7 +465,7 @@ const CoreServices = () => {
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
                 {/* Yellow accent at bottom third */}
-                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-gray-800 via-gray-600 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 lg:[transform:skewX(-30deg)]"></div>
+                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-gray-600 via-gray-300 to-transparent opacity-0 translate-y-full transition-all duration-700 delay-300 ease-out z-10 group-hover:opacity-100 group-hover:translate-y-0 lg:[transform:skewX(-30deg)]"></div>
               </div>
             </div>
 
@@ -486,7 +480,7 @@ const CoreServices = () => {
                 <img
                   src={serviceData[2].bigImage || "/placeholder.svg"}
                   alt={serviceData[2].name}
-                  className="absolute w-full h-full object-cover transform scale-500 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform scale-100 lg:[transform:skewX(-30deg)] transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
                 {/* Inner left shadow */}
@@ -514,8 +508,7 @@ const CoreServices = () => {
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 transform scale-250"></div>
-                {/* Yellow accent at bottom third */}
-                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-yellow-800 via-yellow-600 to-transparent opacity-0 transition-opacity duration-500 ease-out z-10 group-hover:opacity-100 lg:[transform:skewX(-30deg)]"></div>
+                <div className="absolute bottom-0 -left-50 right-0 h-1/3 bg-gradient-to-t from-gray-600 via-gray-300 to-transparent opacity-0 translate-y-full transition-all duration-700 delay-300 ease-out z-10 group-hover:opacity-100 group-hover:translate-y-0 lg:[transform:skewX(-30deg)]"></div>
               </div>
             </div>
           </div>
