@@ -425,7 +425,7 @@ const CoreServices = () => {
                         Brnd Dev
                       </div>
                       <Button
-                        text="EXPLORE"
+                        text="查看详情  "
                         onClick={(e) => {
                           e.stopPropagation();
                           handleItemClick(0);
@@ -451,7 +451,7 @@ const CoreServices = () => {
                 <img
                   src={serviceData[1].bigImage || "/placeholder.svg"}
                   alt={serviceData[1].name}
-                  className="absolute w-full h-full object-cover transform scale-100 lg:[transform:skewX(-30deg)] transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform lg:[transform:skewX(0deg)] scale-x-300 scale-y-150 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
                 {/* Inner left shadow */}
@@ -482,7 +482,7 @@ const CoreServices = () => {
                         Technology
                       </div>
                       <Button
-                        text="EXPLORE"
+                        text="查看详情"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleItemClick(1);
@@ -540,7 +540,7 @@ const CoreServices = () => {
                         Retail Ops
                       </div>
                       <Button
-                        text="EXPLORE"
+                        text="查看详情"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleItemClick(2);
