@@ -115,7 +115,7 @@ const serviceData = [
     name: "Brand Development",
     description: "Comprehensive brand strategy and identity development",
     image: "",
-    bigImage: "/core/1.webp",
+    bigImage: "/core/1b-01.png",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -125,7 +125,7 @@ const serviceData = [
     name: "Technology",
     description: "Cutting-edge technology solutions and digital transformation",
     image: "/core/2.webp",
-    bigImage: "/core/2.webp",
+    bigImage: "/core/3b-01.png",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -451,7 +451,7 @@ const CoreServices = () => {
                 <img
                   src={serviceData[1].bigImage || "/placeholder.svg"}
                   alt={serviceData[1].name}
-                  className="absolute w-full h-full object-cover transform lg:[transform:skewX(0deg)] scale-x-300 scale-y-150 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+                  className="absolute w-full h-full object-cover transform lg:[transform:skewX(-30deg)] scale-100 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-black/60 transition-all duration-1000 ease-out z-10 group-hover:-top-[350%] transform scale-500"></div>
                 {/* Inner left shadow */}

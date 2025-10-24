@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skewed Card with Full Image Coverage</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .card {
+      width: 300px;
+      height: 200px;
+      transform: skewX(-30deg); /* Skew the card -30 degrees on the X-axis */
+      overflow: hidden; /* Clip any overflow */
+      position: relative;
+      background-color: #ccc; /* Fallback background */
+      border: 2px solid red; /* Visual guide for the red rectangle */
+    }
+
+    .card-image {
+      width: 200%; /* Increase width to cover the skewed sides */
+      height: 100%;
+      object-fit: cover; /* Ensure the image fills the card */
+      transform: skewX(30deg); /* Counter-skew the image by +30 degrees */
+      position: absolute;
+      top: 0;
+      left: -20%; /* Shift left to align with the skewed edges */
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1678483790053-71367bc7a02c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z29vZ2xlJTIwbG9nb3xlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000" alt="Sample Image" class="card-image" />
+  </div>
+</body>
+</html>
