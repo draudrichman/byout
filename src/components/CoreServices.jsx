@@ -346,30 +346,30 @@ const CoreServices = () => {
             >
               <p
                 ref={(el) => (descriptiveTextRef.current[0] = el)}
-                className="tracking-widest whitespace-nowrap"
+                className="tracking-[0.3em] whitespace-nowrap"
               >
                 以"光"为引的「穿越化」买点论 ( Prismaeon )
               </p>
               <p
-                className="tracking-widest whitespace-nowrap"
+                className="tracking-[0.3em] whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[1] = el)}
               >
                 开创前策x科技x渠道落地的三位一体服务突破
               </p>
               <p
-                className="tracking-widest whitespace-nowrap"
+                className="tracking-[0.3em] whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[2] = el)}
               >
                 文化·国界·时间周期的市场及维度局限
               </p>
               <p
-                className="tracking-widest whitespace-nowrap"
+                className="tracking-[0.3em] whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[3] = el)}
               >
                 打造具备 穿越化 性质的
               </p>
               <p
-                className="tracking-widest whitespace-nowrap"
+                className="tracking-[0.3em] whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[4] = el)}
               >
                 超级品牌 & 产品
