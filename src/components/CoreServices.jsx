@@ -5,7 +5,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import SplitType from "split-type";
 // import ShaderBackground from "./ShaderBackground";
 // import "./css/CoverPageTransition.css";
-import CircularGallery from "./CircularGallery";
 import Button from "./Button";
 
 // Register ScrollTrigger plugin
@@ -115,7 +114,7 @@ const serviceData = [
     name: "Brand Development",
     description: "Comprehensive brand strategy and identity development",
     image: "",
-    bigImage: "/core/1b-01.png",
+    bigImage: "/core/image1b.png",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -124,8 +123,8 @@ const serviceData = [
   {
     name: "Technology",
     description: "Cutting-edge technology solutions and digital transformation",
-    image: "/core/2.webp",
-    bigImage: "/core/3b-01.png",
+    image: "/core/2b.png",
+    bigImage: "/core/image2b.png",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -135,7 +134,7 @@ const serviceData = [
     name: "Retail Operations",
     description: "End-to-end retail solutions and channel optimization",
     image: "/core/3.webp",
-    bigImage: "/core/3.webp",
+    bigImage: "/core/image3b.png",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
