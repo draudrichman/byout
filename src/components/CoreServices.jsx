@@ -346,30 +346,30 @@ const CoreServices = () => {
             >
               <p
                 ref={(el) => (descriptiveTextRef.current[0] = el)}
-                className="tracking-wider whitespace-nowrap"
+                className="tracking-widest whitespace-nowrap"
               >
                 以"光"为引的「穿越化」买点论 ( Prismaeon )
               </p>
               <p
-                className="tracking-wider whitespace-nowrap"
+                className="tracking-widest whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[1] = el)}
               >
                 开创前策x科技x渠道落地的三位一体服务突破
               </p>
               <p
-                className="tracking-wider whitespace-nowrap"
+                className="tracking-widest whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[2] = el)}
               >
                 文化·国界·时间周期的市场及维度局限
               </p>
               <p
-                className="tracking-wider whitespace-nowrap"
+                className="tracking-widest whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[3] = el)}
               >
                 打造具备 穿越化 性质的
               </p>
               <p
-                className="tracking-wider whitespace-nowrap"
+                className="tracking-widest whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[4] = el)}
               >
                 超级品牌 & 产品
@@ -401,7 +401,7 @@ const CoreServices = () => {
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="relative text-left -ml-6">
                     <div className="lg:[transform:skewX(-30deg)] absolute inset-0 -left-10 -right-15 backdrop-blur-sm bg-black/20 border border-white/10 shadow-lg rounded-lg p-4 lg:p-6"></div>
-                    <div className="relative p-4 lg:p-6">
+                    <div className="relative p-4 lg:p-6 ml-5">
                       <div
                         className="font-bnkgothl font-medium text-gray-100 mb-2 lg:mb-0 lg:-ml-3"
                         style={{
@@ -458,7 +458,7 @@ const CoreServices = () => {
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="relative text-left -ml-6">
                     <div className="lg:[transform:skewX(-30deg)] absolute inset-0 -left-10 -right-15 backdrop-blur-sm bg-black/20 border border-white/10 shadow-lg rounded-lg p-4 lg:p-6"></div>
-                    <div className="relative p-4 lg:p-6">
+                    <div className="relative p-4 lg:p-6 ml-5">
                       <div
                         className="font-bnkgothl font-medium text-gray-100 mb-2 lg:mb-0 lg:-ml-3"
                         style={{
@@ -516,7 +516,7 @@ const CoreServices = () => {
                 <div className="absolute w-full h-full flex flex-col justify-center items-center px-4 lg:px-8 py-8 lg:py-16 font-inherit uppercase leading-tight text-white z-20 transition-colors duration-300 ease-out">
                   <div className="relative text-left -ml-6">
                     <div className="lg:[transform:skewX(-30deg)] absolute inset-0 -left-10 -right-15 backdrop-blur-sm bg-black/20 border border-white/10 shadow-lg rounded-lg p-4 lg:p-6"></div>
-                    <div className="relative p-4 lg:p-6">
+                    <div className="relative p-4 lg:p-6 ml-5">
                       <div
                         className="font-bnkgothl font-medium text-gray-100 mb-2 lg:mb-0 lg:-ml-3"
                         style={{
