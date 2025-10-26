@@ -39,14 +39,14 @@ const HomePage = memo(() => {
         <LandingPage key="landing" />
       </AuroraBackground>
       <StatsPage />
-      {/* <LogoSection />
+      <LogoSection />
       <CompanyIntroduction />
       <ExperienceShowcase />
       <HorizontalTimeline />
       <GlobalPresence />
       <CoreServices />
       <FounderStaff />
-      <ContactForm /> */}
+      <ContactForm />
     </div>
   );
 });

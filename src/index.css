@@ -676,27 +676,29 @@ body{
 }
 
 /* Custom scrollbar for preview modal */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+
+/* Chrome gray gradient custom scrollbar - global */
+html, body {
+  scrollbar-width: thick;
+  scrollbar-color: #cdcdcd #23272b;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+/* WebKit scrollbar styling */
+html::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+html::-webkit-scrollbar-track {
+  background: #23272b; /* Track color */
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #cdcdcd, #ffffff); /* Gradient for thumb */
+  border-radius: 6px; /* Rounded edges */
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #b0b0b0, #e0e0e0); /* Optional hover effect */
 }
 
 /* Loading page progress animation */
