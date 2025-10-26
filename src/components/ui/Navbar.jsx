@@ -2,25 +2,43 @@ import React, { useState, useEffect } from "react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    const animationTimer = setTimeout(() => {
+      setIsAnimationDone(true);
+    }, 6000); // 5.5s for slide-up + 0.5s duration
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(animationTimer);
+    };
   }, []);
+
+  const toggleMenu = () => {
+    if (isAnimationDone) {
+      setIsMenuOpen(!isMenuOpen);
+    }
+  };
 
   return (
     <>
       {/* Animated Logo */}
       <div
         id="logo-animation"
-        className="fixed top-[100px] left-[calc(50%-175px)] z-[100] w-[350px] h-[350px]"
+        className={`fixed top-[100px] left-[calc(50%-175px)] z-[100] w-[350px] h-[350px] ${
+          isAnimationDone ? "cursor-pointer" : ""
+        }`}
         style={{
           animation: "slide-up 0.5s ease-out 5.5s forwards",
         }}
+        onClick={toggleMenu}
       >
         {/* Logo Ring */}
         <div className="absolute w-[350px] h-[350px] logo-ring">
@@ -37,7 +55,10 @@ const Navbar = () => {
           width="350"
           height="350"
           className="w-full h-full relative z-10 opacity-0"
-          style={{ animation: "show-logo 0.1s ease-in 1.5s forwards" }}
+          style={{
+            animation: "show-logo 0.1s ease-in 1.5s forwards",
+            pointerEvents: "none",
+          }}
         >
           <img
             src="/navbar/Preloader2 transparent.svg"
@@ -52,38 +73,45 @@ const Navbar = () => {
       {/* Navigation Bar */}
       <nav
         id="navbar"
-        className="fixed top-0 left-0 w-full h-20 z-[98]"
+        className={`fixed top-0 left-0 w-full h-20 z-[99] ${
+          isMenuOpen ? "line-active" : ""
+        }`}
         style={{
-          animation: "line 0.5s ease-in 6s forwards",
           borderBottom: "0px solid white",
           background: "inherit",
         }}
       >
         <ul className="list-none m-0 p-0 flex h-full items-center justify-between w-full px-[5%]">
           <div className="flex flex-1 justify-evenly">
-            <li>
+            <li
+              className={`nav-item-left ${isMenuOpen ? "open" : ""}`}
+              style={{ transitionDelay: isMenuOpen ? "0.2s" : "0s" }}
+            >
               <a
                 href="#about"
-                className="text-white no-underline text-[1.4em] opacity-0"
-                style={{ animation: "show-text 0.5s ease-in 6.5s forwards" }}
+                className="text-white no-underline text-[1.4em] nav-link"
               >
                 关于
               </a>
             </li>
-            <li>
+            <li
+              className={`nav-item-left ${isMenuOpen ? "open" : ""}`}
+              style={{ transitionDelay: isMenuOpen ? "0.1s" : "0.1s" }}
+            >
               <a
                 href="#blog"
-                className="text-white no-underline text-[1.4em] opacity-0"
-                style={{ animation: "show-text 0.5s ease-in 6.5s forwards" }}
+                className="text-white no-underline text-[1.4em] nav-link"
               >
                 博客
               </a>
             </li>
-            <li>
+            <li
+              className={`nav-item-left ${isMenuOpen ? "open" : ""}`}
+              style={{ transitionDelay: isMenuOpen ? "0s" : "0.2s" }}
+            >
               <a
                 href="#services"
-                className="text-white no-underline text-[1.4em] opacity-0"
-                style={{ animation: "show-text 0.5s ease-in 6.5s forwards" }}
+                className="text-white no-underline text-[1.4em] nav-link"
               >
                 服务
               </a>
@@ -91,34 +119,43 @@ const Navbar = () => {
           </div>
 
           {/* Center space for logo */}
-          <div className="flex justify-center items-center min-w-[80px]">
+          <div
+            className="flex justify-center items-center min-w-[80px]"
+            style={{ zIndex: 101 }}
+          >
             {/* Logo space - logo appears here after animation */}
           </div>
 
           <div className="flex flex-1 justify-evenly">
-            <li>
+            <li
+              className={`nav-item-right ${isMenuOpen ? "open" : ""}`}
+              style={{ transitionDelay: isMenuOpen ? "0s" : "0.2s" }}
+            >
               <a
                 href="#contact"
-                className="text-white no-underline text-[1.4em] opacity-0"
-                style={{ animation: "show-text 0.5s ease-in 6.5s forwards" }}
+                className="text-white no-underline text-[1.4em] nav-link"
               >
                 联系
               </a>
             </li>
-            <li>
+            <li
+              className={`nav-item-right ${isMenuOpen ? "open" : ""}`}
+              style={{ transitionDelay: isMenuOpen ? "0.1s" : "0.1s" }}
+            >
               <a
                 href="#contact-info"
-                className="text-white no-underline text-[1.4em] opacity-0"
-                style={{ animation: "show-text 0.5s ease-in 6.5s forwards" }}
+                className="text-white no-underline text-[1.4em] nav-link"
               >
                 联系方式
               </a>
             </li>
-            <li>
+            <li
+              className={`nav-item-right ${isMenuOpen ? "open" : ""}`}
+              style={{ transitionDelay: isMenuOpen ? "0.2s" : "0s" }}
+            >
               <a
                 href="#contact-us"
-                className="text-white no-underline text-[1.4em] opacity-0"
-                style={{ animation: "show-text 0.5s ease-in 6.5s forwards" }}
+                className="text-white no-underline text-[1.4em] nav-link"
               >
                 联系
               </a>
@@ -129,34 +166,65 @@ const Navbar = () => {
 
       {/* Styles */}
       <style jsx>{`
-        * {
-          scroll-behavior: smooth;
-          box-sizing: border-box;
+ 
+        #navbar {
+          transition: border-bottom 0.5s ease-in;
         }
 
-        @keyframes line {
-          0% {
-            width: 0;
-          }
-          100% {
-            border-bottom: 1px solid white;
-            background: inherit;
-          }
+        #navbar.line-active {
+          border-bottom: 1px solid white;
+        }
+
+        .nav-item-left,
+        .nav-item-right {
+          opacity: 0;
+          transform: translateX(0);
+          transition: opacity 0.3s ease-out, transform 0.4s ease-out;
+        }
+
+        .nav-item-left.open {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .nav-item-right.open {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .nav-item-left:not(.open) {
+          transform: translateX(20vw);
+        }
+        .nav-item-right:not(.open) {
+          transform: translateX(-20vw);
+        }
+
+        .nav-link {
+          position: relative;
+          display: inline-block;
+          padding-bottom: 5px;
+        }
+
+        .nav-link::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 1px;
+          background-color: white;
+          transition: all 0.3s ease-out;
+          transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+          width: 100%;
         }
 
         @keyframes slide-up {
           100% {
             top: -135px;
             transform: scale(0.2);
-          }
-        }
-
-        @keyframes show-text {
-          0% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 1;
           }
         }
 

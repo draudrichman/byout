@@ -38,8 +38,8 @@ const HomePage = memo(() => {
       <AuroraBackground>
         <LandingPage key="landing" />
       </AuroraBackground>
-      {/* <StatsPage />
-      <LogoSection />
+      <StatsPage />
+      {/* <LogoSection />
       <CompanyIntroduction />
       <ExperienceShowcase />
       <HorizontalTimeline />

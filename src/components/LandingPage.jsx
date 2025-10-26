@@ -321,10 +321,25 @@ const LandingPage = memo(() => {
   `,
       }}
     >
+      {/* Hero fade-in animation styles */}
+      <style jsx>{`
+        @keyframes show-hero {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+      `}</style>
+
       {/* Navigation */}
       <Navbar />
 
-      <div className="relative z-10 flex h-full lg:flex-row flex-col">
+      <div
+        className="relative z-10 flex h-full lg:flex-row flex-col opacity-0"
+        style={{ animation: "show-hero 1s ease-in 7s forwards" }}
+      >
         {/* Content Section */}
         <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-24 lg:pr-8 px-6 lg:py-0 py-8 lg:pt-0 pt-35">
           {/* Main Title */}
