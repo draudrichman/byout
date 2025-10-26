@@ -323,19 +323,6 @@ const LandingPage = memo(() => {
     >
       {/* Navigation */}
       <Navbar />
-      {/* radial-gradient(circle at center, #141414 0, transparent 100%), linear-gradient(
-        2deg, #c9c9c9, transparent 40%) */}
-
-      {/* Background gradient */}
-      {/* <div 
-        className="absolute w-full h-full"
-        style={{
-          background: `
-          radial-gradient(circle, rgb(0, 0, 0) 0px, #01010100 100%),
-          linear-gradient(0deg, rgb(191, 191, 189), #000000f0 70%)
-        `
-        }}
-      /> */}
 
       <div className="relative z-10 flex h-full lg:flex-row flex-col">
         {/* Content Section */}
@@ -388,9 +375,6 @@ const LandingPage = memo(() => {
           </div>
         </div>
       </div>
-
-      {/* Wave Background at the bottom */}
-      {/* <WaveBackground /> */}
     </div>
   );
 });

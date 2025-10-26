@@ -38,7 +38,7 @@ const HomePage = memo(() => {
       <AuroraBackground>
         <LandingPage key="landing" />
       </AuroraBackground>
-      <StatsPage />
+      {/* <StatsPage />
       <LogoSection />
       <CompanyIntroduction />
       <ExperienceShowcase />
@@ -46,7 +46,7 @@ const HomePage = memo(() => {
       <GlobalPresence />
       <CoreServices />
       <FounderStaff />
-      <ContactForm />
+      <ContactForm /> */}
     </div>
   );
 });

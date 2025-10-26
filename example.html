@@ -1,43 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skewed Card with Full Image Coverage</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f0f0f0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Helpful Tipper</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*, html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
 
-    .card {
-      width: 300px;
-      height: 200px;
-      transform: skewX(-30deg); /* Skew the card -30 degrees on the X-axis */
-      overflow: hidden; /* Clip any overflow */
-      position: relative;
-      background-color: #ccc; /* Fallback background */
-      border: 2px solid red; /* Visual guide for the red rectangle */
-    }
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(62deg, #3a3d40 0%, #181719 100%);
+  font-family: Helvetica, Arial, sans-serif;
+  color: white;
+}
 
-    .card-image {
-      width: 200%; /* Increase width to cover the skewed sides */
-      height: 100%;
-      object-fit: cover; /* Ensure the image fills the card */
-      transform: skewX(30deg); /* Counter-skew the image by +30 degrees */
-      position: absolute;
-      top: 0;
-      left: -20%; /* Shift left to align with the skewed edges */
-    }
-  </style>
+/*  navigation */
+nav {
+  position: fixed;
+  height: 80px;
+  width: 100%;
+  animation: line 0.5s ease-in 3s forwards;
+  z-index: 99;
+}
+
+.no-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+nav ul {
+  display: flex;
+  height: inherit;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+nav ul div {
+  display: flex;
+}
+
+.left li:first-of-type,
+.right li:first-of-type {
+  margin-right: 50px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.4em;
+  opacity: 0;
+  animation: show-text 0.5s ease-in 3.5s forwards;
+}
+
+@keyframes line {
+  0% { width: 0; }
+  100% { border-bottom: 1px solid white; background: inherit; }
+}
+
+/* logo animation */
+#logo-animation {
+  position: fixed;
+  top: 100px;
+  left: calc(50% - 350px/2);
+  animation: slide-up 0.5s ease-out 2.5s forwards;
+  z-index: 99;
+}
+
+@keyframes slide-up {
+  100% {
+    top: -140px;
+    transform: scale(0.2);
+  }
+}
+/* end logo animation */
+
+/*  end navigation */
+
+#welcome-section {
+  height: 100vh;
+}
+
+#text-welcome {
+  position: relative;
+  top: calc(100vh/2);
+}
+
+/* header section */
+header {
+  text-align: center;
+}
+
+/* logo name */
+#logo-name, .logo-ring {
+  display: inline-block;
+  position: relative;
+  width: 350px;
+  height: 350px;
+}
+
+#logo-name {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+}
+
+#logo-name span {
+  position: absolute;
+  left: 20%;
+  display: inline-block;
+  width: 200px;
+  height: 20px;
+  border-radius: 2px;
+  background: white;
+  opacity: 0;
+  animation: show 1s 1.5s ease-in forwards;
+}
+
+#logo-name span:nth-child(1) {
+  top: 30%;
+  left: 43px;
+  width: 80px;
+}
+
+#logo-name span:nth-child(2) {
+  top: 50%;
+  left: 8px;
+  width: 150px;
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+#logo-name span:nth-child(3) {
+  top: 50%;
+  left: 65px;
+  width: 160px;
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+#logo-name span:nth-child(4) {
+  top: 50%;
+  left: 135px;
+  width: 80px;
+}
+
+#logo-name span:nth-child(5) {
+  top: 50%;
+  left: 128px;
+  width: 160px;
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+#logo-name span:nth-child(6) {
+  top: 30%;
+  left: 230px;
+  width: 80px;
+}
+
+#logo-name span:nth-child(7) {
+  top: 50%;
+  left: 195px;
+  width: 150px;
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+@keyframes show {
+  0% { opacity: 1; transform: scale(0.5); }
+  100% { opacity: 1; }
+}  
+/* end logo name */
+
+/* logo ring  */
+.logo-ring div {
+  display: block;
+  position: absolute;
+  width: 334px;
+  height: 334px;
+  margin: 8px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  animation: logo-ring 1.5s cubic-bezier(0.5, 0, 0.5, 1);
+  border-color: #fff transparent transparent transparent;
+}
+
+.logo-ring div:nth-child(1) {
+  animation: right 1.4s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+}
+
+.logo-ring div:nth-child(2) {
+  animation: bottom 1.4s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+}
+
+.logo-ring div:nth-child(3) {
+  animation: left 1.4s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+}
+
+@keyframes right {
+  100% { transform: rotate(90deg); }
+}
+
+@keyframes bottom {
+  100% { transform: rotate(180deg); }
+}
+
+@keyframes left {
+  100% { transform: rotate(270deg); }
+}
+
+@keyframes logo-ring {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* end logo ring  */
+
+h1 {
+  font-size: 3.9em;
+  margin: 0;
+  text-shadow: 0 1px 5px black;
+}
+
+h1 + p {
+  font-size: 1.5em;
+  font-style: italic;
+  letter-spacing: 0.1rem;
+  font-weight: 300;
+  color: #fffafa;
+}
+
+h1, h1 + p {
+  opacity: 0;
+  animation: show-text 0.5s ease-in 4s forwards;
+}
+
+@keyframes show-text {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+/* end header section */
+
+/* projects section */
+#projects {
+  text-align: center;  
+  padding: 6rem 2rem 0 2rem;
+  background: #f5f5f5;
+}
+
+#projects h2 {
+  font-size: 2.8em;
+  margin-bottom: 4rem;
+  color: #181719;
+  text-shadow: 0 1px 1px black;
+}
+ 
+#projects-grid {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-rows: auto;
+  gap: 2em;
+}
+
+.project-tile {
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #3a3d40;
+}
+
+.project-tile img {
+  display: block;
+  width: 100%;
+  height: calc(100% - 3.2rem);
+  object-fit: cover;
+}
+
+.project-tile p {
+  margin: 0;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: linear-gradient(62deg, #3a3d40 0%, #181719 100%);
+}
+
+.project-tile p::before {
+  content: '< ';
+  margin-right: 5px;
+  font-size: 0.9rem;
+  visibility: hidden;
+}
+
+.project-tile p::after {
+  content: ' / >';
+  margin-left: 5px;
+  font-size: 0.9rem;
+  visibility: hidden;
+}
+
+.project-tile:hover p::before,
+.project-tile:hover p::after {
+  visibility: visible;
+  color: #cd7f32;
+}
+
+.btn {
+  display: inline-block;
+  max-width: 200px;
+  padding: 1rem 2rem;
+  margin: 5em auto;
+  text-decoration: none;
+  color: white;
+  background: #181719;
+  font-size: 1.2rem;
+  transition: background 0.3s ease-in-out;
+  box-shadow: 0 0 2px black;
+}
+
+.btn i {
+  transition: transform 0.3s ease-out 0.1s;
+}
+
+.btn:hover {
+  background: #cd7f32;
+}
+
+.btn:hover i {
+  transform: translateX(5px);
+} 
+/* end projects section */
+
+/* contact section */
+#contact {
+  text-align: center;
+  padding: 10rem;
+}
+
+#contact h2 {
+  font-size: 3.5rem;
+  margin: 0;
+  text-shadow: 0 1px 5px black;
+}
+
+#contact p {
+  font-size: 1.3rem;
+  font-style: italic;
+  text-shadow: 0 1px 5px black;
+}
+
+#contact-links {
+  margin-top: 4em;
+}
+
+#contact-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.8rem;
+  margin: 10px;
+}
+
+#contact-links a i {
+  transition: transform 0.2s ease-out; 
+}
+
+#contact-links a i:hover {
+  transform: scale(1.2);
+}
+/* end contact section */
+
+/* footer */
+footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 20px;
+  border-top: 4px solid white;
+  column-gap: 10px;
+  letter-spacing: .05rem;
+  font-weight: 300;
+}
+
+footer p:nth-of-type(1) {
+  width: 50%;
+}
+/* end footer */
+
+@media ( max-width: 820px ) {
+  nav {
+    height: 140px;
+  }
+  nav ul {
+    height: 80%;
+    align-items: flex-end;
+  }
+  .left li:first-of-type,
+  .right li:first-of-type {
+    margin-right: 20px;
+  }
+  #contact {
+    padding: 10rem 2rem;
+  }
+}
+
+@media ( min-width: 1190px ) {
+  nav {
+    display: flex;
+    justify-content: center;
+  }
+  nav ul {
+    width: 800px;
+    justify-content: space-around;
+  }
+}
+</style>
 </head>
 <body>
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1678483790053-71367bc7a02c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z29vZ2xlJTIwbG9nb3xlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000" alt="Sample Image" class="card-image" />
-  </div>
+
+<nav id="navbar">
+  <ul class="no-list">
+    <div class="left">
+      <li><a href="#welcome-section">About</a></li>
+      <li><a href="#projects">Work</a></li>
+    </div>
+    <div class="right">
+      <li><a href="https://thehelpfultipper.com/" target="_blank">Blog</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </div>
+  </ul>
+</nav>
+
+<main>
+  <section id="welcome-section"> 
+    <header>
+      <div id="logo-animation">
+        <div id="logo-name">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="logo-ring">
+          <div></div><div></div><div></div><div></div>
+        </div>
+      </div>
+      <div id="text-welcome">
+        <h1>The Helpful Tipper</h1>
+        <p>a blog about learning how to code</p>
+      </div>
+    </header>
+  </section> 
+
+
+
+
+</main>
+
+
+
 </body>
 </html>
