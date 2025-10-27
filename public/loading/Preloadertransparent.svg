@@ -1,0 +1,481 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1400 1400" style="enable-background:new 0 0 1400 1400;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#fff;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+	svg {
+
+        max-width: 400px;
+        margin: 0 auto;
+	}
+
+	@keyframes offset_one {
+
+		100% {
+
+			stroke-dashoffset: 928;
+		}
+	}
+
+	@keyframes offset_two {
+
+		0% {
+
+			stroke-dashoffset: 928;
+		}
+
+		60% {
+
+			opacity: 1;
+		}
+
+		100% {
+
+			stroke-dashoffset: 464;
+			opacity: 0;
+		}
+	}
+
+	.sub_one {
+
+		stroke-dasharray: 464;
+		stroke-dashoffset: 1392;
+		animation: offset_one .5s cubic-bezier(.74,.02,.36,.97) forwards, offset_two .5s 1s cubic-bezier(.74,.02,.36,.97) forwards;
+	}
+
+	@keyframes offset_three {
+
+		100% {
+
+			stroke-dashoffset: 624;
+		}
+	}
+
+	@keyframes offset_four {
+
+		0% {
+
+			stroke-dashoffset: 624;
+		}
+
+		60% {
+
+			opacity: 1;
+		}
+
+		100% {
+
+			stroke-dashoffset: 312;
+			opacity: 0;
+		}
+	}
+
+	.sub_two {
+
+		stroke-dasharray: 312;
+		stroke-dashoffset: 936;
+		animation: offset_three .5s .2s cubic-bezier(.74,.02,.36,.97) forwards, offset_four .5s 1.2s cubic-bezier(.74,.02,.36,.97) forwards;
+	}
+
+	@keyframes offset_five {
+
+		100% {
+
+			stroke-dashoffset: 372;
+		}
+	}
+
+	@keyframes offset_six {
+
+		0% {
+
+			stroke-dashoffset: 372;
+		}
+
+		60% {
+
+			opacity: 1;
+		}
+
+		100% {
+
+			stroke-dashoffset: 186;
+			opacity: 0;
+		}
+	}
+
+	.sub_three {
+
+		stroke-dasharray: 186;
+		stroke-dashoffset: 558;
+		animation: offset_five .5s .4s cubic-bezier(.74,.02,.36,.97) forwards, offset_six .5s 1.4s cubic-bezier(.74,.02,.36,.97) forwards;
+	}
+
+    @keyframes eff_one {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(0px, -100px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_one {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(0px, 100px);
+        }
+    }
+
+    .dots circle:nth-of-type(1) {
+
+        opacity: 0;
+        transform: translate(0px, 100px);
+        animation: eff_one .6s .3s cubic-bezier(.74,.02,.36,.97) forwards, rv_one .3s 2.5s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_two {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(0px, 100px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_two {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(0px, -100px);
+        }
+    }
+
+    .dots circle:nth-of-type(2) {
+
+        opacity: 0;
+        transform: translate(0px, -100px);
+        animation: eff_two .6s .3s cubic-bezier(.74,.02,.36,.97) forwards, rv_two .3s 2.5s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_three {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(100px, 0px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_three {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(-100px, 0px);
+        }
+    }
+
+    .dots circle:nth-of-type(3) {
+
+        opacity: 0;
+        transform: translate(-100px, 0px);
+        animation: eff_three .6s .5s cubic-bezier(.74,.02,.36,.97) forwards, rv_three .3s 2.6s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_four {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(-100px, 0px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_four {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(100px, 0px);
+        }
+    }
+
+    .dots circle:nth-of-type(4) {
+
+        opacity: 0;
+        transform: translate(100px, 0px);
+        animation: eff_four .6s .5s cubic-bezier(.74,.02,.36,.97) forwards, rv_four .3s 2.6s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_five {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(100px, 100px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_five {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(-100px, -100px);
+        }
+    }
+
+    .dots circle:nth-of-type(5) {
+
+        opacity: 0;
+        transform: translate(-100px, -100px);
+        animation: eff_five .6s .7s cubic-bezier(.74,.02,.36,.97) forwards, rv_five .3s 2.7s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_six {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(100px, -100px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_six {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(-100px, 100px);
+        }
+    }
+
+    .dots circle:nth-of-type(6) {
+
+        opacity: 0;
+        transform: translate(-100px, 100px);
+        animation: eff_six .6s .7s cubic-bezier(.74,.02,.36,.97) forwards, rv_six .3s 2.7s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_seven {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(-100px, -100px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_seven {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(100px, 100px);
+        }
+    }
+
+    .dots circle:nth-of-type(7) {
+
+        opacity: 0;
+        transform: translate(100px, 100px);
+        animation: eff_seven .6s .7s cubic-bezier(.74,.02,.36,.97) forwards, rv_seven .3s 2.7s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes eff_eight {
+
+        0% {
+
+            opacity: 1;
+        }
+
+        70% {
+
+            transform: translate(-100px, 100px);
+        }
+
+        100% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+    }
+
+    @keyframes rv_eight {
+
+        0% {
+
+            opacity: 1;
+            transform: translate(0px, 0px);
+        }
+
+        100% {
+
+            opacity: 0;
+            transform: translate(100px, -100px);
+        }
+    }
+
+    .dots circle:nth-of-type(8) {
+
+        opacity: 0;
+        transform: translate(100px, -100px);
+        animation: eff_eight .6s .7s cubic-bezier(.74,.02,.36,.97) forwards, rv_eight .3s 2.7s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+
+    @keyframes rotate {
+
+        100% {
+
+            transform: rotate(-540deg) scale(1);
+        }
+    }
+
+    .feat {
+
+        transform-origin: 700px 700px;
+        animation: rotate 1.5s 1.75s cubic-bezier(.74,.02,.36,.97) forwards;
+    }
+</style>
+<g class="feat">
+<g class="sub_one">
+    <line class="st0" x1="699.1" y1="699" x2="701.5" y2="235.6"/>
+    <line class="st0" x1="699.1" y1="699" x2="701.5" y2="1162.4"/>
+</g>
+<g class="sub_two">
+	<line class="st0" x1="699.1" y1="700" x2="1010.3" y2="700"/>
+    <line class="st0" x1="698.9" y1="700" x2="387.7" y2="700"/>
+</g>
+<g class="sub_three">
+    <line class="st0" x1="699.1" y1="699" x2="832.2" y2="569.7"/>
+    <line class="st0" x1="698.9" y1="699" x2="565.7" y2="828.3"/>
+    <line class="st0" x1="698.9" y1="699" x2="565.7" y2="569.7"/>
+	<line class="st0" x1="699.1" y1="699" x2="832.2" y2="828.3"/>
+</g>
+<g class="dots">
+	<circle fill="#fff" cx="701.5" cy="170" r="21"/>
+	<circle fill="#fff" cx="701.5" cy="1225.6" r="21"/>
+	<circle fill="#fff" cx="1080.5" cy="699" r="21"/>
+	<circle fill="#fff" cx="320.1" cy="699" r="21"/>
+	<circle fill="#fff" cx="879" cy="877" r="21"/>
+	<circle fill="#fff" cx="878.7" cy="521" r="21"/>
+    <circle fill="#fff" cx="518" cy="518" r="21"/>
+    <circle fill="#fff" cx="520" cy="875" r="21"/>
+</g>
+</g>
+</svg>
