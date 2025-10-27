@@ -109,7 +109,7 @@ const Navbar = () => {
       {/* Navigation Bar */}
       <nav
         id="navbar"
-        className={`fixed top-0 left-0 w-full h-20 z-[99] glossy-navbar ${
+        className={`fixed top-0 left-0 w-full h-25 z-[99] glossy-navbar ${
           isMenuOpen ? "line-active navbar-bg-animate" : "navbar-bg-none"
         }`}
         style={{
@@ -282,7 +282,7 @@ const Navbar = () => {
 
         @keyframes slide-up {
           100% {
-            top: -135px;
+            top: -125px;
             transform: scale(0.2);
           }
         }
