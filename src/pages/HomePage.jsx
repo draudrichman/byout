@@ -41,11 +41,11 @@ const HomePage = memo(() => {
       <StatsPage />
       <LogoSection />
       <CompanyIntroduction />
-      <ExperienceShowcase />
-      <HorizontalTimeline />
-      <GlobalPresence />
       <CoreServices />
+      <HorizontalTimeline />
+      <ExperienceShowcase />
       <FounderStaff />
+      <GlobalPresence />
       <ContactForm />
     </div>
   );

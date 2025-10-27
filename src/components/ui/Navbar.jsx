@@ -10,16 +10,38 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    // Timer for logo animation completion
     const animationTimer = setTimeout(() => {
       setIsAnimationDone(true);
     }, 6000); // 5.5s for slide-up + 0.5s duration
 
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(animationTimer);
     };
   }, []);
+
+  // Demo: Automatically open menu after logo lands, then close after a few seconds
+  useEffect(() => {
+    let demoOpenTimer;
+    let demoCloseTimer;
+    if (isAnimationDone && !isMenuOpen) {
+      // Open menu after logo lands
+      demoOpenTimer = setTimeout(() => {
+        setIsMenuOpen(true);
+        // Close menu after 2.5 seconds
+        demoCloseTimer = setTimeout(() => {
+          setIsMenuOpen(false);
+        }, 2500);
+      }, 400); // slight delay after animation
+    }
+    return () => {
+      clearTimeout(demoOpenTimer);
+      clearTimeout(demoCloseTimer);
+    };
+  }, [isAnimationDone]);
 
   const toggleMenu = () => {
     if (isAnimationDone) {
@@ -29,14 +51,28 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Fullscreen Black BG for Logo Animation */}
+      <div
+        id="logo-bg"
+        className={`fixed inset-0 z-[99] bg-black transition-opacity duration-1200 ${
+          isAnimationDone ? "logo-bg-fade" : ""
+        }`}
+        style={{
+          opacity: isAnimationDone ? 0 : 1,
+          pointerEvents: isAnimationDone ? "none" : "auto",
+        }}
+      ></div>
+
       {/* Animated Logo */}
       <div
         id="logo-animation"
-        className={`fixed top-[100px] left-[calc(50%-175px)] z-[100] w-[350px] h-[350px] ${
+        className={`fixed top-[calc(50vh-175px)] left-[calc(50%-175px)] z-[100] w-[350px] h-[350px] ${
           isAnimationDone ? "cursor-pointer" : ""
         }`}
         style={{
           animation: "slide-up 0.5s ease-out 5.5s forwards",
+          opacity: 1,
+          pointerEvents: isAnimationDone ? "auto" : "auto",
         }}
         onClick={toggleMenu}
       >
@@ -73,12 +109,11 @@ const Navbar = () => {
       {/* Navigation Bar */}
       <nav
         id="navbar"
-        className={`fixed top-0 left-0 w-full h-20 z-[99] ${
-          isMenuOpen ? "line-active" : ""
+        className={`fixed top-0 left-0 w-full h-20 z-[99] glossy-navbar ${
+          isMenuOpen ? "line-active navbar-bg-animate" : "navbar-bg-none"
         }`}
         style={{
           borderBottom: "0px solid white",
-          background: "inherit",
         }}
       >
         <ul className="list-none m-0 p-0 flex h-full items-center justify-between w-full px-[5%]">
@@ -166,9 +201,33 @@ const Navbar = () => {
 
       {/* Styles */}
       <style jsx>{`
- 
-        #navbar {
-          transition: border-bottom 0.5s ease-in;
+        #logo-bg {
+          transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .logo-bg-fade {
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+        /* .logo-fade removed: logo no longer fades out after animation */
+
+        #navbar,
+        .glossy-navbar {
+          transition: border-bottom 0.5s ease-in,
+            background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+            backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .navbar-bg-none {
+          background: transparent !important;
+          backdrop-filter: none !important;
+          box-shadow: none !important;
+          border-bottom: 1px solid transparent !important;
+        }
+        .navbar-bg-animate {
+          background: rgba(255, 255, 255, 0.1) !important;
+          backdrop-filter: blur(12px) saturate(180%) !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.35) !important;
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08) !important;
+          border-radius: 0 0 12px 12px !important;
         }
 
         #navbar.line-active {
