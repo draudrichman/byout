@@ -158,13 +158,11 @@ const StatsPage = memo(() => {
 
                     <h2 className="text-7xl md:text-9xl font-bold mb-6 relative overflow-hidden">
                             <span ref={titleRef} className="text-white  block">
-                            Our Achievements
+                            成就达成 
                             </span>
                         </h2>
 
-                    <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-                        Numbers that tell our story of growth, innovation, and unwavering commitment to excellence
-                    </p>
+                 
                 </div>
 
                 {/* Horizontal Stats Cards */}

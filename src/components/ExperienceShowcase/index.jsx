@@ -111,7 +111,7 @@ const ExperienceShowcase = memo(() => {
       <div ref={showcaseContainerRef} className="max-w-7xl mx-auto relative">
         {/* Title */}
         <h2 className="mb-12 text-2xl sm:text-3xl lg:text-5xl font-bold text-white uppercase font-scifi">
-          <DecryptedText text="Experience Showcase" className="pointer-events-auto font-scifi" />
+          <DecryptedText text="全球渠道布局 " className="pointer-events-auto font-scifi" />
         </h2>
         {/* Interactive Map Selector with HUD overlay */}
         <div ref={mapSelectorRef} className="sm:px-20 relative">
