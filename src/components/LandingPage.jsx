@@ -16,14 +16,14 @@ const LandingPage = memo(() => {
   const subtitleVariations = [
     {
       line1: "破界有光",
-      line1English: "Break Boundaries",
-      line2: "Reframe Markets",
+      line1English: "Reframe Markets",
+      line2: "Break Boundaries",
       line2Chinese: "落地成境",
     },
     {
       line1: "品牌产品解码重构｜全球顶层战略定位架构",
-      line2: "× 独家创新专利技术赋能",
-      line3: "× 直通全球顶级零售渠道落地",
+      line2: "-   独家创新专利技术赋能",
+      line3: "-   直通全球顶级零售渠道落地",
     },
     {
       line1: "0-1 助力中国品牌转化为世界品牌",
@@ -238,11 +238,11 @@ const LandingPage = memo(() => {
               {/* Left Column */}
               <div className="flex flex-col space-y-1 sm:space-y-2 flex-1">
                 {/* Chinese text */}
-                <h2 className="font-jhenghei text-white text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.15em] tracking-wide">
+                <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.35em] tracking-widest">
                   {current.line1} {/* 破界有光 */}
                 </h2>
                 {/* English text */}
-                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] font-bold tracking-wide whitespace-nowrap">
+                <span className="font-geniso text-gray-300 [word-spacing:0.5em] text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
                   {current.line1English} {/* BREAK BOUNDARIES */}
                 </span>
               </div>
@@ -250,11 +250,11 @@ const LandingPage = memo(() => {
               {/* Right Column */}
               <div className="flex flex-col space-y-1 sm:space-y-2 flex-1 text-right">
                 {/* English text */}
-                <span className="font-geniso text-gray-400 text-[clamp(0.875rem,1.6vw,1.8rem)] font-bold tracking-wide whitespace-nowrap">
+                <span className="font-geniso [word-spacing:0.5em] text-gray-300 text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
                   {current.line2} {/* REFRAME MARKETS */}
                 </span>
                 {/* Chinese text */}
-                <h2 className="font-jhenghei text-white text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.15em] tracking-wide">
+                <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.35em] tracking-widest">
                   {current.line2Chinese} {/* 落地成境 */}
                 </h2>
               </div>
@@ -272,13 +272,13 @@ const LandingPage = memo(() => {
           }`}
         >
           <div className="space-y-4">
-            <div className="font-jhenghei text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-300 lg:text-2xl text-lg font-light tracking-[0.24em] leading-relaxed lg:text-left text-center">
               {current.line1}
             </div>
-            <div className="font-jhenghei text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-md font-light tracking-[0.16em] leading-relaxed pl-0 lg:text-left text-center">
               {current.line2}
             </div>
-            <div className="font-jhenghei text-gray-300 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:pl-3 pl-0 lg:text-left text-center">
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-md font-light tracking-[0.16em] leading-relaxed pl-0 lg:text-left text-center">
               {current.line3}
             </div>
           </div>
@@ -294,16 +294,16 @@ const LandingPage = memo(() => {
           }`}
         >
           <div className="space-y-4">
-            <div className="font-jhenghei text-white lg:text-2xl text-lg font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-3xl text-lg font-light tracking-[0.25em] leading-relaxed lg:text-left text-center">
               {current.line1}
             </div>
-            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-extralight tracking-widest leading-relaxed lg:text-left text-center">
               {current.line2}
             </div>
-            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-extralight tracking-widest leading-relaxed lg:text-left text-center">
               {current.line3}
             </div>
-            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-light tracking-wide leading-relaxed lg:text-left text-center">
+            <div className="font-jhenghei text-gray-100 lg:text-xl text-base font-extralight tracking-widest leading-relaxed lg:text-left text-center">
               {current.line4}
             </div>
           </div>
@@ -348,7 +348,7 @@ const LandingPage = memo(() => {
               src="./img/logos/prism.svg"
               alt="Prism Logo"
               loading="eager"
-              className="lg:max-w-none max-w-[300px] w-auto h-auto"
+              className="lg:max-w-[570px] max-w-[300px] w-auto h-auto"
             />
           </h1>
 
@@ -358,11 +358,11 @@ const LandingPage = memo(() => {
           </div>
 
           {/* Vertical progress indicators for subtitle transitions */}
-          <div className="lg:absolute lg:left-8 lg:top-[43%] lg:h-1/2 lg:flex-col lg:gap-16 static flex flex-row justify-center gap-8 lg:mb-0 mb-8">
+          <div className="lg:absolute lg:left-8 lg:top-[43%] lg:h-1/2 lg:flex-col lg:gap-12 static flex flex-row justify-center lg:justify-start gap-8 lg:mb-0 mb-8">
             {subtitleVariations.map((_, index) => (
               <div
                 key={index}
-                className={`lg:w-1 lg:h-24 w-16 h-1 border border-gray-400 transition-all duration-500 cursor-pointer ${
+                className={`lg:w-1 lg:h-16 w-16 h-1 border border-gray-400 transition-all duration-500 cursor-pointer ${
                   index === currentSubtitleIndex
                     ? "shadow-lg shadow-white/80 border-white bg-white"
                     : "border-opacity-30 hover:border-opacity-60 hover:border-gray-300"
