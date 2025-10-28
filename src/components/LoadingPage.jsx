@@ -162,14 +162,15 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
       }
 
       getColor(speed) {
-        // Start white, then color shift at high speeds to blue/purple
+        // Start white, then color shift at high speeds to light champagne
         if (speed < 0.3) {
           return `hsla(0, 0%, ${90 + speed * 33}%, 1)`; // White to bright white
         } else {
-          // Color shift based on speed - white to blue to purple (warp effect)
-          const hue = 240 - (speed - 0.3) * 100; // Blue to purple
-          const lightness = 90 - (speed - 0.3) * 40;
-          return `hsla(${hue}, 100%, ${lightness}%, 1)`;
+          // Color shift based on speed - white to light champagne (warp effect)
+          const hue = 28; // Fixed champagne hue
+          const saturation = (speed - 0.3) * 121.43; // 0 to 85%
+          const lightness = 90 - (speed - 0.3) * 7.14; // 90 to 85%
+          return `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`;
         }
       }
 
@@ -391,7 +392,7 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
           opacity: 0.9,
         }}
       >
-        %  {loadingProgress}
+        % {loadingProgress}
       </div>
 
       {/* Radial speed lines overlay */}
