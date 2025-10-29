@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useState, useEffect, memo } from "react";
 import Navbar from "./ui/Navbar";
 import WaveBackground from "./WaveBackground";
+import { AuroraBackground } from "./ui/aurora-background";
 
 const World = lazy(() =>
   import("../components/ui/globe").then((m) => ({ default: m.World }))
@@ -313,84 +314,90 @@ const LandingPage = memo(() => {
   };
 
   return (
-    <div
-      className="w-screen lg:h-screen overflow-hidden relative"
-      style={{
-        background: `
-  radial-gradient(circle at center, #141414 0, #cbcbcb00 100%), linear-gradient(2deg, #c7c7c7, transparent 40%)
-  `,
-      }}
-    >
-      {/* Hero fade-in animation styles */}
-      <style jsx>{`
-        @keyframes show-hero {
-          0% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 1;
-          }
-        }
-      `}</style>
-
-      {/* Navigation */}
-      <Navbar />
-
+    <AuroraBackground>
       <div
-        className="relative z-10 flex h-full lg:flex-row flex-col opacity-0"
-        style={{ animation: "show-hero 1s ease-in 7s forwards" }}
+        className="w-screen lg:h-screen overflow-hidden relative 
+            
+             "
+        style={{
+          background: `
+          radial-gradient(circle at center top, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%),
+          
+          linear-gradient(to top, rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 70%)
+        `,
+        }}
       >
-        {/* Content Section */}
-        <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-24 lg:pr-8 px-6 lg:py-0 py-8 lg:pt-0 pt-35">
-          {/* Main Title */}
-          <h1 className="text-white lg:mb-12 mb-8 flex justify-center lg:justify-start">
-            <img
-              src="./img/logos/prism.svg"
-              alt="Prism Logo"
-              loading="eager"
-              className="lg:max-w-[570px] max-w-[300px] w-auto h-auto"
-            />
-          </h1>
+        {/* Hero fade-in animation styles */}
+        <style jsx>{`
+          @keyframes show-hero {
+            0% {
+              opacity: 0;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+        `}</style>
 
-          {/* Morphing Subtitles */}
-          <div className="lg:mb-16 mb-8 lg:pl-3 px-0 lg:min-h-[200px] min-h-[150px] flex items-center lg:items-start">
-            {renderSubtitle()}
-          </div>
+        {/* Navigation */}
+        <Navbar />
 
-          {/* Vertical progress indicators for subtitle transitions */}
-          <div className="lg:absolute lg:left-8 lg:top-[43%] lg:h-1/2 lg:flex-col lg:gap-12 static flex flex-row justify-center lg:justify-start gap-8 lg:mb-0 mb-8">
-            {subtitleVariations.map((_, index) => (
-              <div
-                key={index}
-                className={`lg:w-1 lg:h-16 w-16 h-1 border border-gray-400 transition-all duration-500 cursor-pointer ${
-                  index === currentSubtitleIndex
-                    ? "shadow-lg shadow-white/80 border-white bg-white"
-                    : "border-opacity-30 hover:border-opacity-60 hover:border-gray-300"
-                }`}
-                onMouseEnter={() => handleTabHover(index)}
-                onMouseLeave={handleTabLeave}
+        <div
+          className="relative z-10 flex h-full lg:flex-row flex-col opacity-0"
+          style={{ animation: "show-hero 1s ease-in 7s forwards" }}
+        >
+          {/* Content Section */}
+          <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-24 lg:pr-8 px-6 lg:py-0 py-8 lg:pt-0 pt-35">
+            {/* Main Title */}
+            <h1 className="text-white lg:mb-12 mb-8 flex justify-center lg:justify-start">
+              <img
+                src="./img/logos/prism.svg"
+                alt="Prism Logo"
+                loading="eager"
+                className="lg:max-w-[570px] max-w-[300px] w-auto h-auto"
               />
-            ))}
-          </div>
-        </div>
+            </h1>
 
-        {/* Globe Section */}
-        <div className="lg:w-1/2 w-full flex items-center justify-center relative lg:h-auto h-[60vh] min-h-[300px]">
-          <div className="w-full h-full flex items-center justify-center">
-            <Suspense
-              fallback={
-                <div className="flex items-center justify-center text-white">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                  Loading Globe...
-                </div>
-              }
-            >
-              <World data={sampleArcs} globeConfig={globeConfig} />
-            </Suspense>
+            {/* Morphing Subtitles */}
+            <div className="lg:mb-16 mb-8 lg:pl-3 px-0 lg:min-h-[200px] min-h-[150px] flex items-center lg:items-start">
+              {renderSubtitle()}
+            </div>
+
+            {/* Vertical progress indicators for subtitle transitions */}
+            <div className="lg:absolute lg:left-8 lg:top-[43%] lg:h-1/2 lg:flex-col lg:gap-12 static flex flex-row justify-center lg:justify-start gap-8 lg:mb-0 mb-8">
+              {subtitleVariations.map((_, index) => (
+                <div
+                  key={index}
+                  className={`lg:w-1 lg:h-16 w-16 h-1 border border-gray-400 transition-all duration-500 cursor-pointer ${
+                    index === currentSubtitleIndex
+                      ? "shadow-lg shadow-white/80 border-white bg-white"
+                      : "border-opacity-30 hover:border-opacity-60 hover:border-gray-300"
+                  }`}
+                  onMouseEnter={() => handleTabHover(index)}
+                  onMouseLeave={handleTabLeave}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Globe Section */}
+          <div className="lg:w-1/2 w-full flex items-center justify-center relative lg:h-auto h-[60vh] min-h-[300px]">
+            <div className="w-full h-full flex items-center justify-center">
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center text-white">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
+                    Loading Globe...
+                  </div>
+                }
+              >
+                <World data={sampleArcs} globeConfig={globeConfig} />
+              </Suspense>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </AuroraBackground>
   );
 });
 
