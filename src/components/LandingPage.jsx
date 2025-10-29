@@ -1,4 +1,11 @@
-import React, { lazy, Suspense, useState, useEffect, memo } from "react";
+import React, {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  memo,
+  useRef,
+} from "react";
 import Navbar from "./ui/Navbar";
 import WaveBackground from "./WaveBackground";
 import { AuroraBackground } from "./ui/aurora-background";
@@ -11,7 +18,7 @@ const LandingPage = memo(() => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isUserHovering, setIsUserHovering] = useState(false);
-  const [intervalRef, setIntervalRef] = useState(null);
+  const timeoutRef = useRef(null);
 
   // Define the three subtitle variations
   const subtitleVariations = [
@@ -34,15 +41,27 @@ const LandingPage = memo(() => {
     },
   ];
 
-  // Auto-cycling functionality
-  // eslint-disable-next-line no-unused-vars
-  const startAutoCycle = (startFromIndex = null) => {
-    if (intervalRef) {
-      clearInterval(intervalRef);
-    }
+  const slideDurations = {
+    0: 3000, // 1st slide
+    1: 4000, // 2nd slide
+    2: 5000, // 3rd slide
+    null: 1000, // empty slide
+  };
 
-    const newInterval = setInterval(() => {
-      if (!isUserHovering) {
+  useEffect(() => {
+    const scheduleTransition = () => {
+      if (isUserHovering) return;
+
+      const duration =
+        slideDurations[
+          currentSubtitleIndex === null ? "null" : currentSubtitleIndex
+        ];
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
         setIsTransitioning(true);
         setTimeout(() => {
           setCurrentSubtitleIndex((prev) => {
@@ -52,26 +71,25 @@ const LandingPage = memo(() => {
             return prev + 1;
           });
           setIsTransitioning(false);
-        }, 300);
-      }
-    }, 4000);
+        }, 300); // Transition animation time
+      }, duration);
+    };
 
-    setIntervalRef(newInterval);
-  };
+    scheduleTransition();
 
-  // Initialize auto-cycling on mount
-  useEffect(() => {
-    startAutoCycle();
     return () => {
-      if (intervalRef) {
-        clearInterval(intervalRef);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
-  }, []);
+  }, [currentSubtitleIndex, isUserHovering]);
 
   // Handle tab hover
   const handleTabHover = (index) => {
     setIsUserHovering(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentSubtitleIndex(index);
@@ -81,8 +99,7 @@ const LandingPage = memo(() => {
 
   const handleTabLeave = () => {
     setIsUserHovering(false);
-    // Reset auto-cycle from current position
-    startAutoCycle(currentSubtitleIndex);
+    // useEffect will handle restarting the timer
   };
 
   const globeConfig = {
