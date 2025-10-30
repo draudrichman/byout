@@ -25,7 +25,7 @@ const BackButton = () => {
   return (
     <a
       href="/"
-      className="fixed top-8 left-8 z-50 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full transition-all duration-300 flex items-center gap-2 group"
+      className="fixed top-8 left-8 z-101 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full transition-all duration-300 flex items-center gap-2 group"
     >
       <svg
         width="20"
