@@ -340,7 +340,7 @@ const LandingPage = memo(() => {
           background: `
           radial-gradient(circle at center top, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%),
           
-          linear-gradient(to top, rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 70%)
+          linear-gradient(to top, rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 30%)
         `,
         }}
       >
