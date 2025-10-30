@@ -332,16 +332,13 @@ const LandingPage = memo(() => {
 
   return (
     <AuroraBackground>
+      <div className="absolute inset-0 w-full h-full bg-black -z-1" />
       <div
-        className="w-screen lg:h-screen overflow-hidden relative 
-            
-             "
+        className="w-screen lg:h-screen overflow-hidden relative z-10"
         style={{
           background: `
-          radial-gradient(circle at center top, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%),
-          
-          linear-gradient(to top, rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 30%)
-        `,
+              radial-gradient(circle at center, #141414 0, #cbcbcb00 100%), linear-gradient(2deg, #c7c7c7, transparent 40%)
+              `,
         }}
       >
         {/* Hero fade-in animation styles */}
