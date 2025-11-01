@@ -197,9 +197,9 @@ export default function RadialStats() {
                     {/* NOTE: We must use the BASE radii in the SVG path definition, 
              as the SVG's internal coordinate system is fixed by the viewBox (800 wide). 
              The browser's scaling handles the visual arc size. */}
-                    <path ref={arc1Ref} d={`M ${-BASE_ARC1_RADIUS} 0 A ${BASE_ARC1_RADIUS} ${BASE_ARC1_RADIUS} 0 0 1 ${BASE_ARC1_RADIUS} 0`} stroke="currentColor" strokeWidth="1.5" fill="none" className="text-foreground/40" />
-                    <path ref={arc2Ref} d={`M ${-BASE_ARC2_RADIUS} 0 A ${BASE_ARC2_RADIUS} ${BASE_ARC2_RADIUS} 0 0 1 ${BASE_ARC2_RADIUS} 0`} stroke="currentColor" strokeWidth="1.5" fill="none" className="text-foreground/40" />
-                    <path ref={arc3Ref} d={`M ${-BASE_ARC3_RADIUS} 0 A ${BASE_ARC3_RADIUS} ${BASE_ARC3_RADIUS} 0 0 1 ${BASE_ARC3_RADIUS} 0`} stroke="currentColor" strokeWidth="1.5" fill="none" className="text-foreground/40" />
+                    <path ref={arc1Ref} d={`M ${-BASE_ARC1_RADIUS} 0 A ${BASE_ARC1_RADIUS} ${BASE_ARC1_RADIUS} 0 0 1 ${BASE_ARC1_RADIUS} 0`} stroke="#000000" strokeWidth="1.5" fill="none" strokeOpacity="0.4" />
+                    <path ref={arc2Ref} d={`M ${-BASE_ARC2_RADIUS} 0 A ${BASE_ARC2_RADIUS} ${BASE_ARC2_RADIUS} 0 0 1 ${BASE_ARC2_RADIUS} 0`} stroke="#000000" strokeWidth="1.5" fill="none" strokeOpacity="0.4" />
+                    <path ref={arc3Ref} d={`M ${-BASE_ARC3_RADIUS} 0 A ${BASE_ARC3_RADIUS} ${BASE_ARC3_RADIUS} 0 0 1 ${BASE_ARC3_RADIUS} 0`} stroke="#000000" strokeWidth="1.5" fill="none" strokeOpacity="0.4" />
                 </svg>
 
                 {/* Text Stats Positioning */}
@@ -245,10 +245,10 @@ export default function RadialStats() {
                             <div
                                 className="flex flex-col items-center bg-white"
                             >
-                                <div className="font-bold text-foreground whitespace-nowrap" style={{ fontSize: `calc(1.5rem * ${scaleFactor})` }}>
+                                <div className="font-bold text-black whitespace-nowrap" style={{ fontSize: `calc(1.5rem * ${scaleFactor})` }}>
                                     {stat.number}
                                 </div>
-                                <div className="text-foreground/70 whitespace-pre-line text-center mt-0.5 leading-tight" style={{ fontSize: `calc(0.75rem * ${scaleFactor})` }}>
+                                <div className="text-black/70 whitespace-pre-line text-center mt-0.5 leading-tight" style={{ fontSize: `calc(0.75rem * ${scaleFactor})` }}>
                                     {stat.description}
                                 </div>
                             </div>

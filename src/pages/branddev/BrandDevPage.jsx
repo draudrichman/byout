@@ -20,7 +20,7 @@ export default function BrandDevPage() {
     >
       <ErrorBoundary>
         <SmoothScroll>
-          <Cursor />
+          {/* <Cursor /> */}
           <BrandDevAll />
         </SmoothScroll>
       </ErrorBoundary>
