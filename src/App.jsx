@@ -9,6 +9,7 @@ import PageTransition from './components/PageTransition'
 import HomePage from './pages/HomePage'
 import TechPage from './pages/TechPage'
 import RetailChannelPage from './pages/RetailChannelPage'
+import BrandDevPage from './pages/branddev/BrandDevPage'
 
 
 
@@ -35,6 +36,9 @@ const AppContent = memo(() => {
   const getCurrentPage = () => {
     if (currentPath.startsWith('/tech')) {
       return <TechPage />
+    } 
+    else if (currentPath === '/branddev' || currentPath.startsWith('/branddev')) {
+      return <BrandDevPage />
     } else if (currentPath === '/retail' || currentPath.startsWith('/retail')) {
       return <RetailChannelPage />
     } else {

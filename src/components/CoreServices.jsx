@@ -201,6 +201,10 @@ const CoreServices = () => {
   // Navigation handler
   const handleItemClick = useCallback((index) => {
     // Route to specific pages for Technology and Retail
+    if (index === 0) {
+      window.location.href = "/branddev";
+      return;
+    }
     if (index === 1) {
       window.location.href = "/tech";
       return;

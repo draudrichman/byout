@@ -1,0 +1,416 @@
+/* Animation keyframes */
+@keyframes aura-glow {
+  0% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+
+  .logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 100px;
+    height: auto;
+    
+    @media (min-width: 640px) {
+      width: 130px;
+    }
+    
+    @media (min-width: 768px) {
+      width: 150px;
+    }
+    
+    @media (min-width: 1024px) {
+      width: 100px;
+    }
+    
+    @media (min-width: 1280px) {
+      width: 220px;
+    }
+    
+    @media (min-width: 1536px) {
+      width: 200px;
+    }
+    
+    @media (min-width: 1600px) {
+      width: 250px;
+    }
+    
+    @media (min-width: 1920px) {
+      width: 360px;
+    }
+  }
+
+  .prismaeonText {
+    position: absolute;
+    text-align: center;
+    opacity: 0;
+    text-transform: uppercase;
+    z-index: 2;
+    color: var(--color-text, #ffffff);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    
+    @media (min-width: 640px) {
+      font-size: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      font-size: 1.125rem;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: 1.25rem;
+    }
+    
+    @media (min-width: 1280px) {
+      font-size: 1.5rem;
+    }
+    
+    @media (min-width: 1536px) {
+      font-size: 1.875rem;
+    }
+    
+    @media (min-width: 1920px) {
+      font-size: 2.25rem;
+    }
+  }
+
+  .chineseText {
+    position: absolute;
+    text-align: center;
+    opacity: 0;
+    z-index: 2;
+    color: var(--color-text, #ffffff);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    
+    @media (min-width: 640px) {
+      font-size: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      font-size: 1.125rem;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: 1.25rem;
+    }
+    
+    @media (min-width: 1280px) {
+      font-size: 1.5rem;
+    }
+    
+    @media (min-width: 1536px) {
+      font-size: 1.875rem;
+    }
+    
+    @media (min-width: 1920px) {
+      font-size: 2.25rem;
+    }
+  }
+
+  .svg {
+    position: absolute;
+    z-index: 1;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    @media (min-width: 640px) {
+      width: 250px;
+    }
+    
+    @media (min-width: 768px) {
+      width: 280px;
+    }
+    
+    @media (min-width: 768px) {
+      width: 300px;
+    }
+    
+    @media (min-width: 1024px) {
+      width: 300px;
+    }
+    
+    @media (min-width: 1280px) {
+      width: 350px;
+    }
+    
+    @media (min-width: 1536px) {
+      width: 400px;
+    }
+    
+    @media (min-width: 1600px) {
+      width: 450px;
+    }
+    
+    @media (min-width: 1920px) {
+      width: 700px;
+    }
+
+    circle {
+      &.outer {
+        stroke-dasharray: 377;
+      }
+
+      &.dotted {
+        stroke-dasharray: 2 25;
+      }
+
+      &.inner_slim {
+        stroke-dasharray: 283;
+      }
+
+      &.inner_fat {
+        stroke-dasharray: 1131 0;
+        stroke-dashoffset: -47.25;
+        stroke-width: 3px;
+      }
+    }
+  }
+
+  .webbyNominee {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+
+    &::before {
+      position: absolute;
+      display: block;
+      width: 150%;
+      height: 140%;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--radial-dark, radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%));
+      content: "";
+    }
+
+    &::after {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      mix-blend-mode: overlay;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--radial-champagne, radial-gradient(circle, rgba(247,231,206,0.3) 0%, rgba(247,231,206,0.1) 50%, transparent 100%));
+      content: "";
+    }
+
+    .badge {
+      position: absolute;
+      border-radius: 50%;
+      overflow: hidden;
+      z-index: 10;
+      opacity: 1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      width: 180px;
+      height: 180px;
+
+      @media (min-width: 768px) {
+        width: 220px;
+        height: 220px;
+      }
+
+      @media (min-width: 1024px) {
+        width: var(--badge-size, 280px);
+        height: var(--badge-size, 280px);
+      }
+
+      @media (min-width: 1920px) {
+        width: 500px;
+        height: 500px;
+      }
+
+      .badgeImg {
+        position: absolute;
+        display: block;
+        object-fit: contain;
+        z-index: 2;
+        width: 65%;
+        height: 65%;
+        transition: all 1000ms;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+      }
+    }
+
+    .aura {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.75;
+      mix-blend-mode: plus-lighter;
+      filter: blur(60px);
+      animation: aura-glow 1s ease-in-out infinite alternate;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 50%;
+      width: calc(var(--badge-size) * 1.25);
+      height: calc(var(--badge-size) * 1.25);
+      background: var(--aura-gradient, linear-gradient(180deg, rgba(247,231,206,0.8) 0%, rgba(247,231,206,0.2) 100%)) 0 100% / 100% 200%;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      mix-blend-mode: overlay;
+      opacity: 0.15;
+      background: var(--scanline-gradient, repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px));
+    }
+
+    .canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      /* Canvas animation is optimized based on device capability:
+         - Low capability: 150 particles, 50 lines, 10 discs, 50% animation speed
+         - Medium capability: 300 particles, 75 lines, 15 discs, 75% animation speed  
+         - High capability: 500 particles, 100 lines, 20 discs, 100% animation speed */
+    }
+  }
+
+  .leftSideText {
+    position: absolute;
+    text-align: left;
+    opacity: 0;
+    z-index: 15;
+    color: var(--color-text, #ffffff);
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    display: none;
+    
+    @media (min-width: 768px) {
+      display: block;
+      left: 7%;
+      font-size: 0.875rem;
+    }
+    
+    @media (min-width: 1024px) {
+      left: 10%;
+      font-size: 1rem;
+    }
+    
+    @media (min-width: 1280px) {
+      font-size: 1.125rem;
+    }
+    
+    @media (min-width: 1536px) {
+      font-size: 1.25rem;
+    }
+    
+    @media (min-width: 1600px) {
+      font-size: 1.5rem;
+    }
+    
+    @media (min-width: 1920px) {
+      font-size: 1.875rem;
+    }
+
+    .leftTextLine1 {
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    .leftTextLine2 {
+      font-style: italic;
+      font-weight: 200;
+      opacity: 0.75;
+    }
+  }
+
+  .rightSideText {
+    position: absolute;
+    text-align: right;
+    opacity: 0;
+    z-index: 15;
+    color: var(--color-text, #ffffff);
+    font-weight: 300;
+    line-height: 1.4;
+    right: 5%;
+    font-size: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    
+    @media (min-width: 768px) {
+      display: block;
+      right: 7%;
+      font-size: 0.875rem;
+    }
+    
+    @media (min-width: 1024px) {
+      right: 10%;
+      font-size: 1rem;
+    }
+    
+    @media (min-width: 1280px) {
+      font-size: 1.125rem;
+    }
+    
+    @media (min-width: 1536px) {
+      font-size: 1.25rem;
+    }
+    
+    @media (min-width: 1600px) {
+      font-size: 1.5rem;
+    }
+    
+    @media (min-width: 1920px) {
+      font-size: 1.875rem;
+    }
+  }
+}

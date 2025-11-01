@@ -1,0 +1,158 @@
+/* Scoped styles for Brand Development page only */
+.branddev-page {
+  /* Font Face Declarations */
+  --font-mono: "PPSupplyMono", monospace;
+  --font-sans: "PP Neue Montreal", sans-serif;
+
+  /* Color Theme - Chrome gray and light champagne */
+  --color-bg: #1a1a1a;
+  --color-text: #ffffff;
+  --color-text-light: #e5e5e5;
+  --color-text-lighter: #cccccc;
+
+  /* Gradient Colors - Chrome gray to light champagne */
+  --grad-color-1: #1a1a1a;
+  --grad-color-2: #404040;
+  --grad-color-3: #666666;
+  --grad-color-4: #f7e7ce;
+  --grad-color-5: #f7e7ce;
+  --grad-color-6: #b0b0b0;
+
+  --badge-size: min(20vw, 20rem);
+
+  /* Future Circle Gradients */
+  --radial-dark: radial-gradient(
+    ellipse at 50% 55%,
+    transparent 10%,
+    #303030 50%
+  );
+  --radial-champagne: radial-gradient(
+    ellipse at 50% 75%,
+    #f7e7ce 20%,
+    transparent 75%
+  );
+  --aura-gradient: linear-gradient(
+    15deg,
+    #f7e7ce,
+    #b0b0b0 16.5%,
+    rgba(247, 231, 206, 0.5) 33%,
+    rgba(176, 176, 176, 0.125) 49.5%,
+    #f7e7ce 66%,
+    rgba(176, 176, 176, 0.375) 85.5%,
+    #f7e7ce 100%
+  );
+  --scanline-gradient: repeating-linear-gradient(
+    transparent 5px,
+    transparent 3px,
+    white 1px,
+    white 2px
+  );
+
+  /* Override dark mode for this page only */
+  --background: #303030;
+  --foreground: #ededed;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Font Face Declarations - Scoped to branddev page */
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("https://assets.codepen.io/7558/PPNeueMontreal-Variable.woff2")
+    format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Supply Mono";
+  src: url("https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2")
+    format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PPSupplyMono";
+  src: url("https://assets.codepen.io/7558/PPSupplyMono-Regular.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Scoped resets only for branddev page */
+.branddev-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.branddev-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Scroll sections - scoped */
+.branddev-page .scroll-container {
+  width: 100%;
+  height: 100%;
+}
+
+.branddev-page .scroll-section {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Smooth scrolling - scoped */
+.branddev-page {
+  scroll-behavior: smooth;
+}
+
+.branddev-page.lenis,
+.branddev-page.lenis body {
+  height: auto;
+}
+
+.branddev-page.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.branddev-page.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.branddev-page.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.branddev-page.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Scoped scrollbar styles */
+.branddev-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.branddev-page::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.branddev-page::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.branddev-page::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
