@@ -1,18 +1,24 @@
-import { memo } from "react";
+import { memo, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Leva } from "leva";
 import LandingPage from "../components/LandingPage";
-import { AuroraBackground } from "../components/ui/aurora-background";
 import ErrorBoundary from "../components/ErrorBoundary";
-import CompanyIntroduction from "../components/CompanyIntroductionNew";
-import StatsPage from "../components/StatsPage";
-import ExperienceShowcase from "../components/ExperienceShowcase";
-import FounderStaff from "../components/FounderStaff";
-import ContactForm from "../components/ContactForm";
-import HorizontalTimeline from "../components/HorizontalTimeline";
-import GlobalPresence from "../components/GlobalPresence";
-import CoreServices from "../components/CoreServices";
-import LogoSection from "../components/LogoSection";
-import CoreServicesNew from "../components/CoreServicesNew";
+
+// Lazily loaded sections (below-the-fold)
+const StatsPage = lazy(() => import("../components/StatsPage"));
+const LogoSection = lazy(() => import("../components/LogoSection"));
+const CompanyIntroduction = lazy(() =>
+  import("../components/CompanyIntroductionNew")
+);
+const CoreServices = lazy(() => import("../components/CoreServices"));
+const HorizontalTimeline = lazy(() =>
+  import("../components/HorizontalTimeline")
+);
+const ExperienceShowcase = lazy(() =>
+  import("../components/ExperienceShowcase")
+);
+const FounderStaff = lazy(() => import("../components/FounderStaff"));
+const GlobalPresence = lazy(() => import("../components/GlobalPresence"));
+const ContactForm = lazy(() => import("../components/ContactForm"));
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -21,30 +27,111 @@ const LoadingFallback = memo(() => (
   </div>
 ));
 
-// const LogoSection = lazy(() =>
-//   import("../components/LogoSection").catch((err) => {
-//     console.error("Failed to load LogoSection:", err);
-//     return { default: () => <div>Loading...</div> };
-//   })
-// );
-
 LoadingFallback.displayName = "LoadingFallback";
+
+// IntersectionObserver wrapper to render children when in view
+const LazyLoad = ({ children, rootMargin = "200px 0px" }) => {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current || isVisible) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [isVisible, rootMargin]);
+
+  return <div ref={ref}>{isVisible ? children : <LoadingFallback />}</div>;
+};
 
 const HomePage = memo(() => {
   return (
     <div className="App">
       {/* <Leva hidden /> */}
 
+      {/* Above-the-fold: keep eager to render instantly */}
       <LandingPage key="landing" />
-      <StatsPage />
-      <LogoSection />
-      <CompanyIntroduction />
-      <CoreServices />
-      <HorizontalTimeline />
-      <ExperienceShowcase />
-      <FounderStaff />
-      <GlobalPresence />
-      <ContactForm />
+
+      {/* Below-the-fold sections: lazy render on scroll */}
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <StatsPage />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <LogoSection />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <CompanyIntroduction />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <CoreServices />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <HorizontalTimeline />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <ExperienceShowcase />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <FounderStaff />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <GlobalPresence />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
+
+      <LazyLoad>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
+            <ContactForm />
+          </Suspense>
+        </ErrorBoundary>
+      </LazyLoad>
     </div>
   );
 });
