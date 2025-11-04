@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import gsap from "gsap";
 import ShinyText from "./ui/shiny-text";
@@ -22,76 +22,105 @@ export default function BigLogo() {
   const { ref, inView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
+    rootMargin: "120px 0px",
   });
   // Local ref to the section so we can scope text animations
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const hasAnimatedRef = useRef(false);
 
-  useEffect(() => {
-    // GSAP animations: fade-in text + dramatic spiral for logos
+  useLayoutEffect(() => {
     if (!inView || hasAnimatedRef.current || !containerRef.current) return;
     hasAnimatedRef.current = true;
 
-    // Fade-in/stagger for heading, subheading and paragraph
-    const sectionEl = sectionRef.current;
-    if (sectionEl) {
-      const fadeItems = sectionEl.querySelectorAll(".fade-item");
-      if (fadeItems && fadeItems.length) {
-        gsap.fromTo(
-          fadeItems,
-          { x: -60, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power3.out",
-            stagger: 0.16,
-            delay: 0.15,
-          }
-        );
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const ctx = gsap.context(() => {
+      // Fade-in/stagger for heading, subheading and paragraph (batched)
+      const sectionEl = sectionRef.current;
+      if (sectionEl) {
+        const fadeItems = sectionEl.querySelectorAll(".fade-item");
+        if (fadeItems && fadeItems.length) {
+          gsap.fromTo(
+            fadeItems,
+            { x: -60, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1.0,
+              ease: "power3.out",
+              stagger: 0.16,
+              delay: 0.1,
+              overwrite: "auto",
+            }
+          );
+        }
       }
-    }
 
-    const logoElements = containerRef.current.querySelectorAll(".logo-item");
+      // Logos: initial spiral -> final grid position at origin (batched)
+      const nodeList = containerRef.current?.querySelectorAll(".logo-item");
+      if (!nodeList || !nodeList.length) return;
+      const items = gsap.utils.toArray(nodeList);
+      const total = logos.length;
 
-    logoElements.forEach((element, index) => {
-      const totalLogos = logos.length;
-      // Adjusted spiral parameters for better visual effect within the new layout
-      const angle = (index / totalLogos) * Math.PI * 6;
-      const radius = 600 + (index / totalLogos) * 400;
-      const spiralX = Math.cos(angle) * radius;
-      const spiralY = (index / totalLogos) * 1200 - 600;
-      const spiralZ = Math.sin(angle) * radius;
-
-      // Set initial spiral position
-      gsap.set(element, {
-        x: spiralX,
-        y: spiralY,
-        z: spiralZ,
-        scale: 0,
-        rotationX: Math.random() * 360,
-        rotationY: Math.random() * 360,
-        rotationZ: Math.random() * 360,
-        opacity: 0,
+      // Initial state (3D spiral)
+      gsap.set(items, {
+        x: (i) => {
+          const angle = (i / total) * Math.PI * 6;
+          const radius = 600 + (i / total) * 400;
+          return Math.cos(angle) * radius;
+        },
+        y: (i) => (i / total) * 1200 - 600,
+        z: (i) => {
+          const angle = (i / total) * Math.PI * 6;
+          const radius = 600 + (i / total) * 400;
+          return Math.sin(angle) * radius;
+        },
+        scale: prefersReduced ? 1 : 0,
+        rotationX: prefersReduced ? 0 : () => Math.random() * 360,
+        rotationY: prefersReduced ? 0 : () => Math.random() * 360,
+        rotationZ: prefersReduced ? 0 : () => Math.random() * 360,
+        opacity: prefersReduced ? 1 : 0,
+        willChange: "transform, opacity",
+        force3D: true,
       });
 
-      const delay = index * 0.07;
+      if (prefersReduced) {
+        gsap.set(items, {
+          x: 0,
+          y: 0,
+          z: 0,
+          scale: 1,
+          rotationX: 0,
+          rotationY: 0,
+          rotationZ: 0,
+          opacity: 1,
+          clearProps: "willChange",
+          force3D: true,
+        });
+      } else {
+        gsap.to(items, {
+          x: 0,
+          y: 0,
+          z: 0,
+          scale: 1,
+          rotationX: 0,
+          rotationY: 0,
+          rotationZ: 0,
+          opacity: 1,
+          duration: 2.0,
+          ease: "power3.out",
+          stagger: { each: 0.07, from: 0 },
+          force3D: true,
+          overwrite: "auto",
+          onComplete: () => gsap.set(items, { clearProps: "willChange" }),
+        });
+      }
+    }, sectionRef);
 
-      gsap.to(element, {
-        x: 0,
-        y: 0,
-        z: 0,
-        scale: 1,
-        rotationX: 0,
-        rotationY: 0,
-        rotationZ: 0,
-        opacity: 1,
-        duration: 2.0,
-        delay,
-        ease: "power3.out",
-      });
-    });
+    return () => ctx.revert();
   }, [inView]);
 
   return (
@@ -118,15 +147,15 @@ export default function BigLogo() {
             speed={2}
             className="fade-item opacity-0 font-geniso text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold tracking-tight leading-none"
           />
-          <p class="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-4xl font-jhenghei font-semibold text-gray-400 leading-relaxed">
+          <p className="fade-item opacity-0 text-center lg:text-left mt-8 md:mt-10 text-lg sm:text-xl lg:text-4xl font-jhenghei font-semibold text-gray-400 leading-relaxed">
             我们是红点、iF、长城奖、
-            <br /> TOP Digital等 
+            <br /> TOP Digital等
             <br /> 国内外大奖认可的新一代国际品牌
           </p>
 
           {/* Subheading in orange */}
-          <div class="mt-6 md:mt-8 text-center lg:text-left">
-            <p class="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-semibold font-geniso tracking-wide leading-tight">
+          <div className="mt-6 md:mt-8 text-center lg:text-left">
+            <p className="fade-item opacity-0 text-lg sm:text-3xl lg:text-4xl text-[#F58220] font-semibold font-geniso tracking-wide leading-tight">
               HONOR THE GROWTH OF A NEW GENERATION OF INTERNATIONAL BRANDS
             </p>
           </div>
@@ -166,6 +195,8 @@ export default function BigLogo() {
                       alt={`Brand Logo ${index + 1}`}
                       className="w-full h-full object-contain filter contrast-110 saturate-110"
                       crossOrigin="anonymous"
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         // Fallback: hide broken image and optionally show text
                         e.target.style.display = "none";

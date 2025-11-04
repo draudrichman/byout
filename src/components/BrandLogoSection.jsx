@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import ShinyText from "./ui/shiny-text";
 
@@ -8,8 +8,7 @@ export default function BrandLogosSection() {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const hasAnimatedRef = useRef(false);
-  const cols = 8;
-  const rows = Math.ceil(logos.length / cols);
+  // const cols = 8; // no longer needed after batching tweens
 
   // Calculate responsive spacing: equivalent to clamp(50px, 6vw, 80px)
   const getResponsiveSpacing = () => {
@@ -21,86 +20,115 @@ export default function BrandLogosSection() {
     return spacing;
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !hasAnimatedRef.current) {
-          hasAnimatedRef.current = true;
+  useLayoutEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-          // Fade-in text elements
-          const el = sectionRef.current;
-          if (el) {
-            const fadeItems = el.querySelectorAll(".fade-item");
-            if (fadeItems && fadeItems.length) {
-              gsap.fromTo(
-                fadeItems,
-                { x: -60, opacity: 0 },
-                {
-                  x: 0,
-                  opacity: 1,
-                  duration: 1.2,
-                  ease: "power3.out",
-                  stagger: 0.16,
-                  delay: 0.15,
-                }
-              );
+    const ctx = gsap.context(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !hasAnimatedRef.current) {
+            hasAnimatedRef.current = true;
+
+            // Fade-in text elements (batched)
+            const el = sectionRef.current;
+            if (el) {
+              const fadeItems = el.querySelectorAll(".fade-item");
+              if (fadeItems && fadeItems.length) {
+                gsap.fromTo(
+                  fadeItems,
+                  { x: -60, opacity: 0 },
+                  {
+                    x: 0,
+                    opacity: 1,
+                    duration: 1.0,
+                    ease: "power3.out",
+                    stagger: 0.16,
+                    delay: 0.1,
+                    overwrite: "auto",
+                  }
+                );
+              }
+              observer.unobserve(el);
             }
-            observer.unobserve(el);
+
+            // Animate logos into 8x8 grid with responsive spacing (single batched tween)
+            const spacing = getResponsiveSpacing();
+            const logoNodeList =
+              containerRef.current?.querySelectorAll(".logo-item");
+            if (!logoNodeList || !logoNodeList.length) return;
+
+            const logosArr = gsap.utils.toArray(logoNodeList);
+            const colsLocal = 8;
+
+            // Initial state: spiral
+            gsap.set(logosArr, {
+              x: (i) => {
+                const angle = (i / logos.length) * Math.PI * 4; // 2 revolutions
+                const radius = 500;
+                return Math.cos(angle) * radius;
+              },
+              y: (i) => {
+                const angle = (i / logos.length) * Math.PI * 4;
+                const radius = 500;
+                return Math.sin(angle) * radius;
+              },
+              scale: prefersReduced ? 1 : 0,
+              rotation: prefersReduced ? 0 : () => Math.random() * 360,
+              opacity: prefersReduced ? 1 : 0,
+              willChange: "transform, opacity",
+              force3D: true,
+            });
+
+            const gridX = (i) => ((i % colsLocal) - 3.5) * spacing;
+            const gridY = (i) => (Math.floor(i / colsLocal) - 3.5) * spacing;
+
+            if (prefersReduced) {
+              // No animation: jump to final grid positions and clear will-change
+              gsap.set(logosArr, {
+                x: gridX,
+                y: gridY,
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                clearProps: "willChange",
+                force3D: true,
+              });
+            } else {
+              gsap.to(logosArr, {
+                x: gridX,
+                y: gridY,
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                duration: 1.5,
+                ease: "power3.out",
+                stagger: { each: 0.03, from: 0 },
+                force3D: true,
+                overwrite: "auto",
+                onComplete: () => {
+                  gsap.set(logosArr, { clearProps: "willChange" });
+                },
+              });
+            }
           }
+        },
+        { threshold: 0.25, rootMargin: "120px 0px" }
+      );
 
-          // Animate logos into 8x8 grid with responsive spacing
-          const spacing = getResponsiveSpacing();
-          const logoElements =
-            containerRef.current.querySelectorAll(".logo-item");
-          logoElements.forEach((element, index) => {
-            const col = index % 8;
-            const row = Math.floor(index / 8);
-
-            // Calculate final grid position
-            const gridX = (col - 3.5) * spacing; // Center the grid
-            const gridY = (row - 3.5) * spacing; // Center the grid
-
-            // Set initial spiral position
-            const angle = (index / logos.length) * Math.PI * 4; // Reduced spiral rotations
-            const radius = 500; // Consistent radius for cleaner spiral
-            const spiralX = Math.cos(angle) * radius;
-            const spiralY = Math.sin(angle) * radius;
-
-            gsap.set(element, {
-              x: spiralX,
-              y: spiralY,
-              scale: 0,
-              rotation: Math.random() * 360,
-              opacity: 0,
-            });
-
-            const delay = index * 0.03; // Faster sequence
-
-            gsap.to(element, {
-              x: gridX,
-              y: gridY,
-              scale: 1,
-              rotation: 0,
-              opacity: 1,
-              duration: 1.5,
-              delay,
-              ease: "power3.out",
-            });
-          });
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
       if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+        observer.observe(sectionRef.current);
       }
-    };
+
+      return () => {
+        if (sectionRef.current) {
+          observer.unobserve(sectionRef.current);
+        }
+      };
+    }, [sectionRef, containerRef]);
+
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -144,6 +172,8 @@ export default function BrandLogosSection() {
                           src={url}
                           alt={`logo-${idx}`}
                           className="w-full h-full object-contain filter contrast-110 saturate-110"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     </div>
@@ -191,6 +221,7 @@ export default function BrandLogosSection() {
                           alt={`logo-${index}`}
                           className="w-full h-full object-contain filter contrast-110 saturate-110"
                           loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     </div>
