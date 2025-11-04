@@ -20,6 +20,7 @@ import * as THREE from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { CameraUpdater } from "./CameraUpdater";
 // Post-processing effects temporarily disabled due to version compatibility
 // import { EffectComposer, Bloom, ChromaticAberration, Vignette } from "@react-three/postprocessing";
 // import { BlendFunction } from "postprocessing";
@@ -28,7 +29,6 @@ import countries from "../../data/globe.json";
 extend({ ThreeGlobe: ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 2; // Tasteful expansion speed
-const ASPECT = 0.9;
 const CAMERA_Z = 300;
 const RING_UPDATE_INTERVAL = 1600; // Moderated frequency
 
@@ -94,20 +94,13 @@ export function Globe({ globeConfig, data }) {
     try {
       const globeMaterial = globeRef.current.globeMaterial();
       if (globeMaterial) {
-        // Glass-like material properties
-        globeMaterial.color = new Color("#e8f4fd"); // Light blue tint for glass
-        globeMaterial.emissive = new Color("#4a90e2"); // Subtle blue emission for visibility
-        globeMaterial.emissiveIntensity = 0.1; // Very subtle glow
-        globeMaterial.shininess = 100; // High shininess for glass
+        // Simplified material for performance
+        globeMaterial.color = new Color(defaultProps.globeColor);
+        globeMaterial.emissive = new Color(defaultProps.emissive);
+        globeMaterial.emissiveIntensity = defaultProps.emissiveIntensity;
+        globeMaterial.shininess = defaultProps.shininess;
+        globeMaterial.opacity = defaultProps.globeOpacity;
         globeMaterial.transparent = true;
-        globeMaterial.opacity = 0.4; // More visible but still glass-like
-        globeMaterial.reflectivity = 0.8; // High reflectivity
-        globeMaterial.refractionRatio = 0.98; // Glass-like refraction
-        globeMaterial.metalness = 0.0; // Non-metallic
-        globeMaterial.roughness = 0.05; // Slightly rough for more visible surface
-        globeMaterial.clearcoat = 1.0; // Full clearcoat for glass effect
-        globeMaterial.clearcoatRoughness = 0.1; // Slightly rough clearcoat
-        globeMaterial.envMapIntensity = 1.5; // Strong environment reflections
         globeMaterial.needsUpdate = true;
       }
     } catch (error) {
@@ -273,82 +266,29 @@ export function Globe({ globeConfig, data }) {
           const tubeGeometry = new TubeGeometry(curve, 64, 1.8, 8, false);
 
           // Create enhanced glowing arc material
-          const arcMaterial = new MeshPhysicalMaterial({
+          const arcMaterial = new MeshStandardMaterial({
             color: new Color(d?.color || "#ffffff"),
-            metalness: 0.7, // Reduced for more glow effect
-            roughness: 0.1, // Slightly increased for better glow
-            clearcoat: 0.8, // Reduced clearcoat for more glow
-            clearcoatRoughness: 0.05,
-            transmission: 0.6, // Increased transmission for glow
+            metalness: 0.7,
+            roughness: 0.1,
             transparent: true,
-            opacity: 0.4, // More opaque for better glow visibility
+            opacity: 0.4,
             emissive: new Color(d?.color || "#ffffff"),
-            emissiveIntensity: 1.5, // Much stronger glow
+            emissiveIntensity: 1.5,
             envMapIntensity: 2.0,
-            reflectivity: 0.8,
-            refractionRatio: 0.9,
-            // Enhanced glow properties
-            iridescence: 0.8,
-            iridescenceIOR: 1.3,
-            iridescenceThicknessRange: [100, 800],
-            thickness: 1.2, // Thicker for more glow
-            attenuationDistance: 0.2, // Shorter for more intense glow
-            attenuationColor: new Color(d?.color || "#ffffff"),
-            sheenColor: new Color(d?.color || "#ffffff"),
-            sheen: 0.9, // Higher sheen for glow
-            sheenRoughness: 0.05,
-            specularIntensity: 1.2, // Enhanced specular for glow
-            specularColor: new Color("#ffffff"),
           });
 
           const arcMesh = new Mesh(tubeGeometry, arcMaterial);
 
-          // Add outer glow shell for enhanced glow effect
-          const glowGeometry = new TubeGeometry(curve, 32, 4.5, 6, false);
-          const glowMaterial = new MeshStandardMaterial({
-            color: new Color(d?.color || "#ffffff"),
-            emissive: new Color(d?.color || "#ffffff"),
-            emissiveIntensity: 2.0, // Much stronger glow intensity
-            transparent: true,
-            opacity: 0.7, // More visible glow
-            side: DoubleSide,
-            blending: AdditiveBlending,
-            depthWrite: false, // Prevent depth conflicts
-            depthTest: true,
-          });
-
-          // Add additional inner glow for layered effect
-          const innerGlowGeometry = new TubeGeometry(curve, 48, 2.5, 8, false);
-          const innerGlowMaterial = new MeshStandardMaterial({
-            color: new Color(d?.color || "#ffffff"),
-            emissive: new Color(d?.color || "#ffffff"),
-            emissiveIntensity: 1.0, // Increased inner glow
-            transparent: true,
-            opacity: 0.4, // More visible inner glow
-            side: DoubleSide,
-            blending: AdditiveBlending,
-            depthWrite: false,
-          });
-
-          const glowMesh = new Mesh(glowGeometry, glowMaterial);
-          const innerGlowMesh = new Mesh(innerGlowGeometry, innerGlowMaterial);
-
-          // Create a group to contain the main arc and all glow layers
+          // Create a group to contain the main arc
           const arcGroup = new Group();
           arcGroup.add(arcMesh); // Main metallic arc
-          arcGroup.add(innerGlowMesh); // Inner glow layer
-          arcGroup.add(glowMesh); // Outer glow layer
 
           // Add animation data for pulsing glow effect
           arcGroup.userData = {
             t: Math.random() * Math.PI * 2,
             speed: 0.8 + Math.random() * 0.4,
             baseEmissiveIntensity: 1.5,
-            baseGlowOpacity: 0.7,
-            baseInnerGlowOpacity: 0.8,
             arcMesh: arcMesh,
-            glowMesh: glowMesh,
-            innerGlowMesh: innerGlowMesh,
           };
 
           return arcGroup;
@@ -366,10 +306,10 @@ export function Globe({ globeConfig, data }) {
       globeRef.current
         .ringsData([])
         .ringColor(() => defaultRingColor)
-        .ringMaxRadius(48) // Doubled from 12 to 24
+        .ringMaxRadius(12) // Increased size
         .ringPropagationSpeed(RING_PROPAGATION_SPEED)
         .ringResolution(12) // Add ring resolution for better visibility
-        .ringRadius(24) // Set ring radius to 2 (doubled from default 1)
+        .ringRadius(12) // Increased size
         .ringRepeatPeriod(
           Math.max(
             1200,
@@ -440,7 +380,18 @@ export function Globe({ globeConfig, data }) {
         // Combine both start and end rings
         const ringsData = [...startRingsData, ...endRingsData];
 
-        globeRef.current.ringsData(ringsData).ringColor(() => defaultRingColor);
+        globeRef.current
+          .ringsData(ringsData)
+          .ringColor(() => defaultRingColor)
+          .ringMaxRadius(3)
+          .ringRadius(3)
+          .ringRepeatPeriod(
+            Math.max(
+              1200,
+              (defaultProps.arcTime * defaultProps.arcLength) /
+                (defaultProps.rings || 1)
+            )
+          );
 
         // Glow sprites removed - keeping only golden rings
       } catch (error) {
@@ -478,22 +429,6 @@ export function Globe({ globeConfig, data }) {
         if (userData.arcMesh.material) {
           userData.arcMesh.material.emissiveIntensity = emissivePulse;
           userData.arcMesh.material.needsUpdate = true;
-        }
-
-        // Pulsing opacity for glow layers
-        const glowPulse =
-          userData.baseGlowOpacity + 0.2 * Math.sin(userData.t * 1.2);
-        const innerGlowPulse =
-          userData.baseInnerGlowOpacity + 0.15 * Math.sin(userData.t * 0.8);
-
-        if (userData.glowMesh.material) {
-          userData.glowMesh.material.opacity = glowPulse;
-          userData.glowMesh.material.needsUpdate = true;
-        }
-
-        if (userData.innerGlowMesh.material) {
-          userData.innerGlowMesh.material.opacity = innerGlowPulse;
-          userData.innerGlowMesh.material.needsUpdate = true;
         }
       }
     });
@@ -566,7 +501,7 @@ export function World(props) {
 
   // Memoized camera setup with default position
   const camera = useMemo(() => {
-    const cam = new PerspectiveCamera(55, ASPECT, 180, 1800);
+    const cam = new PerspectiveCamera(55, 1, 180, 1800);
     cam.position.set(195.5409332958142, 50.14669365055826, -138.9637081132115);
     return cam;
   }, []);
@@ -587,87 +522,18 @@ export function World(props) {
   return (
     <Canvas scene={scene} camera={camera}>
       <WebGLRendererConfig />
+      <CameraUpdater />
 
-      {/* Enhanced lighting setup for metallic and glassy arcs */}
+      {/* Simplified lighting for performance */}
       <ambientLight
         color={globeConfig.ambientLight || "#ffffff"}
-        intensity={0.8} // Increased for better metallic visibility
+        intensity={1.8}
       />
-
-      {/* Main key light for metallic reflections */}
       <directionalLight
         color={globeConfig.directionalLeftLight || "#ffffff"}
         position={lightPositions.directionalLeft}
-        intensity={4.5} // Increased for stronger metallic reflections
-        castShadow
-        shadow-mapSize-width={2048} // Reduced for better performance
-        shadow-mapSize-height={2048}
-        shadow-camera-far={2000}
-        shadow-camera-left={-500}
-        shadow-camera-right={500}
-        shadow-camera-top={500}
-        shadow-camera-bottom={-500}
-        shadow-bias={-0.0001}
-      />
-
-      {/* Fill light for softer metallic highlights */}
-      <directionalLight
-        color={globeConfig.directionalLeftLight || "#ffffff"}
-        position={lightPositions.directionalRight}
-        intensity={3.5} // Increased for better metallic illumination
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
-
-      {/* Rim light for metallic edge definition */}
-      <directionalLight
-        color={globeConfig.directionalTopLight || "#ffffff"}
-        position={lightPositions.directionalTop}
-        intensity={2.8} // Increased for metallic highlights
-      />
-
-      {/* Additional directional light for glass refraction and metallic shine */}
-      <directionalLight
-        color="#ffffff"
-        position={[0, 0, 400]}
-        intensity={2.5} // Increased for stronger glass effects
-      />
-
-      {/* Backlight for rim lighting on metallic arcs */}
-      <directionalLight
-        color="#ffffff"
-        position={[0, 0, -400]}
-        intensity={1.8}
-      />
-
-      {/* Main point light for metallic highlights - shadow map reduced */}
-      <pointLight
-        color={globeConfig.pointLight || "#ffffff"}
-        position={lightPositions.pointMain}
-        intensity={3.5}
-        distance={1500}
-        decay={0.03}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
-
-      {/* Keep only essential accent lights for performance */}
-      <pointLight
-        color="#ff6b35"
-        position={lightPositions.pointAccent1}
-        intensity={2.0}
-        distance={1200}
-        decay={0.08}
-      />
-
-      <pointLight
-        color="#4ecdc4"
-        position={lightPositions.pointAccent2}
-        intensity={1.8}
-        distance={1000}
-        decay={0.12}
+        intensity={2.5}
+        castShadow={false}
       />
 
       <Globe {...props} />
@@ -684,33 +550,6 @@ export function World(props) {
         autoRotate={true}
         autoRotateSpeed={globeConfig.autoRotateSpeed}
       />
-
-      {/* Post-processing effects temporarily disabled due to version compatibility issues */}
-      {/* 
-      <EffectComposer>
-        <Bloom
-          intensity={1.5}
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.9}
-          height={300}
-          opacity={1.0}
-          blendFunction={BlendFunction.SCREEN}
-        />
-        
-        <ChromaticAberration
-          offset={[0.002, 0.002]}
-          radialModulation={true}
-          modulationOffset={0.3}
-        />
-        
-        <Vignette
-          offset={0.3}
-          darkness={0.5}
-          eskil={false}
-          blendFunction={BlendFunction.NORMAL}
-        />
-      </EffectComposer>
-      */}
     </Canvas>
   );
 }
