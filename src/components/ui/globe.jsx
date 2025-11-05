@@ -227,6 +227,8 @@ export function Globe({ globeConfig, data }) {
         .hexPolygonColor(getHexPolygonColor);
 
       // Enhanced arcs setup with glassy, glowy, metallic materials
+      // NOTE: Arcs disabled per request. Keeping code for future reference.
+      /*
       globeRef.current
         .arcsData(data)
         .arcStartLat((d) => Number(d?.startLat) || 0)
@@ -293,6 +295,9 @@ export function Globe({ globeConfig, data }) {
 
           return arcGroup;
         });
+      */
+      // Explicitly clear any existing arcs
+      globeRef.current.arcsData([]);
       // Disable default points since we're using custom endpoint markers
       globeRef.current
         .pointsData([])
@@ -306,10 +311,10 @@ export function Globe({ globeConfig, data }) {
       globeRef.current
         .ringsData([])
         .ringColor(() => defaultRingColor)
-        .ringMaxRadius(12) // Increased size
+        .ringMaxRadius(40) // Increased size
         .ringPropagationSpeed(RING_PROPAGATION_SPEED)
         .ringResolution(12) // Add ring resolution for better visibility
-        .ringRadius(12) // Increased size
+        .ringRadius(40) // Increased size
         .ringRepeatPeriod(
           Math.max(
             1200,
@@ -383,8 +388,8 @@ export function Globe({ globeConfig, data }) {
         globeRef.current
           .ringsData(ringsData)
           .ringColor(() => defaultRingColor)
-          .ringMaxRadius(3)
-          .ringRadius(3)
+          .ringMaxRadius(4)
+          .ringRadius(4)
           .ringRepeatPeriod(
             Math.max(
               1200,
@@ -411,7 +416,14 @@ export function Globe({ globeConfig, data }) {
         intervalRef.current = null;
       }
     };
-  }, [isInitialized, data, defaultRingColor]);
+  }, [
+    isInitialized,
+    data,
+    defaultRingColor,
+    defaultProps.arcTime,
+    defaultProps.arcLength,
+    defaultProps.rings,
+  ]);
 
   // Animate arc glow effects with pulsing
   useFrame((_, delta) => {
@@ -555,23 +567,7 @@ export function World(props) {
 }
 
 // Enhanced utility functions with better error handling
-export function hexToRgb(hex) {
-  if (!hex || typeof hex !== "string") return null;
-
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-}
-
-export function genRandomNumbers(min, max, count) {
+function genRandomNumbers(min, max, count) {
   if (min >= max || count <= 0 || count > max - min) {
     return [];
   }
