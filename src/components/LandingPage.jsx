@@ -337,7 +337,7 @@ const LandingPage = memo(() => {
         className="w-screen lg:h-screen overflow-hidden relative z-10"
         style={{
           background: `
-              radial-gradient(circle at center, #141414 0, #cbcbcb00 100%), linear-gradient(2deg, #c7c7c7, transparent 40%)
+              radial-gradient(circle at center, #000000 0, #cbcbcb00 100%), linear-gradient(2deg, #c7c7c7, transparent 40%)
               `,
         }}
       >
