@@ -1,149 +1,120 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from "react";
+
+const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const unique = (arr) => Array.from(new Set(arr));
 
 const useResourceLoader = () => {
-  const [loadingProgress, setLoadingProgress] = useState(0)
-  const [loadingPhase, setLoadingPhase] = useState('Initializing...')
-  const [isComplete, setIsComplete] = useState(false)
-
-  const loadImage = (src) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => resolve(img)
-      img.onerror = reject
-      img.src = src
-    })
-  }
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingPhase, setLoadingPhase] = useState("Initializing...");
+  const [isComplete, setIsComplete] = useState(false);
 
   const loadFont = (fontFamily) => {
     return new Promise((resolve) => {
       if (document.fonts && document.fonts.load) {
-        document.fonts.load(`16px ${fontFamily}`).then(() => {
-          resolve()
-        }).catch(() => {
-          // Font loading failed, but continue
-          resolve()
-        })
+        document.fonts
+          .load(`16px ${fontFamily}`)
+          .then(() => resolve())
+          .catch(() => resolve());
       } else {
-        // Fallback for browsers without Font Loading API
-        setTimeout(resolve, 100)
+        // Fallback when Font Loading API is unavailable
+        setTimeout(resolve, 100);
       }
-    })
-  }
+    });
+  };
+
+  const preloadImage = (src) => {
+    return new Promise((resolve) => {
+      if (!src || src.startsWith("data:")) return resolve();
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => resolve(); // don't block on failures
+      img.src = src;
+    });
+  };
+
+  const collectDomImageSrcs = () => {
+    const nodes = Array.from(document.querySelectorAll("img"));
+    const srcs = nodes.map((n) => n.currentSrc || n.src).filter(Boolean);
+    return unique(srcs);
+  };
 
   const loadResources = useCallback(async () => {
-    const phases = [
-      { name: 'Initializing...', progress: 5 },
-      { name: 'Loading fonts...', progress: 15 },
-      { name: 'Loading images...', progress: 40 },
-      { name: 'Loading components...', progress: 70 },
-      { name: 'Finalizing...', progress: 95 },
-      { name: 'Complete', progress: 100 }
-    ]
-
     try {
-      // Phase 1: Initialize
-      setLoadingPhase(phases[0].name)
-      setLoadingProgress(phases[0].progress)
-      await new Promise(resolve => setTimeout(resolve, 200))
+      // Phase 1: allow underlying app to mount this tick
+      setLoadingPhase("Initializing...");
+      setLoadingProgress(5);
+      await wait(50);
 
-      // Phase 2: Load fonts
-      setLoadingPhase(phases[1].name)
-      setLoadingProgress(phases[1].progress)
-      
+      // Phase 2: Fonts
+      setLoadingPhase("Loading fonts...");
+      setLoadingProgress(10);
       const fontsToLoad = [
-        'Ethnocentric Rg',
-        'MFYueHei_Noncommercial-Regular',
-        'Inter',
-        'system-ui'
-      ]
-      
-      await Promise.allSettled(fontsToLoad.map(font => loadFont(font)))
-      
-      // Simulate font loading progress
-      for (let i = 15; i <= 25; i += 2) {
-        setLoadingProgress(i)
-        await new Promise(resolve => setTimeout(resolve, 50))
-      }
+        "Ethnocentric Rg",
+        "MFYueHei_Noncommercial-Regular",
+        "Inter",
+        "system-ui",
+      ];
 
-      // Phase 3: Load critical images
-      setLoadingPhase(phases[2].name)
-      setLoadingProgress(phases[2].progress)
-      
-      const criticalImages = [
-        '/logo.svg',
-        '/globe.svg',
-        '/prism-logo.webp',
-        '/logo-1.webp',
-        '/logo-2.webp'
-      ]
-      
-      const imagePromises = criticalImages.map(src => loadImage(src))
-      
-      // Track image loading progress
-      let loadedImages = 0
-      const totalImages = imagePromises.length
-      
-      const updateImageProgress = () => {
-        const progress = 25 + (loadedImages / totalImages) * 30
-        setLoadingProgress(Math.min(progress, 55))
-      }
-      
-      imagePromises.forEach(promise => {
-        promise.then(() => {
-          loadedImages++
-          updateImageProgress()
-        }).catch(() => {
-          loadedImages++
-          updateImageProgress()
-        })
-      })
-      
-      await Promise.allSettled(imagePromises)
+      const fontsReady =
+        document.fonts && document.fonts.ready
+          ? document.fonts.ready.catch(() => {})
+          : Promise.resolve();
 
-      // Phase 4: Load components (simulated)
-      setLoadingPhase(phases[3].name)
-      setLoadingProgress(phases[3].progress)
-      
-      // Simulate component loading
-      for (let i = 55; i <= 75; i += 5) {
-        setLoadingProgress(i)
-        await new Promise(resolve => setTimeout(resolve, 100))
-      }
+      await Promise.race([
+        Promise.allSettled(fontsToLoad.map(loadFont)),
+        wait(1500), // cap font wait to keep snappy
+      ]);
+      await Promise.race([fontsReady, wait(500)]);
+      setLoadingProgress(20);
 
-      // Phase 5: Finalize
-      setLoadingPhase(phases[4].name)
-      setLoadingProgress(phases[4].progress)
-      
-      // Simulate finalization
-      for (let i = 75; i <= 95; i += 5) {
-        setLoadingProgress(i)
-        await new Promise(resolve => setTimeout(resolve, 80))
-      }
+      // Phase 3: Gather images from DOM (after pages mounted behind overlay)
+      setLoadingPhase("Loading images...");
+      // Let layout complete so images are in DOM
+      await wait(50);
+      const srcs = collectDomImageSrcs();
+      const total = srcs.length || 1;
+      let done = 0;
 
-      // Complete
-      setLoadingPhase(phases[5].name)
-      setLoadingProgress(phases[5].progress)
-      setIsComplete(true)
+      setLoadingProgress((p) => Math.max(p, 22));
 
-    } catch (error) {
-      console.warn('Resource loading error:', error)
-      // Continue even if some resources fail
-      setLoadingPhase('Complete')
-      setLoadingProgress(100)
-      setIsComplete(true)
+      await Promise.allSettled(
+        srcs.map((src) =>
+          preloadImage(src).then(() => {
+            done += 1;
+            const ratio = done / total;
+            // Map 20% -> 95%
+            const progress = 20 + ratio * 75;
+            setLoadingProgress((prev) =>
+              clamp(Math.max(prev, progress), 0, 97)
+            );
+          })
+        )
+      );
+
+      // Phase 4: Finalize
+      setLoadingPhase("Finalizing...");
+      setLoadingProgress((p) => Math.max(p, 97));
+      await wait(100);
+
+      setLoadingPhase("Complete");
+      setLoadingProgress(100);
+      setIsComplete(true);
+    } catch (e) {
+      console.warn("Resource loading error:", e);
+      setLoadingPhase("Complete");
+      setLoadingProgress(100);
+      setIsComplete(true);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    loadResources()
-  }, [loadResources])
+    loadResources();
+  }, [loadResources]);
 
-  return {
-    loadingProgress,
-    loadingPhase,
-    isComplete
-  }
-}
+  return { loadingProgress, loadingPhase, isComplete };
+};
 
-export default useResourceLoader
-
+export default useResourceLoader;

@@ -1,50 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import useResourceLoader from "../hooks/useResourceLoader";
 
-// Mock resource loader hook - replace with your actual implementation
-const useResourceLoader = () => {
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [loadingPhase, setLoadingPhase] = useState("Initializing Systems");
-  const [isComplete, setIsComplete] = useState(false);
-
-  useEffect(() => {
-    const phases = [
-      { progress: 0, text: "Initializing Systems" },
-      { progress: 25, text: "Loading Resources" },
-      { progress: 50, text: "Preparing Navigation" },
-      { progress: 75, text: "Final Checks" },
-      { progress: 100, text: "Ready for Departure" },
-    ];
-
-    let currentPhase = 0;
-    const interval = setInterval(() => {
-      setLoadingProgress((prev) => {
-        const next = Math.min(prev + 1, 100);
-
-        // Update phase
-        if (
-          phases[currentPhase + 1] &&
-          next >= phases[currentPhase + 1].progress
-        ) {
-          currentPhase++;
-          setLoadingPhase(phases[currentPhase].text);
-        }
-
-        if (next === 100) {
-          setIsComplete(true);
-          clearInterval(interval);
-        }
-
-        return next;
-      });
-    }, 40);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return { loadingProgress, loadingPhase, isComplete };
-};
-
-const LoadingPage = ({ onComplete, duration = 3000 }) => {
+const LoadingPage = ({ onComplete }) => {
   const canvasRef = useRef(null);
   const spaceRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -52,7 +9,7 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
   const [warpSpeed, setWarpSpeed] = useState(1);
   const [svgLoopToggle, setSvgLoopToggle] = useState(false);
 
-  const { loadingProgress, loadingPhase, isComplete } = useResourceLoader();
+  const { loadingProgress, isComplete } = useResourceLoader();
 
   // Keep the SVG playing on loop by restarting it after each full animation
   useEffect(() => {
@@ -338,6 +295,7 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
     isTransitioning && transitionProgress > 0.7
       ? (transitionProgress - 0.7) * 3.33
       : 0;
+  const displayProgress = Math.round(loadingProgress);
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
@@ -392,7 +350,7 @@ const LoadingPage = ({ onComplete, duration = 3000 }) => {
           opacity: 0.9,
         }}
       >
-        % {loadingProgress}
+        % {displayProgress}
       </div>
 
       {/* Radial speed lines overlay */}
