@@ -13,13 +13,13 @@ import FounderStaff from "../components/FounderStaff";
 import GlobalPresence from "../components/GlobalPresence";
 import ContactForm from "../components/ContactForm";
 
-const HomePage = memo(() => {
+const HomePage = memo(({ isLoaded }) => {
   return (
     <div className="App">
       {/* <Leva hidden /> */}
 
       {/* Above-the-fold: keep eager to render instantly */}
-      <LandingPage key="landing" />
+      <LandingPage key="landing" isLoaded={isLoaded} />
 
       {/* Below-the-fold sections: render eagerly so assets download during loading overlay */}
       <ErrorBoundary>

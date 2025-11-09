@@ -7,14 +7,13 @@ import React, {
   useRef,
 } from "react";
 import Navbar from "./ui/Navbar";
-import WaveBackground from "./WaveBackground";
 import { AuroraBackground } from "./ui/aurora-background";
 
 const World = lazy(() =>
   import("../components/ui/globe").then((m) => ({ default: m.World }))
 );
 
-const LandingPage = memo(() => {
+const LandingPage = memo(({ isLoaded }) => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isUserHovering, setIsUserHovering] = useState(false);
@@ -354,7 +353,7 @@ const LandingPage = memo(() => {
         `}</style>
 
         {/* Navigation */}
-        <Navbar />
+        <Navbar isLoaded={isLoaded} />
 
         <div
           className="relative z-10 flex h-full lg:flex-row flex-col opacity-0"

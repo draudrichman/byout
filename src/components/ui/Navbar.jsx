@@ -1,27 +1,45 @@
 import React, { useState, useEffect } from "react";
+import AnimatedLogo from "./AnimatedLogo";
 
-const Navbar = () => {
+const Navbar = ({ isLoaded }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [startAnimation, setStartAnimation] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded) {
+      // Start the animation once the loading page is complete
+      const startTimer = setTimeout(() => {
+        setStartAnimation(true);
+      }, 100); // A small delay to ensure smooth transition
+
+      return () => clearTimeout(startTimer);
+    }
+  }, [isLoaded]);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
-    // Timer for logo animation completion
-    const animationTimer = setTimeout(() => {
-      setIsAnimationDone(true);
-    }, 6000); // 5.5s for slide-up + 0.5s duration
-
     window.addEventListener("scroll", handleScroll);
+
+    // Only set the animation completion timer if the animation has started
+    let animationTimer;
+    if (startAnimation) {
+      animationTimer = setTimeout(() => {
+        setIsAnimationDone(true);
+      }, 6000); // 5.5s for slide-up + 0.5s duration
+    }
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      clearTimeout(animationTimer);
+      if (animationTimer) {
+        clearTimeout(animationTimer);
+      }
     };
-  }, []);
+  }, [startAnimation]);
 
   // Demo: Automatically open menu after logo lands, then close after a few seconds
   useEffect(() => {
@@ -51,14 +69,14 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Fullscreen Black BG for Logo Animation */}
+      {/* Fullscreen Black BG for Logo Animation - only shown when animation starts */}
       <div
         id="logo-bg"
         className={`fixed inset-0 z-[99] bg-black transition-opacity duration-1200 ${
           isAnimationDone ? "logo-bg-fade" : ""
         }`}
         style={{
-          opacity: isAnimationDone ? 0 : 1,
+          opacity: startAnimation && !isAnimationDone ? 1 : 0,
           pointerEvents: isAnimationDone ? "none" : "auto",
         }}
       ></div>
@@ -70,14 +88,20 @@ const Navbar = () => {
           isAnimationDone ? "cursor-pointer" : ""
         }`}
         style={{
-          animation: "slide-up 0.5s ease-out 5.5s forwards",
-          opacity: 1,
+          animation: startAnimation
+            ? "slide-up 0.5s ease-out 5.5s forwards"
+            : "none",
+          opacity: startAnimation ? 1 : 0,
           pointerEvents: isAnimationDone ? "auto" : "auto",
+          transition: "opacity 0.3s ease-in",
         }}
         onClick={toggleMenu}
       >
         {/* Logo Ring */}
-        <div className="absolute w-[350px] h-[350px] logo-ring">
+        <div
+          className="absolute w-[350px] h-[350px] logo-ring"
+          style={{ display: startAnimation ? "block" : "none" }}
+        >
           <div></div>
           <div></div>
           <div></div>
@@ -85,25 +109,17 @@ const Navbar = () => {
         </div>
 
         {/* SVG Logo */}
-        <object
-          data="/navbar/Preloader2 transparent.svg"
-          type="image/svg+xml"
-          width="350"
-          height="350"
+        <div
           className="w-full h-full relative z-10 opacity-0"
           style={{
-            animation: "show-logo 0.1s ease-in 1.5s forwards",
+            animation: startAnimation
+              ? "show-logo 0.1s ease-in 1.5s forwards"
+              : "none",
             pointerEvents: "none",
           }}
         >
-          <img
-            src="/navbar/Preloader2 transparent.svg"
-            alt="Preloader Logo"
-            width="350"
-            height="350"
-            className="w-full h-full"
-          />
-        </object>
+          <AnimatedLogo startAnimation={startAnimation} />
+        </div>
       </div>
 
       {/* Navigation Bar */}

@@ -11,7 +11,7 @@ import TechPage from "./pages/TechPage";
 import RetailChannelPage from "./pages/RetailChannelPage";
 import BrandDevPage from "./pages/branddev/BrandDevPage";
 
-const AppContent = memo(() => {
+const AppContent = memo(({ isLoaded }) => {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const fluidBgRef = useRef(null);
 
@@ -41,7 +41,7 @@ const AppContent = memo(() => {
     } else if (currentPath === "/retail" || currentPath.startsWith("/retail")) {
       return <RetailChannelPage />;
     } else {
-      return <HomePage />;
+      return <HomePage isLoaded={isLoaded} />;
     }
   };
 
@@ -186,7 +186,7 @@ const App = memo(() => {
   return (
     <>
       {/* Render the app immediately so resources start loading */}
-      <AppContent />
+      <AppContent isLoaded={!isLoading} />
       {/* Overlay the cinematic loader on top until all resources are ready */}
       {isLoading && (
         <div style={{ position: "fixed", inset: 0, zIndex: 9999 }}>
