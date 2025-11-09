@@ -137,9 +137,9 @@ export default function BrandLogosSection() {
       className="relative w-full min-h-[100vh] flex items-center justify-center overflow-hidden mb-20"
     >
       <div className="w-full max-w-7xl mx-auto px-6 py-20">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
+        <div className="flex flex-col md:flex-row items-center md:items-stretch gap-10">
           {/* Text column */}
-          <div className="fade-item opacity-0 md:w-1/2 w-full text-center md:text-left flex flex-col justify-between md:min-h-[65vh]">
+          <div className="fade-item opacity-0 md:w-1/2 w-full text-center md:text-left flex flex-col justify-between">
             <p className="mt-2 text-lg sm:text-xl md:text-4xl text-gray-400 font-jhenghei font-semibold leading-relaxed self-center md:self-start">
               我们是实战服务超过100家品牌的
               <br />
