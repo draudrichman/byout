@@ -25,25 +25,83 @@ const LoadingPage = ({ onComplete }) => {
     return () => clearTimeout(timer);
   }, [MINIMUM_DURATION]);
 
-  // Update display progress - purely time-based linear progress
+  // Update display progress - with pause points at key percentages
   useEffect(() => {
     const startTime = Date.now();
 
+    // Define pause points and their durations
+    const pausePoints = [
+      { percent: 20, pauseDuration: 800 },
+      { percent: 45, pauseDuration: 700 },
+      { percent: 69, pauseDuration: 600 },
+      { percent: 91, pauseDuration: 500 },
+    ];
+
+    const totalPauseDuration = pausePoints.reduce(
+      (sum, p) => sum + p.pauseDuration,
+      0
+    );
+    const activeProgressTime = MINIMUM_DURATION - totalPauseDuration; // Time spent actually progressing
+
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
-      const progress = Math.min((elapsed / MINIMUM_DURATION) * 100, 100);
+      let currentProgress = 0;
+      let cumulativeTime = 0;
+      let lastPercent = 0;
+      let found = false;
 
-      setDisplayProgress(progress);
+      // Check each segment
+      for (let i = 0; i < pausePoints.length; i++) {
+        const pause = pausePoints[i];
+        const progressRange = pause.percent - lastPercent;
+        const segmentDuration = (progressRange / 100) * activeProgressTime;
 
-      if (progress < 100) {
+        // Check if we're in the progress phase of this segment
+        if (elapsed < cumulativeTime + segmentDuration) {
+          const segmentElapsed = elapsed - cumulativeTime;
+          const segmentProgress =
+            (segmentElapsed / segmentDuration) * progressRange;
+          currentProgress = lastPercent + segmentProgress;
+          found = true;
+          break;
+        }
+
+        cumulativeTime += segmentDuration;
+
+        // Check if we're in the pause phase of this segment
+        if (elapsed < cumulativeTime + pause.pauseDuration) {
+          currentProgress = pause.percent;
+          found = true;
+          break;
+        }
+
+        cumulativeTime += pause.pauseDuration;
+        lastPercent = pause.percent;
+      }
+
+      // Handle final segment (91% to 100%)
+      if (!found) {
+        const finalRange = 100 - 91;
+        const finalDuration = (finalRange / 100) * activeProgressTime;
+        const finalElapsed = elapsed - cumulativeTime;
+
+        if (finalElapsed < finalDuration) {
+          const finalProgress = (finalElapsed / finalDuration) * finalRange;
+          currentProgress = 91 + finalProgress;
+        } else {
+          currentProgress = 100;
+        }
+      }
+
+      setDisplayProgress(Math.min(currentProgress, 100));
+
+      if (currentProgress < 100) {
         requestAnimationFrame(updateProgress);
       }
     };
 
     requestAnimationFrame(updateProgress);
-  }, [MINIMUM_DURATION]);
-
-  // Keep the SVG playing on loop by restarting it after each full animation
+  }, [MINIMUM_DURATION]); // Keep the SVG playing on loop by restarting it after each full animation
   useEffect(() => {
     if (isTransitioning) return; // pause restarts during the exit transition
     // Full SVG cycle: ~1.75s delay + 1.5s rotate = 3.25s. Add small buffer.
