@@ -410,6 +410,7 @@ const LandingPage = memo(({ isLoaded }) => {
           </div>
         </div>
       </div>
+
     </AuroraBackground>
   );
 });

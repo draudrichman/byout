@@ -102,6 +102,11 @@
   font-family: var(--font-jhenghei), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
+html {
+  /* Always show scrollbar to prevent layout shift */
+  overflow-y: scroll;
+}
+
 body{
   background: #000000;
   background-attachment: fixed;
