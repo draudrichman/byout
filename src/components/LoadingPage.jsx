@@ -14,37 +14,34 @@ const LoadingPage = ({ onComplete }) => {
   const MINIMUM_DURATION = 11000; // 11 seconds minimum
   const TRANSITION_DURATION = 2500; // 2.5 seconds for transition
 
-  const { loadingProgress: resourceProgress, isComplete: resourcesComplete } =
-    useResourceLoader();
+  const { isComplete: resourcesComplete } = useResourceLoader();
 
-  // Track minimum time requirement (9 seconds)
+  // Track minimum time requirement
   useEffect(() => {
     const timer = setTimeout(() => {
       setCanComplete(true);
     }, MINIMUM_DURATION);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [MINIMUM_DURATION]);
 
-  // Update display progress - simple time-based with resource sync
+  // Update display progress - purely time-based linear progress
   useEffect(() => {
     const startTime = Date.now();
 
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
-      const timeProgress = Math.min((elapsed / MINIMUM_DURATION) * 100, 100);
+      const progress = Math.min((elapsed / MINIMUM_DURATION) * 100, 100);
 
-      // Display whichever is higher: resource loading or time-based progress
-      const currentProgress = Math.max(resourceProgress, timeProgress);
-      setDisplayProgress(currentProgress);
+      setDisplayProgress(progress);
 
-      if (currentProgress < 100 || !canComplete || !resourcesComplete) {
+      if (progress < 100) {
         requestAnimationFrame(updateProgress);
       }
     };
 
     requestAnimationFrame(updateProgress);
-  }, [resourceProgress, canComplete, resourcesComplete, MINIMUM_DURATION]);
+  }, [MINIMUM_DURATION]);
 
   // Keep the SVG playing on loop by restarting it after each full animation
   useEffect(() => {
