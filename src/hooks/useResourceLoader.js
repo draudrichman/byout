@@ -43,14 +43,19 @@ const useResourceLoader = () => {
 
   const loadResources = useCallback(async () => {
     try {
-      // Phase 1: allow underlying app to mount this tick
+      // Phase 0: Delay resource loading to prevent initial lag
       setLoadingPhase("Initializing...");
       setLoadingProgress(5);
+      await wait(3000); // Wait 3 seconds before starting heavy operations
+
+      // Phase 1: allow underlying app to mount this tick
+      setLoadingPhase("Preparing...");
+      setLoadingProgress(10);
       await wait(50);
 
       // Phase 2: Fonts
       setLoadingPhase("Loading fonts...");
-      setLoadingProgress(10);
+      setLoadingProgress(15);
       const fontsToLoad = [
         "Ethnocentric Rg",
         "MFYueHei_Noncommercial-Regular",
@@ -68,7 +73,7 @@ const useResourceLoader = () => {
         wait(1500), // cap font wait to keep snappy
       ]);
       await Promise.race([fontsReady, wait(500)]);
-      setLoadingProgress(20);
+      setLoadingProgress(25);
 
       // Phase 3: Gather images from DOM (after pages mounted behind overlay)
       setLoadingPhase("Loading images...");
@@ -78,15 +83,15 @@ const useResourceLoader = () => {
       const total = srcs.length || 1;
       let done = 0;
 
-      setLoadingProgress((p) => Math.max(p, 22));
+      setLoadingProgress((p) => Math.max(p, 27));
 
       await Promise.allSettled(
         srcs.map((src) =>
           preloadImage(src).then(() => {
             done += 1;
             const ratio = done / total;
-            // Map 20% -> 95%
-            const progress = 20 + ratio * 75;
+            // Map 27% -> 95%
+            const progress = 27 + ratio * 68;
             setLoadingProgress((prev) =>
               clamp(Math.max(prev, progress), 0, 97)
             );

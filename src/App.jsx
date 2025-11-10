@@ -11,7 +11,8 @@ import TechPage from "./pages/TechPage";
 import RetailChannelPage from "./pages/RetailChannelPage";
 import BrandDevPage from "./pages/branddev/BrandDevPage";
 
-const AppContent = memo(({ isLoaded }) => {
+// eslint-disable-next-line no-unused-vars
+const AppContent = memo(({ isLoaded, mountPhase }) => {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const fluidBgRef = useRef(null);
 
@@ -51,7 +52,7 @@ const AppContent = memo(({ isLoaded }) => {
 
   // Performance monitoring (optional - disable if too noisy)
   useEffect(() => {
-    if (typeof window === "undefined" || process.env.NODE_ENV !== "development")
+    if (typeof window === "undefined" || import.meta.env.MODE !== "development")
       return;
 
     // Use PerformanceObserver instead of manual RAF for better accuracy
@@ -72,6 +73,7 @@ const AppContent = memo(({ isLoaded }) => {
       });
 
       observer.observe({ entryTypes: ["measure", "longtask"] });
+    // eslint-disable-next-line no-unused-vars
     } catch (e) {
       // PerformanceObserver not supported, skip monitoring
       console.log("Performance monitoring not available");
@@ -180,13 +182,38 @@ AppContent.displayName = "AppContent";
 
 const App = memo(() => {
   const [isLoading, setIsLoading] = useState(true);
+  const [mountPhase, setMountPhase] = useState(0);
 
-  const handleLoadingComplete = () => setIsLoading(false);
+  // Progressively mount components to distribute load over 8 seconds
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Progressive mounting schedule
+    const timers = [
+      setTimeout(() => setMountPhase(1), 1500), // Start mounting at 1.5s
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    // Ensure scroll is at top when loading completes
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 0);
+  };
 
   return (
     <>
-      {/* Render the app immediately so resources start loading */}
-      <AppContent isLoaded={!isLoading} />
+      {/* Progressive rendering based on mount phase */}
+      {mountPhase >= 1 && (
+        <AppContent isLoaded={!isLoading} mountPhase={mountPhase} />
+      )}
       {/* Overlay the cinematic loader on top until all resources are ready */}
       {isLoading && (
         <div style={{ position: "fixed", inset: 0, zIndex: 9999 }}>

@@ -17,7 +17,17 @@ const LandingPage = memo(({ isLoaded }) => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isUserHovering, setIsUserHovering] = useState(false);
+  const [shouldLoadGlobe, setShouldLoadGlobe] = useState(false);
   const timeoutRef = useRef(null);
+
+  // Delay Globe loading to prevent initial lag
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldLoadGlobe(true);
+    }, 19000); // Wait 3 seconds before loading the heavy Globe component
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Define the three subtitle variations
   const subtitleVariations = [
@@ -396,21 +406,26 @@ const LandingPage = memo(({ isLoaded }) => {
           {/* Globe Section */}
           <div className="lg:w-1/2 w-full flex items-center justify-center relative lg:h-auto h-[60vh] min-h-[300px]">
             <div className="w-full h-full flex items-center justify-center">
-              <Suspense
-                fallback={
-                  <div className="flex items-center justify-center text-white">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                    Loading Globe...
-                  </div>
-                }
-              >
-                <World data={sampleArcs} globeConfig={globeConfig} />
-              </Suspense>
+              {shouldLoadGlobe ? (
+                <Suspense
+                  fallback={
+                    <div className="flex items-center justify-center text-white">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
+                      Loading Globe...
+                    </div>
+                  }
+                >
+                  <World data={sampleArcs} globeConfig={globeConfig} />
+                </Suspense>
+              ) : (
+                <div className="flex items-center justify-center text-transparent">
+                  {/* Empty placeholder during initial load */}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-
     </AuroraBackground>
   );
 });
