@@ -8,8 +8,43 @@ const LoadingPage = ({ onComplete }) => {
   const [transitionProgress, setTransitionProgress] = useState(0);
   const [warpSpeed, setWarpSpeed] = useState(1);
   const [svgLoopToggle, setSvgLoopToggle] = useState(false);
+  const [displayProgress, setDisplayProgress] = useState(0);
+  const [canComplete, setCanComplete] = useState(false);
 
-  const { loadingProgress, isComplete } = useResourceLoader();
+  const MINIMUM_DURATION = 9000; // 9 seconds minimum
+  const TRANSITION_DURATION = 2500; // 2.5 seconds for transition
+
+  const { loadingProgress: resourceProgress, isComplete: resourcesComplete } =
+    useResourceLoader();
+
+  // Track minimum time requirement (9 seconds)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCanComplete(true);
+    }, MINIMUM_DURATION);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Update display progress - use whichever is higher: resource progress or time-based progress
+  useEffect(() => {
+    const startTime = Date.now();
+
+    const updateProgress = () => {
+      const elapsed = Date.now() - startTime;
+      const timeProgress = Math.min((elapsed / MINIMUM_DURATION) * 100, 100);
+
+      // Display the maximum of resource loading or minimum time progress
+      const currentProgress = Math.max(resourceProgress, timeProgress);
+      setDisplayProgress(currentProgress);
+
+      if (currentProgress < 100 || !canComplete || !resourcesComplete) {
+        requestAnimationFrame(updateProgress);
+      }
+    };
+
+    requestAnimationFrame(updateProgress);
+  }, [resourceProgress, canComplete, resourcesComplete]);
 
   // Keep the SVG playing on loop by restarting it after each full animation
   useEffect(() => {
@@ -20,9 +55,9 @@ const LoadingPage = ({ onComplete }) => {
     return () => clearInterval(id);
   }, [isTransitioning]);
 
-  // Hyper-smooth transition with speed ramping
+  // Hyper-smooth transition with speed ramping - only when BOTH conditions are met
   useEffect(() => {
-    if (isComplete && loadingProgress >= 100) {
+    if (canComplete && resourcesComplete && displayProgress >= 100) {
       const transitionTimer = setTimeout(() => {
         setIsTransitioning(true);
 
@@ -73,7 +108,7 @@ const LoadingPage = ({ onComplete }) => {
 
       return () => clearTimeout(transitionTimer);
     }
-  }, [isComplete, loadingProgress, onComplete]);
+  }, [canComplete, resourcesComplete, displayProgress, onComplete]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -295,7 +330,7 @@ const LoadingPage = ({ onComplete }) => {
     isTransitioning && transitionProgress > 0.7
       ? (transitionProgress - 0.7) * 3.33
       : 0;
-  const displayProgress = Math.round(loadingProgress);
+  const displayProgressRounded = Math.round(displayProgress);
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
@@ -350,7 +385,7 @@ const LoadingPage = ({ onComplete }) => {
           opacity: 0.9,
         }}
       >
-        % {displayProgress}
+        % {displayProgressRounded}
       </div>
 
       {/* Radial speed lines overlay */}

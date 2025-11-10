@@ -69,14 +69,14 @@ const Navbar = ({ isLoaded }) => {
 
   return (
     <>
-      {/* Fullscreen Black BG for Logo Animation - only shown when animation starts */}
+      {/* Fullscreen Black BG for Logo Animation - visible from start */}
       <div
         id="logo-bg"
         className={`fixed inset-0 z-[99] bg-black transition-opacity duration-1200 ${
           isAnimationDone ? "logo-bg-fade" : ""
         }`}
         style={{
-          opacity: startAnimation && !isAnimationDone ? 1 : 0,
+          opacity: isAnimationDone ? 0 : 1,
           pointerEvents: isAnimationDone ? "none" : "auto",
         }}
       ></div>
