@@ -99,7 +99,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             zIndex: 0,
           }}
         >
-          {/* <Prism
+          <Prism
             animationType="3drotate"
             timeScale={1}
             height={2.5}
@@ -110,7 +110,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             glow={0.1}
             scale={3.6}
             colorScheme="champagne-chrome"
-          /> */}
+          />
         </div>
       )}
 
