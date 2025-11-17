@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, memo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import LoadingPage from "./components/LoadingPage";
-import Prism from "./components/PrismaBackground.jsx";
+// import Prism from "./components/PrismaBackground.jsx";
+import Prism from "./components/PrismBackground.jsx";
 import PageTransition from "./components/PageTransition";
 
 // Pages
@@ -73,7 +74,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
       });
 
       observer.observe({ entryTypes: ["measure", "longtask"] });
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (e) {
       // PerformanceObserver not supported, skip monitoring
       console.log("Performance monitoring not available");
@@ -99,7 +100,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             zIndex: 0,
           }}
         >
-          <Prism
+          {/* <Prism
             animationType="3drotate"
             timeScale={1}
             height={2.5}
@@ -110,6 +111,13 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             glow={0.1}
             scale={3.6}
             colorScheme="champagne-chrome"
+          /> */}
+          <Prism
+            showFPS={true}
+            fpsPosition="top-left"
+            height={2}
+            baseWidth={2}
+            animationType="rotate"
           />
         </div>
       )}
