@@ -92,7 +92,7 @@ const usePerformanceMonitor = (enabled = true, onQualityChange = null) => {
 
       if (currentTime - lastFpsUpdate >= 500) {
         const fps = Math.round(
-          (frameCount * 1000) / (currentTime - lastFpsUpdate)
+          (frameCount * 1000) / (currentTime - lastFpsUpdate),
         );
         fpsRef.current = fps;
         setDisplayFPS(fps);
@@ -142,7 +142,7 @@ const Prism = ({
   height = 2.5,
   baseWidth = 2.5,
   animationType = "rotate",
-  glow = 0.6,
+  glow = 0.9,
   offset = { x: 0, y: 0 },
   noise = 0.1,
   transparent = true,
@@ -151,7 +151,7 @@ const Prism = ({
   colorFrequency = 1,
   hoverStrength = 1,
   inertia = 0.05,
-  bloom = 0.9,
+  bloom = 1.8,
   suspendWhenOffscreen = true,
   timeScale = 0.5,
   colorScheme = "grey",
@@ -206,7 +206,7 @@ const Prism = ({
       const isLowPerf =
         navigator.hardwareConcurrency <= 4 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
+          navigator.userAgent,
         );
 
       setQuality(isLowPerf ? "low" : "high");
@@ -665,7 +665,7 @@ const Prism = ({
             0,
             0,
             0,
-            rot4DBuf
+            rot4DBuf,
           );
         }
       } else if (animationType === "3drotate") {
@@ -677,7 +677,7 @@ const Prism = ({
           yaw,
           pitch,
           roll,
-          rotBuf
+          rotBuf,
         );
       } else {
         if (TS >= 1e-6) {
@@ -692,7 +692,7 @@ const Prism = ({
               t * 0.4,
               t * 0.15,
               t * 0.25,
-              rot4DBuf
+              rot4DBuf,
             );
           }
         }
@@ -708,7 +708,7 @@ const Prism = ({
         if (vis && !document.hidden) startRAF();
         else stopRAF();
       },
-      { rootMargin: "50px" }
+      { rootMargin: "50px" },
     );
     io.observe(container);
 
