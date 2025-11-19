@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { MapPoint } from './MapPoint';
-import { mapPoints } from './MapData';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { MapPoint } from "./MapPoint";
+import { mapPoints } from "./MapData";
 
 export const MapSelector = ({
   flagItems,
@@ -12,7 +12,7 @@ export const MapSelector = ({
   pauseOnHover = true,
   className = "",
   onCountryChange,
-  selectedIndex = 0
+  selectedIndex = 0,
 }) => {
   const currentIndex = selectedIndex;
   const [isHovered, setIsHovered] = useState(false);
@@ -27,13 +27,15 @@ export const MapSelector = ({
     onCountryChange?.(flagItems[nextIndex].country, nextIndex, false);
   }, [currentIndex, onCountryChange, flagItems]);
 
-  const goToIndex = useCallback((index, isUserClick = true) => {
-    if (index >= 0 && index < flagItems.length) {
-      // Pass isUserClick flag to indicate if this was triggered by user interaction
-      onCountryChange?.(flagItems[index].country, index, isUserClick);
-    }
-  }, [onCountryChange, flagItems]);
-
+  const goToIndex = useCallback(
+    (index, isUserClick = true) => {
+      if (index >= 0 && index < flagItems.length) {
+        // Pass isUserClick flag to indicate if this was triggered by user interaction
+        onCountryChange?.(flagItems[index].country, index, isUserClick);
+      }
+    },
+    [onCountryChange, flagItems]
+  );
 
   // Initialize GSAP ScrollTrigger
   useEffect(() => {
@@ -41,14 +43,18 @@ export const MapSelector = ({
 
     // Add delay to ensure DOM is ready
     const timer = setTimeout(() => {
-      if (mapImageRef.current && mapPointsRef.current && mapContainerRef.current) {
+      if (
+        mapImageRef.current &&
+        mapPointsRef.current &&
+        mapContainerRef.current
+      ) {
         try {
           // Initial state - map and points are scaled down and faded
           gsap.set([mapImageRef.current, mapPointsRef.current], {
             scale: 0.8,
             opacity: 0.3,
             y: 30,
-            transformOrigin: "center center"
+            transformOrigin: "center center",
           });
 
           // Create scroll-triggered animation for both map and points
@@ -62,11 +68,11 @@ export const MapSelector = ({
               start: "top 80%",
               end: "bottom 20%",
               scrub: 1,
-              toggleActions: "play none none reverse"
-            }
+              toggleActions: "play none none reverse",
+            },
           });
         } catch (error) {
-          console.warn('Error initializing GSAP ScrollTrigger:', error);
+          console.warn("Error initializing GSAP ScrollTrigger:", error);
         }
       }
     }, 50);
@@ -74,9 +80,9 @@ export const MapSelector = ({
     return () => {
       clearTimeout(timer);
       try {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       } catch (error) {
-        console.warn('Error cleaning up ScrollTrigger:', error);
+        console.warn("Error cleaning up ScrollTrigger:", error);
       }
       // Kill any remaining animations
       if (mapImageRef.current) gsap.killTweensOf(mapImageRef.current);
@@ -114,40 +120,54 @@ export const MapSelector = ({
     }
   }, [pauseOnHover]);
 
-  const handlePointClick = useCallback((country) => {
-    if (!country || !flagItems) return;
-    const flagIndex = flagItems.findIndex(flag => flag?.country === country);
-    if (flagIndex !== -1) {
-      goToIndex(flagIndex);
-    }
-  }, [flagItems, goToIndex]);
-
-  const handlePointHover = useCallback((country) => {
-    if (!country || !flagItems) return;
-    if (pauseOnHover && isHovered) {
-      const flagIndex = flagItems.findIndex(flag => flag?.country === country);
+  const handlePointClick = useCallback(
+    (country) => {
+      if (!country || !flagItems) return;
+      const flagIndex = flagItems.findIndex(
+        (flag) => flag?.country === country
+      );
       if (flagIndex !== -1) {
         goToIndex(flagIndex);
       }
-    }
-  }, [flagItems, goToIndex, pauseOnHover, isHovered]);
+    },
+    [flagItems, goToIndex]
+  );
 
-  const handleKeyDown = useCallback((event) => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      const prevIndex = (currentIndex - 1 + flagItems.length) % flagItems.length;
-      goToIndex(prevIndex);
-    } else if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      const nextIndex = (currentIndex + 1) % flagItems.length;
-      goToIndex(nextIndex);
-    }
-  }, [goToIndex, currentIndex, flagItems.length]);
+  const handlePointHover = useCallback(
+    (country) => {
+      if (!country || !flagItems) return;
+      if (pauseOnHover && isHovered) {
+        const flagIndex = flagItems.findIndex(
+          (flag) => flag?.country === country
+        );
+        if (flagIndex !== -1) {
+          goToIndex(flagIndex);
+        }
+      }
+    },
+    [flagItems, goToIndex, pauseOnHover, isHovered]
+  );
+
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        const prevIndex =
+          (currentIndex - 1 + flagItems.length) % flagItems.length;
+        goToIndex(prevIndex);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        const nextIndex = (currentIndex + 1) % flagItems.length;
+        goToIndex(nextIndex);
+      }
+    },
+    [goToIndex, currentIndex, flagItems.length]
+  );
 
   const selectedCountry = flagItems[currentIndex]?.country || "Canada";
 
   return (
-    <div 
+    <div
       className={`relative ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -157,8 +177,11 @@ export const MapSelector = ({
       aria-label="Interactive country selection map"
     >
       {/* Map Image */}
-      <div ref={mapContainerRef} className="py-64 sm:py-24 md:py-18 lg:py-8 relative">
-        <img 
+      <div
+        ref={mapContainerRef}
+        className="py-64 sm:py-24 md:py-18 lg:py-8 relative"
+      >
+        <img
           ref={mapImageRef}
           src="/Map/Map.png"
           alt="Interactive Geographic Map"
@@ -168,30 +191,35 @@ export const MapSelector = ({
             height: "auto",
             width: "100%",
             filter: "invert(1) brightness(0.8)",
-            opacity: 0.6
+            opacity: 0.6,
           }}
         />
-        
+
         {/* Dynamic Map Points */}
-        <div 
-          ref={mapPointsRef} 
+        <div
+          ref={mapPointsRef}
           className="absolute inset-0"
           style={{ zIndex: 50 }}
         >
-          {mapPoints && mapPoints.map((point) => point && point.country && (
-            <MapPoint
-              key={point.country}
-              point={point}
-              isActive={selectedCountry === point.country}
-              onClick={() => handlePointClick(point.country)}
-              onMouseEnter={() => handlePointHover(point.country)}
-              radarIntensity={0.8}
-              radarSpeed={1}
-              radarFrequency={0.1}
-              hasActivePoint={true}
-              containerRef={mapContainerRef}
-            />
-          ))}
+          {mapPoints &&
+            mapPoints.map(
+              (point) =>
+                point &&
+                point.country && (
+                  <MapPoint
+                    key={point.country}
+                    point={point}
+                    isActive={selectedCountry === point.country}
+                    onClick={() => handlePointClick(point.country)}
+                    onMouseEnter={() => handlePointHover(point.country)}
+                    radarIntensity={0.8}
+                    radarSpeed={1}
+                    radarFrequency={0.1}
+                    hasActivePoint={true}
+                    containerRef={mapContainerRef}
+                  />
+                )
+            )}
         </div>
       </div>
     </div>

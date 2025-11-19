@@ -1,32 +1,32 @@
 export const flagItems = [
-    {
-      country: "Canada",
-      flag: "🇨🇦"
-    },
-    {
-      country: "United States",
-      flag: "🇺🇸"
-    },
-    {
-      country: "Cambodia",
-      flag: "🇰🇭"
-    },
-    {
-      country: "China",
-      flag: "🇨🇳"
-    },
-    {
-      country: "Australia",
-      flag: "🇦🇺"
-    },
-    {
-      country: "New Zealand",
-      flag: "🇳🇿"
-    }
-  ];
+  {
+    country: "Canada",
+    flag: "🇨🇦",
+  },
+  {
+    country: "United States",
+    flag: "🇺🇸",
+  },
+  {
+    country: "Cambodia",
+    flag: "🇰🇭",
+  },
+  {
+    country: "China",
+    flag: "🇨🇳",
+  },
+  {
+    country: "Australia",
+    flag: "🇦🇺",
+  },
+  {
+    country: "New Zealand",
+    flag: "🇳🇿",
+  },
+];
 
 export const logosByCountry = {
-  "Canada": [
+  Canada: [
     {
       src: "/Logos/Canada/Brunet.png",
       title: "Brunet",
@@ -152,21 +152,33 @@ export const logosByCountry = {
     {
       src: "/Logos/US/Walgreens.jpg",
       title: "Walgreens",
-    }
+    },
   ],
-  "Cambodia": [
+  Cambodia: [
     {
       src: "/Logos/Cambodia/LuckySupermarket.jpg",
       title: "Lucky Supermarket",
     },
   ],
-  "China": [
+  China: [
     {
       src: "/Logos/China/SamsClub.png",
       title: "Sam's Club",
     },
+    {
+      src: "/Logos/China/Aldi.png",
+      title: "Aldi",
+    },
+    {
+      src: "/Logos/China/Costco.png",
+      title: "Costco",
+    },
+    {
+      src: "/Logos/China/Yonghui.png",
+      title: "Yonghui Superstores",
+    },
   ],
-  "Australia": [
+  Australia: [
     {
       src: "/Logos/Australia/Aldi.png",
       title: "Aldi",
@@ -201,7 +213,7 @@ export const splitLogosIntoThreeGroups = (logos) => {
   const group1 = [];
   const group2 = [];
   const group3 = [];
-  
+
   logos.forEach((logo, index) => {
     const groupIndex = index % 3;
     if (groupIndex === 0) {
@@ -212,7 +224,7 @@ export const splitLogosIntoThreeGroups = (logos) => {
       group3.push(logo);
     }
   });
-  
+
   return { group1, group2, group3 };
 };
 
@@ -220,7 +232,7 @@ export const splitLogosIntoThreeGroups = (logos) => {
 export const splitLogosIntoTwoGroups = (logos) => {
   const group1 = [];
   const group2 = [];
-  
+
   logos.forEach((logo, index) => {
     if (index % 2 === 0) {
       group1.push(logo);
@@ -228,19 +240,31 @@ export const splitLogosIntoTwoGroups = (logos) => {
       group2.push(logo);
     }
   });
-  
+
   return { group1, group2 };
 };
 
 // Get logos split into appropriate groups for a specific country
 export const getLogoGroupsForCountry = (country) => {
   const logos = logosByCountry[country] || logosByCountry["Canada"];
-  
+
   // Use 1 group for United States and Canada, 1 group for smaller countries
   if (country === "United States" || country === "Canada") {
-    return { group1: logos, group2: [], group3: [], useTwoGroups: false, useOneGroup: true };
+    return {
+      group1: logos,
+      group2: [],
+      group3: [],
+      useTwoGroups: false,
+      useOneGroup: true,
+    };
   } else if (country === "Japan" || logos.length <= 3) {
-    return { group1: logos, group2: [], group3: [], useTwoGroups: false, useOneGroup: true };
+    return {
+      group1: logos,
+      group2: [],
+      group3: [],
+      useTwoGroups: false,
+      useOneGroup: true,
+    };
   } else {
     const { group1, group2, group3 } = splitLogosIntoThreeGroups(logos);
     return { group1, group2, group3, useTwoGroups: false };

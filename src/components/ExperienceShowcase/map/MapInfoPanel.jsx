@@ -1,16 +1,13 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { getCountryTextData } from './MapData';
+import React, { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { getCountryTextData } from "./MapData";
 
-
-const MapInfoPanel = ({
-  selectedCountry
-}) => {
+const MapInfoPanel = ({ selectedCountry }) => {
   const textContentRef = useRef(null);
   const containerRef = useRef(null);
-  
+
   // Get country-specific text data
   const textData = getCountryTextData(selectedCountry);
 
@@ -22,24 +19,26 @@ const MapInfoPanel = ({
 
     // Create timeline for entrance animation
     const tl = gsap.timeline({ delay: 0.6 });
-    
+
     tl.to(containerRef.current, {
       opacity: 1,
       scaleX: 1,
       duration: 0.2,
       ease: "back.out(0.5)",
     });
-
   }, [selectedCountry]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="mt-8 mb-12 min-h-[340px] sm:min-h-[240px] flex items-center relative z-20"
       data-map-info-panel="true"
     >
       <div className="w-full px-4 sm:px-8">
-        <div ref={textContentRef} className="relative grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 text-center text-white">
+        <div
+          ref={textContentRef}
+          className="relative grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 text-center text-white"
+        >
           {/* Section 1 */}
           <div className="space-y-2">
             <div className="text-3xl sm:text-4xl font-bold text-white">
@@ -52,10 +51,10 @@ const MapInfoPanel = ({
               {textData?.section1.englishLabel || "Total Retail locations"}
             </div>
           </div>
-          
+
           {/* Separator 1 */}
           <div className="hidden sm:block absolute left-1/3 top-1/2 transform -translate-y-1/2 w-px h-16 bg-white/20"></div>
-          
+
           {/* Section 2 */}
           <div className="space-y-2">
             <div className="text-3xl sm:text-4xl font-bold text-white">
@@ -68,10 +67,10 @@ const MapInfoPanel = ({
               {textData?.section2.englishLabel || "Onboard products"}
             </div>
           </div>
-          
+
           {/* Separator 2 */}
           <div className="hidden sm:block absolute left-2/3 top-1/2 transform -translate-y-1/2 w-px h-16 bg-white/20"></div>
-          
+
           {/* Section 3 */}
           <div className="space-y-2">
             <div className="text-3xl sm:text-4xl font-bold text-white">
