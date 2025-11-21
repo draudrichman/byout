@@ -104,7 +104,7 @@
 
 html {
   /* Always show scrollbar to prevent layout shift */
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 body{
