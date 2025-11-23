@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import Navbar from "./ui/Navbar";
 import { AuroraBackground } from "./ui/aurora-background";
+import RotatingEarth from "./ui/globe2";
 
 const World = lazy(() =>
   import("../components/ui/globe").then((m) => ({ default: m.World }))
@@ -415,7 +416,8 @@ const LandingPage = memo(({ isLoaded }) => {
                     </div>
                   }
                 >
-                  <World data={sampleArcs} globeConfig={globeConfig} />
+                  {/* <World data={sampleArcs} globeConfig={globeConfig} /> */}
+                  <RotatingEarth width={700} height={700} />
                 </Suspense>
               ) : (
                 <div className="flex items-center justify-center text-transparent">
