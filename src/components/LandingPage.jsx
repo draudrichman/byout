@@ -1,5 +1,4 @@
 import React, {
-  lazy,
   Suspense,
   useState,
   useEffect,
@@ -10,9 +9,6 @@ import Navbar from "./ui/Navbar";
 import { AuroraBackground } from "./ui/aurora-background";
 import RotatingEarth from "./ui/globe2";
 
-const World = lazy(() =>
-  import("../components/ui/globe").then((m) => ({ default: m.World }))
-);
 
 const LandingPage = memo(({ isLoaded }) => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
@@ -112,125 +108,8 @@ const LandingPage = memo(({ isLoaded }) => {
     // useEffect will handle restarting the timer
   };
 
-  const globeConfig = {
-    pointSize: 5,
-    pointStyle: "dot",
-    pointOpacity: 1,
-    particlesSize: 2,
-    hexPolygonColor: "#414141",
-    chinaHexPolygonColor: "#ffffff",
-    targetingCountriesColor: "#ffffff",
-    globeColor: "#ffffff",
-    globeOpacity: 0,
-    showAtmosphere: false,
-    atmosphereColor: "#ffffff",
-    atmosphereAltitude: 0.2,
-    emissive: "#ffffff",
-    emissiveIntensity: 0.1,
-    shininess: 0.9,
-    polygonColor: "rgba(0, 121, 145,0.7)",
-    ambientLight: "#ffffff",
-    directionalLeftLight: "#ffffff",
-    directionalTopLight: "#ffffff",
-    pointLight: "#ffffff",
-    arcTime: 2000,
-    arcLength: 0.9,
-    rings: 1,
-    maxRings: 3,
-    initialPosition: { lat: 22.3193, lng: 114.1694 },
-    autoRotate: true,
-    autoRotateSpeed: 1,
-    metallicIntensity: 0.9,
-    glowIntensity: 0.8,
-  };
 
-  const colors = [
-    "#DDDDDD", // Medium silver, neutral metallic
-    "#DDDDDD", // Very light silver, almost white
-    "#DDDDDD", // Dark steel silver with blue undertone
-    "#DDDDDD", // Warm silver with golden tint
-    "#DDDDDD", // Light blue-gray silver
-    "#DDDDDD", // Deep chrome blue, darker shade
-    "#DDDDDD", // Bright, near-white silver
-    "#DDDDDD", // Mid-dark silver, cool tone
-    "#DDDDDD", // Light bronze-silver mix
-    "#DDDDDD", // Dark charcoal silver
-    "#DDDDDD", // Pale blue chrome
-    "#DDDDDD", // Soft, neutral light silver
-  ];
 
-  // Country coordinates
-  const chinaLat = 35.8617;
-  const chinaLng = 104.1954;
-  const usaLat = 39.8283;
-  const usaLng = -98.5795;
-  const canadaLat = 56.1304;
-  const canadaLng = -106.3468;
-  const cambodiaLat = 12.5657;
-  const cambodiaLng = 104.991;
-  const japanLat = 36.2048;
-  const japanLng = 138.2529;
-  const australiaLat = -25.2744;
-  const australiaLng = 133.7751;
-  const newZealandLat = -40.9006;
-  const newZealandLng = 174.886;
-
-  const sampleArcs = [
-    {
-      order: 1,
-      startLat: chinaLat,
-      startLng: chinaLng,
-      endLat: usaLat,
-      endLng: usaLng,
-      arcAlt: 0.3,
-      color: colors[0],
-    },
-    {
-      order: 1,
-      startLat: chinaLat,
-      startLng: chinaLng,
-      endLat: canadaLat,
-      endLng: canadaLng,
-      arcAlt: 0.3,
-      color: colors[1],
-    },
-    {
-      order: 1,
-      startLat: chinaLat,
-      startLng: chinaLng,
-      endLat: cambodiaLat,
-      endLng: cambodiaLng,
-      arcAlt: 0.3,
-      color: colors[2],
-    },
-    {
-      order: 1,
-      startLat: chinaLat,
-      startLng: chinaLng,
-      endLat: japanLat,
-      endLng: japanLng,
-      arcAlt: 0.3,
-      color: colors[3],
-    },
-    {
-      order: 1,
-      startLat: chinaLat,
-      startLng: chinaLng,
-      endLat: australiaLat,
-      endLng: australiaLng,
-      arcAlt: 0.3,
-      color: colors[4],
-    },
-    {
-      order: 1,
-      startLat: chinaLat,
-      startLng: chinaLng,
-      endLat: newZealandLat,
-      endLng: newZealandLng,
-      arcAlt: 0.3,
-      color: colors[5],
-    },
-  ];
 
   const renderSubtitle = () => {
     // Show empty state when no tab is hovered
@@ -341,7 +220,8 @@ const LandingPage = memo(({ isLoaded }) => {
   };
 
   return (
-    <AuroraBackground>
+    // <AuroraBackground>
+    <>
       <div className="absolute inset-0 w-full h-full bg-black -z-1" />
       <div
         className="w-screen lg:h-screen overflow-hidden relative z-10"
@@ -433,7 +313,9 @@ const LandingPage = memo(({ isLoaded }) => {
           </div>
         </div>
       </div>
-    </AuroraBackground>
+    </>
+
+    // </AuroraBackground>
   );
 });
 
