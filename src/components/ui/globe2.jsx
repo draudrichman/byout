@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
 const RADAR_LOCATIONS = [
-  { name: "Beijing", lng: 116.4074, lat: 39.9042, color: "#ff6b6b" },
-  { name: "Hong Kong", lng: 114.1095, lat: 22.3193, color: "#ffd93d" },
-  { name: "Australia", lng: 133.7751, lat: -25.2744, color: "#6bcf7f" },
-  { name: "UK", lng: -3.4359, lat: 55.3781, color: "#4d96ff" },
+  { name: "China", lng: 104.1954, lat: 35.8617, color: "#DDDDDD" },
+  { name: "USA", lng: -98.5795, lat: 39.8283, color: "#DDDDDD" },
+  { name: "Canada", lng: -106.3468, lat: 56.1304, color: "#DDDDDD" },
+  { name: "Cambodia", lng: 104.991, lat: 12.5657, color: "#DDDDDD" },
+  { name: "Japan", lng: 138.2529, lat: 36.2048, color: "#DDDDDD" },
+  { name: "Australia", lng: 133.7751, lat: -25.2744, color: "#DDDDDD" },
+  { name: "New Zealand", lng: 174.886, lat: -40.9006, color: "#DDDDDD" },
 ];
 
 export default function RotatingEarth({
@@ -25,8 +28,8 @@ export default function RotatingEarth({
     if (!context) return;
 
     // Set up responsive dimensions
-    const containerWidth = Math.min(width, window.innerWidth - 40);
-    const containerHeight = Math.min(height, window.innerHeight - 100);
+    const containerWidth = width;
+    const containerHeight = height;
     const radius = Math.min(containerWidth, containerHeight) / 2.5;
 
     const dpr = window.devicePixelRatio || 1;
@@ -150,7 +153,7 @@ export default function RotatingEarth({
       //   context.fillStyle = "#000000";
       context.fill();
       context.globalAlpha = 1;
-      context.strokeStyle = "#ffffff";
+      context.strokeStyle = "#83878d";
       context.lineWidth = 2 * scaleFactor;
       context.stroke();
 
@@ -159,7 +162,7 @@ export default function RotatingEarth({
         const graticule = d3.geoGraticule();
         context.beginPath();
         path(graticule());
-        context.strokeStyle = "#ffffff";
+        context.strokeStyle = "#83878d";
         context.lineWidth = 1 * scaleFactor;
         context.globalAlpha = 0.25;
         context.stroke();
@@ -170,55 +173,42 @@ export default function RotatingEarth({
         landFeatures.features.forEach((feature) => {
           path(feature);
         });
-        context.strokeStyle = "#ffffff";
+        context.strokeStyle = "#83878d";
         context.lineWidth = 1 * scaleFactor;
         context.stroke();
 
-        // Draw halftone dots
-        allDots.forEach((dot) => {
-          const projected = projection([dot.lng, dot.lat]);
-          if (
-            projected &&
-            projected[0] >= 0 &&
-            projected[0] <= containerWidth &&
-            projected[1] >= 0 &&
-            projected[1] <= containerHeight
-          ) {
-            context.beginPath();
-            context.arc(
-              projected[0],
-              projected[1],
-              1.2 * scaleFactor,
-              0,
-              2 * Math.PI
-            );
-            context.fillStyle = "#999999";
-            context.fill();
-          }
-        });
-
         RADAR_LOCATIONS.forEach((location) => {
           const projected = projection([location.lng, location.lat]);
+
+          // Check if the location is on the visible side of the globe
+          const rotatedCoords = projection.rotate();
+          const lambda = location.lng + rotatedCoords[0];
+          const phi = location.lat - rotatedCoords[1];
+          const cosPhi = Math.cos((phi * Math.PI) / 180);
+          const cosLambda = Math.cos((lambda * Math.PI) / 180);
+          const distance = cosPhi * cosLambda;
+
           if (
             projected &&
             projected[0] >= 0 &&
             projected[0] <= containerWidth &&
             projected[1] >= 0 &&
-            projected[1] <= containerHeight
+            projected[1] <= containerHeight &&
+            distance > 0 // Only draw if on the front side
           ) {
             // Draw radar center point
             context.beginPath();
             context.arc(
               projected[0],
               projected[1],
-              3 * scaleFactor,
+              6 * scaleFactor,
               0,
               2 * Math.PI
             );
             context.fillStyle = location.color;
             context.fill();
 
-            const maxRadius = 40 * scaleFactor;
+            const maxRadius = 80 * scaleFactor;
             const expandingRadius =
               ((radarAnimationTime % 5000) / 5000) * maxRadius;
 
@@ -232,7 +222,7 @@ export default function RotatingEarth({
               2 * Math.PI
             );
             context.strokeStyle = location.color;
-            context.lineWidth = 1.5 * scaleFactor;
+            context.lineWidth = 2.5 * scaleFactor;
             const outerAlpha = 1 - (radarAnimationTime % 5000) / 5000;
             context.globalAlpha = outerAlpha * 0.6;
             context.stroke();
@@ -243,12 +233,12 @@ export default function RotatingEarth({
             context.arc(
               projected[0],
               projected[1],
-              15 * scaleFactor,
+              30 * scaleFactor,
               0,
               2 * Math.PI
             );
             context.strokeStyle = location.color;
-            context.lineWidth = 1 * scaleFactor;
+            context.lineWidth = 2 * scaleFactor;
             context.globalAlpha = 0.4;
             context.stroke();
             context.globalAlpha = 1;

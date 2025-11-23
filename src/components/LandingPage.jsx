@@ -366,22 +366,38 @@ const LandingPage = memo(({ isLoaded }) => {
         {/* Navigation */}
         <Navbar isLoaded={isLoaded} />
 
+        {/* Globe Background Section */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div
+            className="w-full h-full flex items-center justify-center opacity-0"
+            style={{ animation: "show-hero 1s ease-in 7s forwards" }}
+          >
+            {shouldLoadGlobe ? (
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center text-white">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
+                    Loading Globe...
+                  </div>
+                }
+              >
+                {/* <World data={sampleArcs} globeConfig={globeConfig} /> */}
+                <RotatingEarth width={1250} height={1250} />
+              </Suspense>
+            ) : (
+              <div className="flex items-center justify-center text-transparent">
+                {/* Empty placeholder during initial load */}
+              </div>
+            )}
+          </div>
+        </div>
+
         <div
           className="relative z-10 flex h-full lg:flex-row flex-col opacity-0"
           style={{ animation: "show-hero 1s ease-in 7s forwards" }}
         >
           {/* Content Section */}
           <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-24 lg:pr-8 px-6 lg:py-0 py-8 lg:pt-0 pt-35">
-            {/* Main Title */}
-            <h1 className="text-white lg:mb-12 mb-8 flex justify-center lg:justify-start">
-              <img
-                src="./img/logos/prism.svg"
-                alt="Prism Logo"
-                loading="eager"
-                className="lg:max-w-[570px] max-w-[300px] w-auto h-auto"
-              />
-            </h1>
-
             {/* Morphing Subtitles */}
             <div className="lg:mb-16 mb-8 lg:pl-3 px-0 lg:min-h-[200px] min-h-[150px] flex items-center lg:items-start">
               {renderSubtitle()}
@@ -404,27 +420,16 @@ const LandingPage = memo(({ isLoaded }) => {
             </div>
           </div>
 
-          {/* Globe Section */}
-          <div className="lg:w-1/2 w-full flex items-center justify-center relative lg:h-auto h-[60vh] min-h-[300px]">
-            <div className="w-full h-full flex items-center justify-center">
-              {shouldLoadGlobe ? (
-                <Suspense
-                  fallback={
-                    <div className="flex items-center justify-center text-white">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                      Loading Globe...
-                    </div>
-                  }
-                >
-                  {/* <World data={sampleArcs} globeConfig={globeConfig} /> */}
-                  <RotatingEarth width={700} height={700} />
-                </Suspense>
-              ) : (
-                <div className="flex items-center justify-center text-transparent">
-                  {/* Empty placeholder during initial load */}
-                </div>
-              )}
-            </div>
+          {/* Right section with Prism Logo */}
+          <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-8 lg:pr-24 px-6 lg:py-0 py-8">
+            <h1 className="text-white flex justify-center lg:justify-end">
+              <img
+                src="./img/logos/prism.svg"
+                alt="Prism Logo"
+                loading="eager"
+                className="lg:max-w-[570px] max-w-[300px] w-auto h-auto"
+              />
+            </h1>
           </div>
         </div>
       </div>
