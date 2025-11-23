@@ -7,7 +7,16 @@
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(jpg|jpeg|gif|png|webp|svg|woff2|woff|ttf|eot|ico|js|css|json)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -16,16 +25,13 @@
       ]
     },
     {
-      "source": "/index.html",
+      "source": "/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     }
   ]
 }
-
-
-
