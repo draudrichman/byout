@@ -283,7 +283,7 @@ export default function RotatingEarth({
     // Set up rotation and interaction
     const rotation = [0, 0];
     let autoRotate = true;
-    const rotationSpeed = 0.1;
+    const rotationSpeed = 0.2;
 
     const rotate = () => {
       if (autoRotate) {
@@ -329,13 +329,13 @@ export default function RotatingEarth({
       document.addEventListener("mouseup", handleMouseUp);
     };
 
-    const handleWheel = (event) => {
-      event.preventDefault();
-      // const scaleFactor = event.deltaY > 0 ? 0.9 : 1.1
-      // const newRadius = Math.max(radius * 0.5, Math.min(radius * 3, projection.scale() * scaleFactor))
-      // projection.scale(newRadius)
-      // render()
-    };
+    // const handleWheel = (event) => {
+    //   event.preventDefault();
+    //   // const scaleFactor = event.deltaY > 0 ? 0.9 : 1.1
+    //   // const newRadius = Math.max(radius * 0.5, Math.min(radius * 3, projection.scale() * scaleFactor))
+    //   // projection.scale(newRadius)
+    //   // render()
+    // };
 
     canvas.addEventListener("mousedown", handleMouseDown);
     // canvas.addEventListener("wheel", handleWheel)

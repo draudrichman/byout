@@ -382,7 +382,7 @@ const LandingPage = memo(({ isLoaded }) => {
                 }
               >
                 {/* <World data={sampleArcs} globeConfig={globeConfig} /> */}
-                <RotatingEarth width={1250} height={1250} />
+                <RotatingEarth width={1350} height={1350} />
               </Suspense>
             ) : (
               <div className="flex items-center justify-center text-transparent">
