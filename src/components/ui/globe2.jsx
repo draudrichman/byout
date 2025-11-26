@@ -177,24 +177,42 @@ export default function RotatingEarth({
         context.lineWidth = 1 * scaleFactor;
         context.stroke();
 
+        // Update current region index based on rotation
+        currentRegionIndex = getCurrentFocusRegion();
+
         RADAR_LOCATIONS.forEach((location) => {
+          // Check if this location should be visible in the current region
+          const currentRegion = focusRegions[currentRegionIndex];
+          if (!currentRegion.visibleCountries.includes(location.name)) {
+            return; // Skip this radar if it's not in the current focus region
+          }
+
           const projected = projection([location.lng, location.lat]);
 
-          // Check if the location is on the visible side of the globe
+          if (!projected) return;
+
+          // Check if the location is on the visible side of the globe using proper spherical geometry
           const rotatedCoords = projection.rotate();
-          const lambda = location.lng + rotatedCoords[0];
-          const phi = location.lat - rotatedCoords[1];
-          const cosPhi = Math.cos((phi * Math.PI) / 180);
-          const cosLambda = Math.cos((lambda * Math.PI) / 180);
-          const distance = cosPhi * cosLambda;
+
+          // Convert to radians
+          const locationLng = (location.lng * Math.PI) / 180;
+          const locationLat = (location.lat * Math.PI) / 180;
+          const rotateLng = (-rotatedCoords[0] * Math.PI) / 180;
+          const rotateLat = (-rotatedCoords[1] * Math.PI) / 180;
+
+          // Calculate if point is on the visible hemisphere using spherical dot product
+          const cosc =
+            Math.sin(rotateLat) * Math.sin(locationLat) +
+            Math.cos(rotateLat) *
+              Math.cos(locationLat) *
+              Math.cos(locationLng - rotateLng);
 
           if (
-            projected &&
             projected[0] >= 0 &&
             projected[0] <= containerWidth &&
             projected[1] >= 0 &&
             projected[1] <= containerHeight &&
-            distance > 0 // Only draw if on the front side
+            cosc > 0 // Only draw if on the front side
           ) {
             // Draw radar center point
             context.beginPath();
@@ -281,18 +299,100 @@ export default function RotatingEarth({
     };
 
     // Set up rotation and interaction
-    const rotation = [0, 0];
+    const rotation = [0, 0, 0]; // [longitude, latitude, roll]
     let autoRotate = true;
-    const rotationSpeed = 0.2;
+
+    // Define regions to focus on during rotation (ordered for counter-clockwise movement)
+    const focusRegions = [
+      {
+        lng: -110, // China, Japan, Cambodia (continuing counter-clockwise)
+        lat: -40,
+        visibleCountries: ["China", "Japan", "Cambodia"],
+      },
+      {
+        lng: -140, // Australia & New Zealand
+        lat: 0,
+        visibleCountries: ["Australia", "New Zealand"],
+      },
+      {
+        lng: 110, // Canada & USA (going counter-clockwise/westward)
+        lat: -65,
+        visibleCountries: ["Canada", "USA"],
+      },
+    ];
+
+    // Total cycle time for one complete rotation through all regions
+    const totalCycleDuration = 18000; // 18 seconds for full cycle (6 seconds per region)
+    const startTime = Date.now();
+
+    // Helper function to determine which region is currently in focus based on rotation
+    const getCurrentFocusRegion = () => {
+      // Calculate distances from current rotation to each focus region
+      const distances = focusRegions.map((region, index) => {
+        // Normalize rotation[0] to be in similar range for comparison
+        let normalizedRotation = rotation[0] % 360;
+        if (normalizedRotation > 180) normalizedRotation -= 360;
+        if (normalizedRotation < -180) normalizedRotation += 360;
+
+        let normalizedRegionLng = region.lng % 360;
+        if (normalizedRegionLng > 180) normalizedRegionLng -= 360;
+        if (normalizedRegionLng < -180) normalizedRegionLng += 360;
+
+        const lngDiff = Math.abs(
+          ((normalizedRotation - normalizedRegionLng + 180) % 360) - 180
+        );
+        const latDiff = Math.abs(rotation[1] - region.lat);
+        const distance = Math.sqrt(lngDiff * lngDiff + latDiff * latDiff);
+        return { index, distance };
+      });
+
+      // Return the region we're closest to
+      distances.sort((a, b) => a.distance - b.distance);
+      return distances[0].index;
+    };
 
     const rotate = () => {
       if (autoRotate) {
-        rotation[0] += rotationSpeed;
+        const elapsed = Date.now() - startTime;
+        const cycleProgress =
+          (elapsed % totalCycleDuration) / totalCycleDuration;
+
+        // Calculate smooth path through all focus regions
+        const totalRegions = focusRegions.length;
+        const currentSegment = cycleProgress * totalRegions;
+        const currentIndex = Math.floor(currentSegment);
+        const nextIndex = (currentIndex + 1) % totalRegions;
+        const segmentProgress = currentSegment - currentIndex;
+
+        // Smooth interpolation between current and next region
+        const currentRegion = focusRegions[currentIndex];
+        const nextRegion = focusRegions[nextIndex];
+
+        // Calculate longitude difference (no wrapping - keep going in same direction)
+        let lngDiff = nextRegion.lng - currentRegion.lng;
+
+        // Special case: when going from Australia (index 1, lng: -140) to USA/Canada (index 2, lng: 110)
+        // Force counter-clockwise by subtracting 360 from the target
+        if (currentIndex === 1 && nextIndex === 2) {
+          lngDiff = nextRegion.lng - 360 - currentRegion.lng;
+        }
+
+        // Ease function for smooth movement (ease-in-out)
+        const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+        const easedProgress = ease(segmentProgress);
+
+        rotation[0] = currentRegion.lng + lngDiff * easedProgress;
+        rotation[1] =
+          currentRegion.lat +
+          (nextRegion.lat - currentRegion.lat) * easedProgress;
+
         projection.rotate(rotation);
         radarAnimationTime += 16; // Increment by ~16ms per frame
         render();
       }
     };
+
+    let currentRegionIndex = getCurrentFocusRegion();
 
     // Auto-rotation timer
     const rotationTimer = d3.timer(rotate);

@@ -1,14 +1,7 @@
-import React, {
-  Suspense,
-  useState,
-  useEffect,
-  memo,
-  useRef,
-} from "react";
+import React, { Suspense, useState, useEffect, memo, useRef } from "react";
 import Navbar from "./ui/Navbar";
 import { AuroraBackground } from "./ui/aurora-background";
 import RotatingEarth from "./ui/globe2";
-
 
 const LandingPage = memo(({ isLoaded }) => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
@@ -107,9 +100,6 @@ const LandingPage = memo(({ isLoaded }) => {
     setIsUserHovering(false);
     // useEffect will handle restarting the timer
   };
-
-
-
 
   const renderSubtitle = () => {
     // Show empty state when no tab is hovered
@@ -249,7 +239,7 @@ const LandingPage = memo(({ isLoaded }) => {
         {/* Globe Background Section */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div
-            className="w-full h-full flex items-center justify-center opacity-0"
+            className="w-full h-full flex items-end justify-center opacity-0 pb-[0%]"
             style={{ animation: "show-hero 1s ease-in 7s forwards" }}
           >
             {shouldLoadGlobe ? (
@@ -262,7 +252,7 @@ const LandingPage = memo(({ isLoaded }) => {
                 }
               >
                 {/* <World data={sampleArcs} globeConfig={globeConfig} /> */}
-                <RotatingEarth width={1350} height={1350} />
+                <RotatingEarth width={1650} height={1650} />
               </Suspense>
             ) : (
               <div className="flex items-center justify-center text-transparent">
