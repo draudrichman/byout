@@ -131,27 +131,35 @@ const LandingPage = memo(({ isLoaded }) => {
           }`}
         >
           <div className="flex flex-col lg:space-y-3 space-y-2 lg:items-start items-center">
-            <div className="flex lg:w-full w-[95%] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg gap-4 sm:gap-6 lg:gap-12">
-              {/* Left Column */}
-              <div className="flex flex-col space-y-1 sm:space-y-2 flex-1">
+            <div className="grid grid-cols-2 lg:w-full w-[95%] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg gap-x-4 sm:gap-x-6 lg:gap-x-12 gap-y-1">
+              {/* Top Left */}
+              <div className="flex flex-col space-y-1 sm:space-y-2">
                 {/* Chinese text */}
                 <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.35em] tracking-widest">
                   {current.line1} {/* 破界有光 */}
                 </h2>
+              </div>
+
+              {/* Top Right */}
+              <div className="flex flex-col space-y-1 sm:space-y-2 text-right">
+                {/* English text */}
+                <span className="font-geniso [word-spacing:0.5em] text-gray-300 text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
+                  {current.line2} {/* REFRAME MARKETS */}
+                </span>
+              </div>
+
+              {/* Bottom Left */}
+              <div className="flex flex-col space-y-1 sm:space-y-2">
                 {/* English text */}
                 <span className="font-geniso text-gray-300 [word-spacing:0.5em] text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
                   {current.line1English} {/* BREAK BOUNDARIES */}
                 </span>
               </div>
 
-              {/* Right Column */}
-              <div className="flex flex-col space-y-1 sm:space-y-2 flex-1 text-right">
-                {/* English text */}
-                <span className="font-geniso [word-spacing:0.5em] text-gray-300 text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
-                  {current.line2} {/* REFRAME MARKETS */}
-                </span>
+              {/* Bottom Right */}
+              <div className="flex flex-col space-y-1 sm:space-y-2 text-right">
                 {/* Chinese text */}
-                <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.35em] tracking-widest">
+                <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight ml-16 lg:tracking-[0.35em] tracking-widest whitespace-nowrap">
                   {current.line2Chinese} {/* 落地成境 */}
                 </h2>
               </div>

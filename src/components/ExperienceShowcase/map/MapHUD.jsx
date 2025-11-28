@@ -277,7 +277,7 @@ const MapHUD = ({
                 <div className="space-y-4">
                   {/* Country Name Section */}
                   <div className={`space-y-2 ${alignmentClass}`}>
-                    <div className="text-2xl font-bold text-white">
+                    <div className="text-4xl font-bold text-white">
                       {countryDescription?.chineseName}
                     </div>
                   </div>
