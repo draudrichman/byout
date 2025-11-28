@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, memo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import LoadingPage from "./components/LoadingPage";
-import Prism from "./components/PrismaBackground.jsx";
+// import Prism from "./components/PrismaBackground.jsx";
+import Prism from "./components/PrismOptimized";
 import PageTransition from "./components/PageTransition";
 
 // Pages
@@ -89,14 +90,14 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
       {/* Fixed background Prism for home page only */}
       {!isSpecialPage && (
         <div
-          className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-black"
+          className="fixed inset-0 w-full h-full overflow-hidden bg-black"
           style={{
             position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 0,
+            zIndex: 1,
           }}
         >
           {/* <Prism
@@ -111,6 +112,13 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             scale={3.6}
             colorScheme="champagne-chrome"
           /> */}
+          <Prism
+            showFPS={true}
+            fpsPosition="top-left"
+            height={2}
+            baseWidth={2}
+            animationType="rotate"
+          />
         </div>
       )}
 

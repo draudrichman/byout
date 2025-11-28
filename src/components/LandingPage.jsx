@@ -218,8 +218,8 @@ const LandingPage = memo(({ isLoaded }) => {
   };
 
   return (
-    // <AuroraBackground>
-    <>
+    <AuroraBackground>
+    
       <div className="absolute inset-0 w-full h-full bg-black -z-1" />
       <div
         className="w-screen lg:h-screen overflow-hidden relative z-10"
@@ -311,9 +311,8 @@ const LandingPage = memo(({ isLoaded }) => {
           </div>
         </div>
       </div>
-    </>
 
-    // </AuroraBackground>
+    </AuroraBackground>
   );
 });
 
