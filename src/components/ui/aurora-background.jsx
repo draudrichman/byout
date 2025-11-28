@@ -17,7 +17,7 @@ export const AuroraBackground = ({
         )}
         {...props}
       >
-        <div
+        {/* <div
           className="absolute inset-0 overflow-hidden"
           style={{
             "--aurora":
@@ -47,7 +47,7 @@ export const AuroraBackground = ({
                 `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,var(--transparent)_70%)]`
             )}
           ></div>
-        </div>
+        </div> */}
         {children}
       </div>
     </main>
