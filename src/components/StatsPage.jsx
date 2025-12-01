@@ -135,7 +135,7 @@ const StatsPage = memo(() => {
     }, []);
     return (
         <section
-            className="py-60 relative h-1/2 overflow-hidden"
+            className="py-60 relative h-1/2 overflow-hidden z-1"
             style={{
                 background: `
               radial-gradient(circle at center, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%), linear-gradient(rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 70%)

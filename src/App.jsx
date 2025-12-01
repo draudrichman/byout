@@ -74,7 +74,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
       });
 
       observer.observe({ entryTypes: ["measure", "longtask"] });
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (e) {
       // PerformanceObserver not supported, skip monitoring
       console.log("Performance monitoring not available");
@@ -87,40 +87,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
 
   return (
     <>
-      {/* Fixed background Prism for home page only */}
-      {!isSpecialPage && (
-        <div
-          className="fixed inset-0 w-full h-full overflow-hidden bg-black"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1,
-          }}
-        >
-          {/* <Prism
-            animationType="3drotate"
-            timeScale={1}
-            height={2.5}
-            baseWidth={3.5}
-            hueShift={0.02}
-            colorFrequency={3}
-            noise={0.1}
-            glow={0.1}
-            scale={3.6}
-            colorScheme="champagne-chrome"
-          /> */}
-          <Prism
-            showFPS={true}
-            fpsPosition="top-left"
-            height={2}
-            baseWidth={2}
-            animationType="rotate"
-          />
-        </div>
-      )}
+      {/* Background is handled per-page (moved to HomePage) */}
 
       {isSpecialPage ? (
         // No smooth scroll for special pages - no overflow restrictions for sticky positioning

@@ -2,6 +2,7 @@ import { memo, useState, useEffect } from "react";
 import { Leva } from "leva";
 import LandingPage from "../components/LandingPage";
 import ErrorBoundary from "../components/ErrorBoundary";
+import Prism from "../components/PrismOptimized";
 // Lazy import sections to control mounting timing
 import StatsPage from "../components/StatsPage";
 import LogoSection from "../components/LogoSection";
@@ -33,6 +34,11 @@ const HomePage = memo(({ isLoaded }) => {
     return () => timers.forEach(clearTimeout);
   }, []);
 
+  // Prism background is provided by the mother container below;
+  // it intentionally uses no hooks to control visibility —
+  // placing Prism inside the container keeps it out of view until
+  // the user scrolls past the Stats section into this container.
+
   return (
     <div className="App">
       {/* <Leva hidden /> */}
@@ -47,52 +53,74 @@ const HomePage = memo(({ isLoaded }) => {
         </ErrorBoundary>
       )}
 
+      {/* Mother container: Prism sits inside and serves as background for all sections below StatsPage.
+          This uses no hooks to toggle visibility — the container appears after StatsPage in the DOM,
+          so Prism is not visible until the user scrolls into this area. */}
       {mountedSections >= 2 && (
-        <ErrorBoundary>
-          <LogoSection />
-        </ErrorBoundary>
-      )}
+        <div className="home-mother relative">
+          <div
+            className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
+            style={{ zIndex: 0 }}
+          >
+            <Prism
+              showFPS={true}
+              fpsPosition="top-left"
+              height={2}
+              baseWidth={2}
+              animationType="rotate"
+            />
+          </div>
 
-      {mountedSections >= 3 && (
-        <ErrorBoundary>
-          <CompanyIntroduction />
-        </ErrorBoundary>
-      )}
+          <div className="relative z-10">
+            {mountedSections >= 2 && (
+              <ErrorBoundary>
+                <LogoSection />
+              </ErrorBoundary>
+            )}
 
-      {mountedSections >= 4 && (
-        <ErrorBoundary>
-          <CoreServices />
-        </ErrorBoundary>
-      )}
+            {mountedSections >= 3 && (
+              <ErrorBoundary>
+                <CompanyIntroduction />
+              </ErrorBoundary>
+            )}
 
-      {mountedSections >= 5 && (
-        <ErrorBoundary>
-          <HorizontalTimeline />
-        </ErrorBoundary>
-      )}
+            {mountedSections >= 4 && (
+              <ErrorBoundary>
+                <CoreServices />
+              </ErrorBoundary>
+            )}
 
-      {mountedSections >= 6 && (
-        <ErrorBoundary>
-          <ExperienceShowcase />
-        </ErrorBoundary>
-      )}
+            {mountedSections >= 5 && (
+              <ErrorBoundary>
+                <HorizontalTimeline />
+              </ErrorBoundary>
+            )}
 
-      {mountedSections >= 7 && (
-        <ErrorBoundary>
-          <FounderStaff />
-        </ErrorBoundary>
-      )}
+            {mountedSections >= 6 && (
+              <ErrorBoundary>
+                <ExperienceShowcase />
+              </ErrorBoundary>
+            )}
 
-      {mountedSections >= 8 && (
-        <ErrorBoundary>
-          <GlobalPresence />
-        </ErrorBoundary>
-      )}
+            {mountedSections >= 7 && (
+              <ErrorBoundary>
+                <FounderStaff />
+              </ErrorBoundary>
+            )}
 
-      {mountedSections >= 9 && (
-        <ErrorBoundary>
-          <ContactForm />
-        </ErrorBoundary>
+            {mountedSections >= 8 && (
+              <ErrorBoundary>
+                <GlobalPresence />
+              </ErrorBoundary>
+            )}
+
+            {mountedSections >= 9 && (
+              <ErrorBoundary>
+                <ContactForm />
+              </ErrorBoundary>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
