@@ -106,7 +106,7 @@ const LandingPage = memo(({ isLoaded }) => {
     if (currentSubtitleIndex === null) {
       return (
         <div
-          className={`transition-all duration-300 ${
+          className={`transition-all duration-300 lg:pt-18 ${
             isTransitioning
               ? "opacity-0 transform translate-y-2"
               : "opacity-100 transform translate-y-0"
@@ -124,18 +124,18 @@ const LandingPage = memo(({ isLoaded }) => {
     if (currentSubtitleIndex === 0) {
       return (
         <div
-          className={`transition-all duration-300 ${
+          className={`transition-all duration-300 lg:pt-18 ${
             isTransitioning
               ? "opacity-0 transform translate-y-2"
               : "opacity-100 transform translate-y-0"
           }`}
         >
           <div className="flex flex-col lg:space-y-3 space-y-2 lg:items-start items-center">
-            <div className="grid grid-cols-2 lg:w-full w-[95%] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg gap-x-4 sm:gap-x-6 lg:gap-x-12 gap-y-1">
+            <div className="grid grid-cols-2 lg:w-full w-[95%] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg gap-x-4 sm:gap-x-6 lg:gap-x-12 gap-y-3">
               {/* Top Left */}
               <div className="flex flex-col space-y-1 sm:space-y-2">
                 {/* Chinese text */}
-                <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.35em] tracking-widest">
+                <h2 className="-mt-2 font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight lg:tracking-[0.35em] tracking-widest ">
                   {current.line1} {/* 破界有光 */}
                 </h2>
               </div>
@@ -143,7 +143,7 @@ const LandingPage = memo(({ isLoaded }) => {
               {/* Top Right */}
               <div className="flex flex-col space-y-1 sm:space-y-2 text-right">
                 {/* English text */}
-                <span className="font-geniso [word-spacing:0.5em] text-gray-300 text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
+                <span className="-mt-2 font-geniso [word-spacing:0.5em] text-gray-300 text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
                   {current.line2} {/* REFRAME MARKETS */}
                 </span>
               </div>
@@ -151,7 +151,7 @@ const LandingPage = memo(({ isLoaded }) => {
               {/* Bottom Left */}
               <div className="flex flex-col space-y-1 sm:space-y-2">
                 {/* English text */}
-                <span className="font-geniso text-gray-300 [word-spacing:0.5em] text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
+                <span className="-mt-2 font-geniso text-gray-300 [word-spacing:0.5em] text-[clamp(0.875rem,1.6vw,1.5rem)] font-semibold tracking-[0.15em] whitespace-nowrap">
                   {current.line1English} {/* BREAK BOUNDARIES */}
                 </span>
               </div>
@@ -159,7 +159,7 @@ const LandingPage = memo(({ isLoaded }) => {
               {/* Bottom Right */}
               <div className="flex flex-col space-y-1 sm:space-y-2 text-right">
                 {/* Chinese text */}
-                <h2 className="font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight ml-16 lg:tracking-[0.35em] tracking-widest whitespace-nowrap">
+                <h2 className="-mt-2 font-jhenghei text-gray-300 text-[clamp(1rem,2.6vw,2.25rem)] font-extralight ml-16 lg:tracking-[0.35em] tracking-widest whitespace-nowrap">
                   {current.line2Chinese} {/* 落地成境 */}
                 </h2>
               </div>
@@ -170,7 +170,7 @@ const LandingPage = memo(({ isLoaded }) => {
     } else if (currentSubtitleIndex === 1) {
       return (
         <div
-          className={`transition-all duration-300 ${
+          className={`transition-all duration-300 lg:pt-18 ${
             isTransitioning
               ? "opacity-0 transform translate-y-2"
               : "opacity-100 transform translate-y-0"
@@ -192,7 +192,7 @@ const LandingPage = memo(({ isLoaded }) => {
     } else {
       return (
         <div
-          className={`transition-all duration-300 ${
+          className={`transition-all duration-300 lg:pt-25 ${
             isTransitioning
               ? "opacity-0 transform translate-y-2"
               : "opacity-100 transform translate-y-0"
@@ -219,7 +219,6 @@ const LandingPage = memo(({ isLoaded }) => {
 
   return (
     <AuroraBackground>
-    
       <div className="absolute inset-0 w-full h-full bg-black -z-1" />
       <div
         className="w-screen lg:h-screen overflow-hidden relative z-10"
@@ -311,7 +310,6 @@ const LandingPage = memo(({ isLoaded }) => {
           </div>
         </div>
       </div>
-
     </AuroraBackground>
   );
 });
