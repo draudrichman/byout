@@ -10,11 +10,15 @@ const LandingPage = memo(({ isLoaded }) => {
   const [shouldLoadGlobe, setShouldLoadGlobe] = useState(false);
   const timeoutRef = useRef(null);
 
-  // Delay Globe loading to prevent initial lag
+  // Delay Globe loading to prevent initial lag (only on first visit)
   useEffect(() => {
+    const hasShownLoading =
+      sessionStorage.getItem("hasShownLoading") === "true";
+    const delay = hasShownLoading ? 0 : 19000; // Skip delay if loading page already shown
+
     const timer = setTimeout(() => {
       setShouldLoadGlobe(true);
-    }, 19000); // Wait 3 seconds before loading the heavy Globe component
+    }, delay);
 
     return () => clearTimeout(timer);
   }, []);

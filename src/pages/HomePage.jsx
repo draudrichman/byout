@@ -63,7 +63,7 @@ const HomePage = memo(({ isLoaded }) => {
             style={{ zIndex: 0 }}
           >
             <Prism
-              showFPS={true}
+              showFPS={false}
               fpsPosition="top-left"
               height={2}
               baseWidth={2}

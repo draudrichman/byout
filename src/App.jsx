@@ -156,7 +156,9 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
 AppContent.displayName = "AppContent";
 
 const App = memo(() => {
-  const [isLoading, setIsLoading] = useState(true);
+  // Check if loading page has been shown in this session
+  const hasShownLoading = sessionStorage.getItem("hasShownLoading") === "true";
+  const [isLoading, setIsLoading] = useState(!hasShownLoading);
   const [mountPhase, setMountPhase] = useState(0);
 
   // Progressively mount components to distribute load over 8 seconds
@@ -165,15 +167,17 @@ const App = memo(() => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
 
-    // Progressive mounting schedule
+    // Progressive mounting schedule|
     const timers = [
-      setTimeout(() => setMountPhase(1), 1500), // Start mounting at 1.5s
+      setTimeout(() => setMountPhase(1), hasShownLoading ? 0 : 1500), // Skip delay if already shown
     ];
 
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [hasShownLoading]);
 
   const handleLoadingComplete = () => {
+    // Mark that loading page has been shown in this session
+    sessionStorage.setItem("hasShownLoading", "true");
     setIsLoading(false);
     // Ensure scroll is at top when loading completes
     setTimeout(() => {

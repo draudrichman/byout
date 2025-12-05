@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
+import Navbar from "../components/ui/Navbar";
 
 // 使用新引入的 TechApp（基于 react-router） 作为 /tech 子应用
 const TechApp = lazy(() => import("./tech/main.jsx"));
@@ -55,7 +56,7 @@ function TechPage() {
 
   return (
     <div className="min-h-screen bg-[#2a2a2c]">
-      <BackButton />
+      <Navbar isLoaded={true} />
       <Suspense fallback={<LoadingSpinner />}>
         <TechApp />
       </Suspense>
