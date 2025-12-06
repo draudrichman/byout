@@ -1,5 +1,6 @@
 import { memo, useState, useEffect } from "react";
 import { Leva } from "leva";
+import Navbar from "../components/ui/Navbar";
 import LandingPage from "../components/LandingPage";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Prism from "../components/PrismOptimized";
@@ -42,6 +43,9 @@ const HomePage = memo(({ isLoaded }) => {
   return (
     <div className="App">
       {/* <Leva hidden /> */}
+
+      {/* Navigation */}
+      <Navbar isLoaded={isLoaded} />
 
       {/* Above-the-fold: render immediately */}
       <LandingPage key="landing" isLoaded={isLoaded} />

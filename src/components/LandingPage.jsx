@@ -1,9 +1,8 @@
 import React, { Suspense, useState, useEffect, memo, useRef } from "react";
-import Navbar from "./ui/Navbar";
 import { AuroraBackground } from "./ui/aurora-background";
 import RotatingEarth from "./ui/globe2";
 
-const LandingPage = memo(({ isLoaded }) => {
+const LandingPage = memo(() => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isUserHovering, setIsUserHovering] = useState(false);
@@ -243,9 +242,6 @@ const LandingPage = memo(({ isLoaded }) => {
             }
           }
         `}</style>
-
-        {/* Navigation */}
-        <Navbar isLoaded={isLoaded} />
 
         {/* Globe Background Section */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

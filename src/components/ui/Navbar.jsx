@@ -72,7 +72,7 @@ const Navbar = ({ isLoaded }) => {
       {/* Fullscreen Black BG for Logo Animation - visible from start */}
       <div
         id="logo-bg"
-        className={`fixed inset-0 z-[99] bg-black transition-opacity duration-1200 ${
+        className={`fixed inset-0 z-[999] bg-black transition-opacity duration-1200 ${
           isAnimationDone ? "logo-bg-fade" : ""
         }`}
         style={{
@@ -84,7 +84,7 @@ const Navbar = ({ isLoaded }) => {
       {/* Animated Logo */}
       <div
         id="logo-animation"
-        className={`fixed top-[calc(50vh-175px)] left-[calc(50%-175px)] z-[100] w-[350px] h-[350px] ${
+        className={`fixed top-[calc(50vh-175px)] left-[calc(50%-175px)] z-[1000] w-[350px] h-[350px] ${
           isAnimationDone ? "cursor-pointer" : ""
         }`}
         style={{
@@ -125,7 +125,7 @@ const Navbar = ({ isLoaded }) => {
       {/* Navigation Bar */}
       <nav
         id="navbar"
-        className={`fixed top-0 left-0 w-full h-25 z-[99] glossy-navbar ${
+        className={`fixed top-0 left-0 w-full h-25 z-[999] glossy-navbar ${
           isMenuOpen ? "line-active navbar-bg-animate" : "navbar-bg-none"
         }`}
         style={{

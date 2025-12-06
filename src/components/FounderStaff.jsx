@@ -119,10 +119,10 @@ const FounderStaff = () => {
                 img: "/founders/founder.png",
               },
               {
-                name: "CALVIN LUO",
+                name: "CALVIN LU",
                 title: "Co-Founder & CMO",
                 role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
+                img: "/founders/founder3.webp",
               },
             ].map((founder, index) => (
               <div key={index} className="founder-card group">
