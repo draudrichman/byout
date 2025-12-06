@@ -153,7 +153,7 @@ const Navbar = ({ isLoaded }) => {
                 href="#blog"
                 className="text-white no-underline text-[1.4em] nav-link"
               >
-                博客
+                核心服务
               </a>
             </li>
             <li
@@ -164,7 +164,7 @@ const Navbar = ({ isLoaded }) => {
                 href="#services"
                 className="text-white no-underline text-[1.4em] nav-link"
               >
-                服务
+                服务流程
               </a>
             </li>
           </div>
@@ -186,7 +186,7 @@ const Navbar = ({ isLoaded }) => {
                 href="#contact"
                 className="text-white no-underline text-[1.4em] nav-link"
               >
-                联系
+                渠道布局
               </a>
             </li>
             <li
@@ -197,7 +197,7 @@ const Navbar = ({ isLoaded }) => {
                 href="#contact-info"
                 className="text-white no-underline text-[1.4em] nav-link"
               >
-                联系方式
+                团队介绍
               </a>
             </li>
             <li
