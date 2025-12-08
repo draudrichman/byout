@@ -64,7 +64,7 @@ const HomePage = memo(({ isLoaded }) => {
         <div className="home-mother relative">
           <div
             className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
-            style={{ zIndex: 0 }}
+            style={{ zIndex: 10 }}
           >
             <Prism
               showFPS={false}
