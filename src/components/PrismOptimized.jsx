@@ -362,7 +362,7 @@ const Prism = ({
           o += mix(color0, color1, float(uColorScheme)) / d;
         }
 
-        o = tanh4(o * o * (uGlow * uBloom) / 4.081e4); // Reduced peak brightness by 30%
+        o = tanh4(o * o * (uGlow * uBloom) / 6.081e4); // Reduced peak brightness by 30%
         float edge = smoothstep(0.01, 0.02, 1.0 - 0.1);
         o.rgb *= edge;
 
