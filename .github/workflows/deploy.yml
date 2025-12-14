@@ -3,11 +3,12 @@ name: Deploy React App
 on:
   push:
     branches:
-      - main  # Change this if your default branch is different
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,12 +24,20 @@ jobs:
           npm run build
 
       - name: Deploy to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          source: "dist/*"
-          target: "/var/www/byout"
-          strip_components: 1
+        run: |
+          # 1. Create the .ssh directory and set permissions
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # 2. Populate the private key file
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # 3. Add the VPS to known_hosts to prevent "Host key verification failed"
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+          # 4. Copy the build files using standard SCP
+          # -P: Port
+          # -i: Identity file (key)
+          # -r: Recursive (for folders)
+          scp -P ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa -r dist/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/var/www/byout
