@@ -207,17 +207,17 @@ const CoreServices = () => {
       document.documentElement.scrollTop;
     sessionStorage.setItem("homePageScrollPosition", scrollPosition.toString());
 
-    // Route to specific pages for Technology and Retail - open in new tab
+    // Route to specific pages for Technology and Retail - open in same tab
     if (index === 0) {
-      window.open("/branddev", "_blank");
+      window.open("/branddev", "_self");
       return;
     }
     if (index === 1) {
-      window.open("/tech", "_blank");
+      window.open("/tech", "_self");
       return;
     }
     if (index === 2) {
-      window.open("/retail", "_blank");
+      window.open("/retail", "_self");
       return;
     }
     // Open preview for Brand Development
