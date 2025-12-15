@@ -200,17 +200,24 @@ const CoreServices = () => {
 
   // Navigation handler
   const handleItemClick = useCallback((index) => {
-    // Route to specific pages for Technology and Retail
+    // Save current scroll position before navigating
+    const scrollPosition =
+      window.scrollY ||
+      window.pageYOffset ||
+      document.documentElement.scrollTop;
+    sessionStorage.setItem("homePageScrollPosition", scrollPosition.toString());
+
+    // Route to specific pages for Technology and Retail - open in new tab
     if (index === 0) {
-      window.location.href = "/branddev";
+      window.open("/branddev", "_blank");
       return;
     }
     if (index === 1) {
-      window.location.href = "/tech";
+      window.open("/tech", "_blank");
       return;
     }
     if (index === 2) {
-      window.location.href = "/retail";
+      window.open("/retail", "_blank");
       return;
     }
     // Open preview for Brand Development

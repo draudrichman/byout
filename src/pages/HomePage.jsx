@@ -1,4 +1,5 @@
 import { memo, useState, useEffect } from "react";
+import { useLenis } from "@studio-freight/react-lenis";
 import { Leva } from "leva";
 import Navbar from "../components/ui/Navbar";
 import LandingPage from "../components/LandingPage";
@@ -17,6 +18,7 @@ import ContactForm from "../components/ContactForm";
 
 const HomePage = memo(({ isLoaded }) => {
   const [mountedSections, setMountedSections] = useState(0);
+  const lenis = useLenis();
 
   // Progressively mount sections over 6.5 seconds to distribute load
   useEffect(() => {
@@ -34,6 +36,54 @@ const HomePage = memo(({ isLoaded }) => {
 
     return () => timers.forEach(clearTimeout);
   }, []);
+
+  // Restore scroll position when returning from other pages
+  useEffect(() => {
+    const savedScrollPosition = sessionStorage.getItem(
+      "homePageScrollPosition"
+    );
+
+    if (savedScrollPosition) {
+      const scrollY = parseFloat(savedScrollPosition);
+
+      // Wait for CoreServices section to mount (mountedSections >= 4)
+      // and add a small delay to ensure DOM is ready
+      if (mountedSections >= 4) {
+        // Use Lenis instance if available for better integration, otherwise fallback to window.scrollTo
+        const restoreScroll = () => {
+          if (lenis) {
+            // Use Lenis scrollTo for smooth integration
+            lenis.scrollTo(scrollY, { immediate: false });
+          } else {
+            // Fallback to standard scroll methods
+            window.scrollTo({
+              top: scrollY,
+              left: 0,
+              behavior: "auto",
+            });
+            document.documentElement.scrollTop = scrollY;
+            document.body.scrollTop = scrollY;
+          }
+        };
+
+        // Immediate attempt
+        restoreScroll();
+
+        // Additional attempts with delays to handle ReactLenis initialization and DOM readiness
+        const timers = [
+          setTimeout(restoreScroll, 100),
+          setTimeout(restoreScroll, 300),
+          setTimeout(() => {
+            restoreScroll();
+            // Clear the saved position after final attempt
+            sessionStorage.removeItem("homePageScrollPosition");
+          }, 500),
+        ];
+
+        return () => timers.forEach(clearTimeout);
+      }
+    }
+  }, [mountedSections, lenis]);
 
   // Prism background is provided by the mother container below;
   // it intentionally uses no hooks to control visibility —
