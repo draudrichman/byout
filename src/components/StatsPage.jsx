@@ -162,7 +162,7 @@ const StatsPage = memo(() => {
       className="py-60 sticky top-0 h-screen overflow-hidden z-1"
       style={{
         background: `
-              radial-gradient(circle at center, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%), linear-gradient(rgb(191, 191, 189), rgba(0, 0, 0, 0.94) 70%)
+              radial-gradient(circle at center, rgb(0, 0, 0) 0px, rgba(1, 1, 1, 0) 100%), linear-gradient(#916b4e, rgba(0, 0, 0, 0.94) 80%)
                 `,
       }}
     >
