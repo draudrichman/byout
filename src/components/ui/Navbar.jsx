@@ -130,6 +130,7 @@ const Navbar = ({ isLoaded }) => {
         }`}
         style={{
           borderBottom: "0px solid white",
+          height: "78px",
         }}
       >
         <ul className="list-none m-0 p-0 flex h-full items-center justify-between w-full px-[5%]">
@@ -140,7 +141,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#about"
-                className="text-white no-underline text-[1.4em] nav-link"
+                className="text-white no-underline text-[1.1em] nav-link"
               >
                 关于
               </a>
@@ -151,7 +152,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#blog"
-                className="text-white no-underline text-[1.4em] nav-link"
+                className="text-white no-underline text-[1.1em] nav-link"
               >
                 核心服务
               </a>
@@ -162,7 +163,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#services"
-                className="text-white no-underline text-[1.4em] nav-link"
+                className="text-white no-underline text-[1.1em] nav-link"
               >
                 服务流程
               </a>
@@ -171,7 +172,7 @@ const Navbar = ({ isLoaded }) => {
 
           {/* Center space for logo */}
           <div
-            className="flex justify-center items-center min-w-[80px]"
+            className="flex justify-center items-center min-w-[62px]"
             style={{ zIndex: 101 }}
           >
             {/* Logo space - logo appears here after animation */}
@@ -184,7 +185,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#contact"
-                className="text-white no-underline text-[1.4em] nav-link"
+                className="text-white no-underline text-[1.1em] nav-link"
               >
                 渠道布局
               </a>
@@ -195,7 +196,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#contact-info"
-                className="text-white no-underline text-[1.4em] nav-link"
+                className="text-white no-underline text-[1.1em] nav-link"
               >
                 团队介绍
               </a>
@@ -206,7 +207,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#contact-us"
-                className="text-white no-underline text-[1.4em] nav-link"
+                className="text-white no-underline text-[1.1em] nav-link"
               >
                 联系
               </a>
@@ -298,8 +299,8 @@ const Navbar = ({ isLoaded }) => {
 
         @keyframes slide-up {
           100% {
-            top: -125px;
-            transform: scale(0.2);
+            top: -135px;
+            transform: scale(0.18);
           }
         }
 
