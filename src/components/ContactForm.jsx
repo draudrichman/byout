@@ -143,7 +143,7 @@ export default function ContactForm() {
             <div className="mb-16 text-center lg:text-left lg:w-1/3 form-content-child">
               {" "}
               {/* lg:w-1/3 allocates one-third width */}
-              <h2 className="text-6xl md:text-7xl font-light mb-6 border-2 border-blue-800">
+              <h2 className="text-6xl md:text-7xl font-light mb-6">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
                   <span className="tracking-[0.053em]">GET IN</span> TOUCH
                 </span>
