@@ -2,11 +2,10 @@ import { memo, useState, useEffect } from "react";
 import { useLenis } from "@studio-freight/react-lenis";
 import { Leva } from "leva";
 import Navbar from "../components/ui/Navbar";
-import LandingPage from "../components/LandingPage";
+import Hero from "../components/HeroSection";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Prism from "../components/PrismOptimized";
 // Lazy import sections to control mounting timing
-import StatsPage from "../components/StatsPage";
 import LogoSection from "../components/LogoSection";
 import CompanyIntroduction from "../components/CompanyIntroductionNew";
 import CoreServices from "../components/CoreServices";
@@ -23,15 +22,14 @@ const HomePage = memo(({ isLoaded }) => {
   // Progressively mount sections over 6.5 seconds to distribute load
   useEffect(() => {
     const timers = [
-      setTimeout(() => setMountedSections(1), 100), // StatsPage immediately
-      setTimeout(() => setMountedSections(2), 1500), // LogoSection at 1.5s
-      setTimeout(() => setMountedSections(3), 2500), // CompanyIntro at 2.5s
-      setTimeout(() => setMountedSections(4), 3500), // CoreServices at 3.5s
-      setTimeout(() => setMountedSections(5), 4500), // Timeline at 4.5s
-      setTimeout(() => setMountedSections(6), 5500), // Experience at 5.5s
-      setTimeout(() => setMountedSections(7), 6500), // FounderStaff at 6.5s
-      setTimeout(() => setMountedSections(8), 7500), // GlobalPresence at 7.5s
-      setTimeout(() => setMountedSections(9), 8000), // ContactForm at 8s
+      setTimeout(() => setMountedSections(1), 100), // LogoSection immediately
+      setTimeout(() => setMountedSections(2), 1500), // CompanyIntro at 1.5s
+      setTimeout(() => setMountedSections(3), 2500), // CoreServices at 2.5s
+      setTimeout(() => setMountedSections(4), 3500), // Timeline at 3.5s
+      setTimeout(() => setMountedSections(5), 4500), // Experience at 4.5s
+      setTimeout(() => setMountedSections(6), 5500), // FounderStaff at 5.5s
+      setTimeout(() => setMountedSections(7), 6500), // GlobalPresence at 6.5s
+      setTimeout(() => setMountedSections(8), 7500), // ContactForm at 7.5s
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -98,19 +96,12 @@ const HomePage = memo(({ isLoaded }) => {
       <Navbar isLoaded={isLoaded} />
 
       {/* Above-the-fold: render immediately */}
-      <LandingPage key="landing" isLoaded={isLoaded} />
+      <Hero key="landing" isLoaded={isLoaded} />
 
-      {/* Progressive section mounting to distribute load */}
-      {mountedSections >= 1 && (
-        <ErrorBoundary>
-          <StatsPage />
-        </ErrorBoundary>
-      )}
-
-      {/* Mother container: Prism sits inside and serves as background for all sections below StatsPage.
-          This uses no hooks to toggle visibility — the container appears after StatsPage in the DOM,
+      {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
+          This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
           so Prism is not visible until the user scrolls into this area. */}
-      {mountedSections >= 2 && (
+      {mountedSections >= 1 && (
         <div className="home-mother relative">
           <div
             className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
@@ -126,49 +117,51 @@ const HomePage = memo(({ isLoaded }) => {
           </div>
 
           <div className="relative z-10">
-            {mountedSections >= 2 && (
+            {mountedSections >= 1 && (
               <ErrorBoundary>
                 <LogoSection />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 3 && (
+            {mountedSections >= 2 && (
               <ErrorBoundary>
+                <LogoSection />
+
                 <CompanyIntroduction />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 4 && (
+            {mountedSections >= 3 && (
               <ErrorBoundary>
                 <CoreServices />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 5 && (
+            {mountedSections >= 4 && (
               <ErrorBoundary>
                 <HorizontalTimeline />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 6 && (
+            {mountedSections >= 5 && (
               <ErrorBoundary>
                 <ExperienceShowcase />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 7 && (
+            {mountedSections >= 6 && (
               <ErrorBoundary>
                 <FounderStaff />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 8 && (
+            {mountedSections >= 7 && (
               <ErrorBoundary>
                 <GlobalPresence />
               </ErrorBoundary>
             )}
 
-            {mountedSections >= 9 && (
+            {mountedSections >= 8 && (
               <ErrorBoundary>
                 <ContactForm />
               </ErrorBoundary>

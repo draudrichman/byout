@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const StatsPage = memo(() => {
+const StatsSection = memo(() => {
   const titleRef = useRef(null);
   const statsRef = useRef(null);
   const [stats, setStats] = useState([
@@ -258,6 +258,6 @@ const StatsPage = memo(() => {
   );
 });
 
-StatsPage.displayName = "StatsPage";
+StatsSection.displayName = "StatsSection";
 
-export default StatsPage;
+export default StatsSection;
