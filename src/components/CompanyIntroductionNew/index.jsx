@@ -10,6 +10,7 @@ import PhilosophyDivider from "./PhilosophyDivider";
 import PhilosophySections from "./PhilosophySections";
 import ValueProposition from "./ValueProposition";
 import ClosingStatement from "./ClosingStatement";
+import ValuePropositionSecond from "./ValuePropositionSecond";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -173,6 +174,9 @@ const CompanyIntroduction = memo(() => {
           </section>
           <section className="snap-panel flex items-center justify-center h-full">
             <ValueProposition />
+          </section>
+          <section className="snap-panel flex items-center justify-center h-full">
+            <ValuePropositionSecond />
           </section>
           <section className="snap-panel flex items-center justify-center h-full">
             <ClosingStatement />

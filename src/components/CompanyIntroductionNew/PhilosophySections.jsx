@@ -100,7 +100,7 @@ const PhilosophySections = () => {
           「Break Boundaries」
         </p>
         <div className="text-white/90 relative z-10 space-y-1 text-sm tracking-[0.2em] font-songti">
-          <p>市场之界・技术之界</p>
+          <p>创新之界・技术之界</p>
           <p>渠道之界・增长之界</p>
         </div>
       </div>
@@ -125,7 +125,11 @@ const PhilosophySections = () => {
         <div className="text-white/90 relative z-10 space-y-1 text-sm tracking-[0.2em] font-songti">
           <p>以光破界</p>
           <p>破界之路的指引之光</p>
-          <p>战略之光・技术之光・方法之光</p>
+          <p>
+            战略之光、创意之光、科技之光、
+            <br />
+            法论之光
+          </p>
         </div>
       </div>
 
@@ -147,9 +151,9 @@ const PhilosophySections = () => {
           「Results Oriented」
         </p>
         <div className="text-white/90 relative z-10 space-y-1 text-sm tracking-[0.2em] font-songti">
-          <p>将全球化资源・认知・洞察</p>
-          <p>转化为一步一脚印的扎实执行</p>
-          <p>实现知行合一</p>
+          <p>
+            多年来积累的全球化认知深度·技术高度·通路精度，转化为一步一脚印的扎实执行，实行知行合一
+          </p>
         </div>
       </div>
 

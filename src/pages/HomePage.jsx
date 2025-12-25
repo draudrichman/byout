@@ -119,14 +119,13 @@ const HomePage = memo(({ isLoaded }) => {
           <div className="relative z-10">
             {mountedSections >= 1 && (
               <ErrorBoundary>
+                <div className="spacer h-[100vh]" />
                 <LogoSection />
               </ErrorBoundary>
             )}
 
             {mountedSections >= 2 && (
               <ErrorBoundary>
-                <LogoSection />
-
                 <CompanyIntroduction />
               </ErrorBoundary>
             )}

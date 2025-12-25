@@ -219,19 +219,21 @@ const LogoSection = () => {
             ref={text1Ref}
             className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/80 font-light tracking-widest"
           >
-            前身为 BYOUT 年轻化创新集团 | MDL买点论实验室
+            前身为 BY 年轻化创新集团 | MDL买点论实验室
           </p>
           <p
             ref={text2Ref}
             className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-normal tracking-widest leading-relaxed"
           >
-            PRïSM瓴境是全球化时代背景下诞生的「技术驱动型品渠全域生态运营商」
+            PRïSM瓴境 诞生于全球化的时代背景下，基于独创的「买点论」体系
+            驱动增长的快消品品牌创新集团。
           </p>
           <p
             ref={text3Ref}
-            className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/85 font-light tracking-widest leading-relaxed"
+            className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/85 font-light tracking-widest leading-relaxed mt-4" // added mt-4 for spacing between paragraphs
           >
-            独创从0到1的全球化「产品价值重构」与「渠道进驻落地」的全链路一体化增长方案
+            为快消品行业提供从 品类创新 到 全球渠道交付
+            的全链路智解方案，赋能品牌方创造前所未有的产品价值与市场增长，共同孵化定义未来的一体化增长新境界。
           </p>
         </div>
       </div>

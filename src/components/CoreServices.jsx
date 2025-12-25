@@ -365,7 +365,7 @@ const CoreServices = () => {
                 className="tracking-[0.3em] whitespace-nowrap"
                 ref={(el) => (descriptiveTextRef.current[1] = el)}
               >
-                开创前策x科技x渠道落地的三位一体服务突破
+                开创创新策略x前沿科技x全球渠道的三位一体服务突破
               </p>
               <p
                 className="tracking-[0.3em] whitespace-nowrap"

@@ -175,7 +175,7 @@ const ValueProposition = () => {
               ref={line4Ref}
               className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-white/75 font-songti font-light tracking-wide"
             >
-              从海外零售商超的货架到消费者的心智，我们打通完整的价值链
+              海内外零售商超的货架到消费者的心智，我们打通完整的价值链
             </p>
           </div>
         </div>

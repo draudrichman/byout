@@ -62,8 +62,8 @@ const HeroSection = memo(() => {
       gsap.ticker.lagSmoothing(0);
     }
 
-    // Create timeline for smooth horizontal slide animation
-    const scrollDistance = window.innerHeight * 3; // 3x viewport height for good scroll length
+    // Create timeline for smooth vertical slide animation
+    const scrollDistance = window.innerHeight * 2; // 3x viewport height for good scroll length
 
     const scrollTrigger = ScrollTrigger.create({
       trigger: heroSectionRef.current,
@@ -85,9 +85,9 @@ const HeroSection = memo(() => {
           setCurrentSlide(newSlide);
         }
 
-        // Animate horizontal slide position - only the content slides
+        // Animate vertical slide position - only the content slides
         gsap.set(contentContainerRef.current, {
-          x: `-${progress * 100}%`,
+          y: `-${progress * 100}%`,
         });
       },
     });
@@ -129,8 +129,9 @@ const HeroSection = memo(() => {
     },
     {
       line1: "品牌产品解码重构｜全球顶层战略定位架构",
-      line2: "-   独家创新专利技术赋能",
-      line3: "-   直通全球顶级零售渠道落地",
+      line2: "-   全球化破圈和颠覆的创新大脑",
+      line3: "-   独家创新NNP全营养 + 鲜到鲜专利技术赋能",
+      line4: "-   直通全球顶级零售渠道落地",
     },
     {
       line1: "0-1 助力中国品牌转化为世界品牌",
@@ -286,6 +287,9 @@ const HeroSection = memo(() => {
             <div className="font-jhenghei text-gray-300 lg:text-xl text-md font-light tracking-[0.16em] leading-relaxed pl-0 lg:text-left text-center">
               {current.line3}
             </div>
+            <div className="font-jhenghei text-gray-300 lg:text-xl text-md font-light tracking-[0.16em] leading-relaxed pl-0 lg:text-left text-center">
+              {current.line4}
+            </div>
           </div>
         </div>
       );
@@ -405,24 +409,9 @@ const HeroSection = memo(() => {
                 `,
           }}
         >
-          {/* Hero fade-in animation styles */}
-          <style jsx>{`
-            @keyframes show-hero {
-              0% {
-                opacity: 0;
-              }
-              100% {
-                opacity: 1;
-              }
-            }
-          `}</style>
-
           {/* Globe Background Section - Fixed position, always visible */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <div
-              className="w-full h-full flex items-end justify-center opacity-0 pb-[0%]"
-              style={{ animation: "show-hero 1s ease-in forwards" }}
-            >
+            <div className="w-full h-full flex items-end justify-center pb-[0%]">
               {shouldLoadGlobe ? (
                 <Suspense
                   fallback={
@@ -445,15 +434,12 @@ const HeroSection = memo(() => {
           {/* Sliding Content Container - Only content slides, background stays fixed */}
           <div
             ref={contentContainerRef}
-            className="flex h-full w-[200%] relative z-10"
+            className="flex flex-col h-[100%] w-full relative z-10"
             style={{ willChange: "transform" }}
           >
             {/* Slide 1: Hero Content */}
-            <div className="w-screen h-full flex-shrink-0 flex items-center">
-              <div
-                className="relative z-10 flex h-full w-full lg:flex-row flex-col opacity-0"
-                style={{ animation: "show-hero 1s ease-in forwards" }}
-              >
+            <div className="w-full h-screen flex-shrink-0 flex items-center">
+              <div className="relative z-10 flex h-full w-full lg:flex-row flex-col">
                 {/* Content Section */}
                 <div className="lg:w-1/2 w-full flex flex-col lg:justify-center justify-start lg:pl-24 lg:pr-8 px-6 lg:py-0 py-8 lg:pt-0 pt-35">
                   {/* Morphing Subtitles */}
@@ -493,7 +479,7 @@ const HeroSection = memo(() => {
             </div>
 
             {/* Slide 2: Stats Content - Same background, just content slides */}
-            <div className="w-screen h-full flex-shrink-0">
+            <div className="w-full h-screen flex-shrink-0">
               {renderStatsContent()}
             </div>
           </div>
