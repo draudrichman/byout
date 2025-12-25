@@ -327,9 +327,12 @@ const HeroSection = memo(() => {
         <div className="container mx-auto px-4 relative z-10 w-full">
           {/* Section Title */}
           <div className="text-center mb-16">
-            <h2 className="text-7xl md:text-9xl font-bold mb-6 relative overflow-hidden">
+            <h2 className="text-7xl md:text-8xl font-bold mb-5 relative overflow-hidden tracking-[0.3em]">
               <span className="text-white block">成就达成</span>
             </h2>
+            <div className="text-white/70 text-4xl md:text-5xl uppercase tracking-widest">
+              Achievements
+            </div>
           </div>
 
           {/* Horizontal Stats Cards */}
