@@ -126,9 +126,8 @@ const PhilosophySections = () => {
           <p>以光破界</p>
           <p>破界之路的指引之光</p>
           <p>
-            战略之光、创意之光、科技之光、
-            <br />
-            法论之光
+            战略之光・创意之光<br />
+            科技之光・法论之光
           </p>
         </div>
       </div>
@@ -152,7 +151,7 @@ const PhilosophySections = () => {
         </p>
         <div className="text-white/90 relative z-10 space-y-1 text-sm tracking-[0.2em] font-songti">
           <p>
-            多年来积累的全球化认知深度·技术高度·通路精度，转化为一步一脚印的扎实执行，实行知行合一
+            多年来积累的全球化<br />认知深度·技术高度·通路精度<br />转化为一步一脚印的扎实执行<br />实行知行合一
           </p>
         </div>
       </div>

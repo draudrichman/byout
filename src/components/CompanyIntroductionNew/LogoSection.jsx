@@ -225,7 +225,7 @@ const LogoSection = () => {
             ref={text2Ref}
             className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-normal tracking-widest leading-relaxed"
           >
-            PRïSM瓴境 诞生于全球化的时代背景下，基于独创的「买点论」体系
+            PRïSM瓴境 诞生于全球化的时代背景下<br />基于独创的「买点论」体系
             驱动增长的快消品品牌创新集团。
           </p>
           <p
@@ -233,7 +233,7 @@ const LogoSection = () => {
             className="font-songti text-sm sm:text-base md:text-lg lg:text-xl text-white/85 font-light tracking-widest leading-relaxed mt-4" // added mt-4 for spacing between paragraphs
           >
             为快消品行业提供从 品类创新 到 全球渠道交付
-            的全链路智解方案，赋能品牌方创造前所未有的产品价值与市场增长，共同孵化定义未来的一体化增长新境界。
+            的全链路智解方案<br />赋能品牌方创造前所未有的产品价值与市场增长<br />共同孵化定义未来的一体化增长新境界。
           </p>
         </div>
       </div>
