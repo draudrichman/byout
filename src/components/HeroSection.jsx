@@ -20,6 +20,15 @@ const HeroSection = memo(() => {
   const timeoutRef = useRef(null);
   const contentContainerRef = useRef(null);
   const heroSectionRef = useRef(null);
+  const statsSectionRef = useRef(null);
+  const titleChineseRef = useRef(null);
+  const titleEnglishRef = useRef(null);
+  const cardRefs = useRef([]);
+  const animationTimelinesRef = useRef({
+    titleChinese: null,
+    titleEnglish: null,
+    cards: null,
+  });
   const lenis = useLenis();
   const [stats, setStats] = useState([
     {
@@ -116,6 +125,173 @@ const HeroSection = memo(() => {
           value: 0,
         }))
       );
+    }
+  }, [currentSlide]);
+
+  // GSAP ScrollTrigger animations for stats section heading and cards
+  useEffect(() => {
+    if (
+      !statsSectionRef.current ||
+      !titleChineseRef.current ||
+      !titleEnglishRef.current
+    )
+      return;
+
+    // Set initial states for animations with more dramatic transforms
+    gsap.set([titleChineseRef.current, titleEnglishRef.current], {
+      opacity: 0,
+      y: 100,
+      x: -30,
+      scale: 0.5,
+      rotationX: -90,
+      rotationY: 15,
+      filter: "blur(20px)",
+      transformOrigin: "center center",
+    });
+
+    cardRefs.current.forEach((cardRef) => {
+      if (cardRef) {
+        gsap.set(cardRef, {
+          opacity: 0,
+          y: 60,
+          scale: 0.85,
+        });
+      }
+    });
+
+    // Kill existing timelines if they exist
+    if (animationTimelinesRef.current.titleChinese) {
+      animationTimelinesRef.current.titleChinese.kill();
+    }
+    if (animationTimelinesRef.current.titleEnglish) {
+      animationTimelinesRef.current.titleEnglish.kill();
+    }
+    if (animationTimelinesRef.current.cards) {
+      animationTimelinesRef.current.cards.kill();
+    }
+
+    // Create spectacular animation timelines
+    // Chinese title timeline - dramatic 3D entrance
+    animationTimelinesRef.current.titleChinese = gsap.timeline({
+      paused: true,
+    });
+    animationTimelinesRef.current.titleChinese
+      .to(titleChineseRef.current, {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1.1, // Overshoot
+        rotationX: 0,
+        rotationY: 0,
+        filter: "blur(0px)",
+        duration: 1.4,
+        ease: "elastic.out(1, 0.5)",
+      })
+      .to(titleChineseRef.current, {
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+      })
+      .to(
+        titleChineseRef.current,
+        {
+          textShadow:
+            "0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.4)",
+          duration: 0.3,
+        },
+        "-=0.2"
+      )
+      .to(
+        titleChineseRef.current,
+        {
+          textShadow: "0 0 0px rgba(255, 255, 255, 0)",
+          duration: 0.5,
+        },
+        "-=0.1"
+      );
+
+    // English title timeline - spectacular entrance from opposite side
+    animationTimelinesRef.current.titleEnglish = gsap.timeline({
+      paused: true,
+    });
+    animationTimelinesRef.current.titleEnglish
+      .to(titleEnglishRef.current, {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1.15, // Overshoot
+        rotationX: 0,
+        rotationY: 0,
+        filter: "blur(0px)",
+        duration: 1.4,
+        ease: "elastic.out(1, 0.5)",
+      })
+      .to(titleEnglishRef.current, {
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+      })
+      .to(
+        titleEnglishRef.current,
+        {
+          textShadow:
+            "0 0 25px rgba(255, 255, 255, 0.7), 0 0 50px rgba(255, 255, 255, 0.3)",
+          duration: 0.3,
+        },
+        "-=0.2"
+      )
+      .to(
+        titleEnglishRef.current,
+        {
+          textShadow: "0 0 0px rgba(255, 255, 255, 0)",
+          duration: 0.5,
+        },
+        "-=0.1"
+      );
+
+    // Cards timeline - simple animation
+    animationTimelinesRef.current.cards = gsap.timeline({ paused: true });
+    animationTimelinesRef.current.cards.to(cardRefs.current.filter(Boolean), {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.2,
+    });
+
+    // Trigger animations when stats slide becomes active
+    if (currentSlide === 1) {
+      // Store ref values in local variables for cleanup
+      const titleChineseTimeline = animationTimelinesRef.current.titleChinese;
+      const titleEnglishTimeline = animationTimelinesRef.current.titleEnglish;
+      const cardsTimeline = animationTimelinesRef.current.cards;
+
+      // Small delay to ensure DOM is ready and smooth transition
+      const timer = setTimeout(() => {
+        // Play animations forward with spectacular staggered timing
+        titleChineseTimeline?.play();
+        titleEnglishTimeline?.delay(0.3).play();
+        cardsTimeline?.delay(0.6).play();
+      }, 200);
+
+      return () => {
+        clearTimeout(timer);
+        // Clean up timelines on unmount
+        titleChineseTimeline?.kill();
+        titleEnglishTimeline?.kill();
+        cardsTimeline?.kill();
+      };
+    } else {
+      // Reverse animations when leaving stats slide
+      // Reverse in opposite order (cards first, then titles)
+      const titleChineseTimeline = animationTimelinesRef.current.titleChinese;
+      const titleEnglishTimeline = animationTimelinesRef.current.titleEnglish;
+      const cardsTimeline = animationTimelinesRef.current.cards;
+
+      cardsTimeline?.reverse();
+      titleEnglishTimeline?.reverse();
+      titleChineseTimeline?.reverse();
     }
   }, [currentSlide]);
 
@@ -323,14 +499,22 @@ const HeroSection = memo(() => {
 
   const renderStatsContent = () => {
     return (
-      <div className="w-screen h-full flex-shrink-0 flex items-center justify-center px-4">
+      <div
+        ref={statsSectionRef}
+        className="w-screen h-full flex-shrink-0 flex items-center justify-center px-4"
+      >
         <div className="container mx-auto px-4 relative z-10 w-full">
           {/* Section Title */}
           <div className="text-center mb-16">
             <h2 className="text-7xl md:text-8xl font-bold mb-5 relative overflow-hidden tracking-[0.3em]">
-              <span className="text-white block">成就达成</span>
+              <span ref={titleChineseRef} className="text-white block">
+                成就达成
+              </span>
             </h2>
-            <div className="text-white/70 text-4xl md:text-5xl uppercase tracking-widest">
+            <div
+              ref={titleEnglishRef}
+              className="text-white/70 text-4xl md:text-5xl uppercase tracking-widest"
+            >
               Achievements
             </div>
           </div>
@@ -345,7 +529,12 @@ const HeroSection = memo(() => {
                   style={{ animationDelay: `${index * 200}ms` }}
                 >
                   {/* Card */}
-                  <div className="relative bg-black/40 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl h-72 flex flex-col justify-between">
+                  <div
+                    ref={(el) => {
+                      if (el) cardRefs.current[index] = el;
+                    }}
+                    className="relative bg-black/40 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl h-72 flex flex-col justify-between"
+                  >
                     {/* Stat Value - Fixed height container */}
                     <div className="flex items-center justify-center h-16 mb-4">
                       <Odometer
