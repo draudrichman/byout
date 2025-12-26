@@ -72,7 +72,9 @@ const HeroSection = memo(() => {
     }
 
     // Create timeline for smooth vertical slide animation
-    const scrollDistance = window.innerHeight * 2; // 3x viewport height for good scroll length
+    const baseScrollDistance = window.innerHeight * 2; // Base scroll for transition
+    const pauseDistance = window.innerHeight * 1.5; // Fixed pause distance (not proportional)
+    const scrollDistance = baseScrollDistance + pauseDistance; // Total scroll distance
 
     const scrollTrigger = ScrollTrigger.create({
       trigger: heroSectionRef.current,
@@ -88,15 +90,37 @@ const HeroSection = memo(() => {
       markers: false, // Set to true for debugging
       onUpdate: (self) => {
         const progress = self.progress;
-        // Switch to stats slide when scroll progress is > 0.5
-        const newSlide = progress > 0.5 ? 1 : 0;
+
+        // Transition completes earlier so stats section appears sooner - stats section becomes fully visible
+        const transitionProgress = 0.35; // Reduced from 0.5 to make content appear sooner
+
+        // Calculate pause end point based on pause distance portion of total scroll
+        const pauseProgressPortion = pauseDistance / scrollDistance;
+        const pauseEnd = transitionProgress + pauseProgressPortion;
+
+        // Switch to stats slide when scroll progress reaches transition point
+        const newSlide = progress > transitionProgress ? 1 : 0;
         if (newSlide !== currentSlide) {
           setCurrentSlide(newSlide);
         }
 
-        // Animate vertical slide position - only the content slides
+        // Animate vertical slide position with pause
+        let slideProgress;
+        if (progress <= transitionProgress) {
+          // Normal scrolling: transition from hero to stats (0% to 35% progress)
+          // Map progress 0 to 0.35 to y 0% to -100%
+          slideProgress = progress / transitionProgress;
+        } else if (progress <= pauseEnd) {
+          // Pause period: hold stats section at y = -100% (fully visible)
+          // Content stays fixed during pause
+          slideProgress = 1; // Keep at -100%
+        } else {
+          // After pause: continue scrolling if needed
+          slideProgress = 1; // Or continue beyond if you want
+        }
+
         gsap.set(contentContainerRef.current, {
-          y: `-${progress * 100}%`,
+          y: `-${slideProgress * 100}%`,
         });
       },
     });

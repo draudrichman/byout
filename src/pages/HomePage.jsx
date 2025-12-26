@@ -120,6 +120,8 @@ const HomePage = memo(({ isLoaded }) => {
             {mountedSections >= 1 && (
               <ErrorBoundary>
                 <div className="spacer h-[100vh]" />
+                <div className="spacer h-[100vh]" />
+                <div className="spacer h-[50vh]" />
                 <LogoSection />
               </ErrorBoundary>
             )}
