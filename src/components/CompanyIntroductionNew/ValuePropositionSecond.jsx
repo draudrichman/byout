@@ -100,36 +100,39 @@ const ValuePropositionSecond = () => {
   return (
     <section
       ref={containerRef}
-      className="mb-12 sm:mb-16 md:mb-20 max-w-7xl mx-auto px-6"
+      className="mb-12 sm:mb-16 md:mb-20 mx-auto px-6"
       style={{
+        width: "80vw",
+        height: "85vh",
         paddingTop: "clamp(1.5rem, 4vw, 3.5rem)",
         paddingBottom: "clamp(1.5rem, 4vw, 3.5rem)",
+        overflowY: "auto",
       }}
     >
-      <div className="bg-gradient-to-b from-white/3 to-transparent p-8 rounded-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-start">
-          <div>
+      <div className="bg-gradient-to-b from-white/3 to-transparent p-10 rounded-lg h-full w-full flex flex-col">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch h-full">
+          <div className="flex flex-col justify-start h-full">
             <h3
               className="text-lg sm:text-xl text-white/95 font-semibold mb-4"
               style={{ fontSize: "clamp(1.125rem, 2.2vw, 1.75rem)" }}
             >
               核心宣言
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {bullets.map((b, i) => (
                 <div
                   key={i}
                   ref={(el) => (bulletsRefs.current[i] = el)}
-                  className="flex gap-3"
+                  className="flex gap-4 items-start"
                 >
-                  <div className="flex-shrink-0 text-white/90 font-songti text-3xl">
+                  <div className="flex-shrink-0 text-white/90 font-songti text-5xl leading-none">
                     •
                   </div>
                   <div className="text-left">
-                    <div className="text-base sm:text-lg text-white/95 font-medium">
+                    <div className="text-lg sm:text-xl text-white/95 font-medium">
                       {b.title}
                     </div>
-                    <div className="text-sm sm:text-base text-white/75">
+                    <div className="text-base sm:text-lg text-white/75">
                       {b.text}
                     </div>
                   </div>
@@ -138,27 +141,27 @@ const ValuePropositionSecond = () => {
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col justify-between h-full">
             <h3
               className="text-lg sm:text-xl text-white/95 font-semibold mb-4"
               style={{ fontSize: "clamp(1.125rem, 2.2vw, 1.75rem)" }}
             >
               关键指标
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6 h-full items-stretch">
               {metrics.map((m, i) => (
                 <div
                   key={i}
                   ref={(el) => (metricsRefs.current[i] = el)}
-                  className="flex flex-col p-6 bg-white/3 rounded-lg border border-white/6"
+                  className="flex flex-col p-8 bg-white/3 rounded-lg border border-white/6 flex-1 min-h-[120px]"
                 >
                   <div
-                    className="text-3xl sm:text-4xl font-extrabold text-white"
-                    style={{ fontSize: "clamp(1.5rem, 3.4vw, 2.5rem)" }}
+                    className="text-4xl sm:text-5xl font-extrabold text-white"
+                    style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)" }}
                   >
                     {m.value}
                   </div>
-                  <div className="text-sm text-white/70 mt-2">{m.label}</div>
+                  <div className="text-base text-white/70 mt-3">{m.label}</div>
                 </div>
               ))}
             </div>

@@ -131,7 +131,7 @@ const CompanyIntroduction = memo(() => {
         animation: tl,
         trigger: container,
         start: "top top",
-        end: () => "+=" + panels.length * window.innerHeight,
+        end: () => "+=" + panels.length * window.innerHeight * 2,
         // Smooth the scrubbing for less snappy feel
         scrub: 0.8,
         pin: true,
@@ -153,7 +153,7 @@ const CompanyIntroduction = memo(() => {
       <div className="relative z-10 w-full">
         <div
           ref={pinRef}
-          className="relative h-screen max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 md:py-20"
+          className="relative h-screen max-w-8xl mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 md:py-20"
         >
           <section className="snap-panel flex items-center justify-center h-full">
             <LogoSection />
@@ -168,7 +168,7 @@ const CompanyIntroduction = memo(() => {
             <div className="philosophy-divider-container w-full">
               <PhilosophyDivider />
             </div>
-            <div className="philosophy-sections-container w-full">
+            <div className="philosophy-sections-container max-w-7xl w-full">
               <PhilosophySections />
             </div>
           </section>
