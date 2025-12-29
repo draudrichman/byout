@@ -147,6 +147,7 @@ const CompanyIntroduction = memo(() => {
 
   return (
     <div
+      id="about"
       ref={contentRef}
       className="text-center min-h-screen relative flex items-center justify-center font-sans overflow-hidden"
     >

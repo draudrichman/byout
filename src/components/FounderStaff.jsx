@@ -81,7 +81,7 @@ const FounderStaff = () => {
     return () => ctx.revert();
   }, []);
   return (
-    <section ref={teamSectionRef} className="py-24 px-12">
+    <section ref={teamSectionRef} id="team-introduction" className="py-24 px-12">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <div className="mb-10 team-heading">

@@ -130,7 +130,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section ref={formRef} className="py-24 px-6 md:px-12">
+    <section ref={formRef} id="contact" className="py-24 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         {" "}
         {/* Increased max-width for better column layout */}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useLenis } from "@studio-freight/react-lenis";
 import AnimatedLogo from "./AnimatedLogo";
 
 const Navbar = ({ isLoaded }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAnimationDone, setIsAnimationDone] = useState(false);
   const [startAnimation, setStartAnimation] = useState(false);
+  const [hasRunDemo, setHasRunDemo] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     if (isLoaded) {
@@ -19,12 +21,6 @@ const Navbar = ({ isLoaded }) => {
   }, [isLoaded]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
     // Only set the animation completion timer if the animation has started
     let animationTimer;
     if (startAnimation) {
@@ -34,7 +30,6 @@ const Navbar = ({ isLoaded }) => {
     }
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       if (animationTimer) {
         clearTimeout(animationTimer);
       }
@@ -43,10 +38,12 @@ const Navbar = ({ isLoaded }) => {
 
   // Demo: Automatically open menu after logo lands, then close after a few seconds
   useEffect(() => {
+    // Demo: run only once after initial animation completes so
+    // the menu doesn't auto-reopen every time the user closes it.
     let demoOpenTimer;
     let demoCloseTimer;
-    if (isAnimationDone && !isMenuOpen) {
-      // Open menu after logo lands
+    if (isAnimationDone && !isMenuOpen && !hasRunDemo) {
+      setHasRunDemo(true);
       demoOpenTimer = setTimeout(() => {
         setIsMenuOpen(true);
         // Close menu after 2.5 seconds
@@ -63,8 +60,62 @@ const Navbar = ({ isLoaded }) => {
 
   const toggleMenu = () => {
     if (isAnimationDone) {
-      setIsMenuOpen(!isMenuOpen);
+      setIsMenuOpen((prev) => !prev);
     }
+  };
+
+  // Smooth scroll to target id (accounts for fixed navbar height and pinned hero section)
+  const handleNavClick = (e, id) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    // Close menu if open
+    setIsMenuOpen(false);
+
+    // Use requestAnimationFrame to ensure DOM is ready and any current scroll animations are considered
+    requestAnimationFrame(() => {
+      // Calculate target position accounting for navbar height
+      const navbarHeight = 0; // Height of the navbar
+
+      // Use Lenis for smooth scrolling if available, otherwise fallback to window.scrollTo
+      if (lenis) {
+        // Wait a bit to ensure any current scroll animations are considered
+        // This helps when scrolling from within the pinned hero section
+        setTimeout(() => {
+          // Calculate position with offset for navbar
+          const targetRect = target.getBoundingClientRect();
+          const currentScrollY =
+            lenis.scroll ||
+            window.pageYOffset ||
+            document.documentElement.scrollTop;
+          const targetY = targetRect.top + currentScrollY - navbarHeight;
+
+          // Use Lenis scrollTo - it should handle pinned sections automatically
+          // but we ensure we're scrolling to the correct position
+          lenis.scrollTo(targetY, {
+            duration: 1.8, // Slightly longer duration for smoother scroll past pinned sections
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            immediate: false,
+            lock: false, // Don't lock scroll during animation
+          });
+        }, 100); // Slightly longer delay to ensure ScrollTrigger updates
+      } else {
+        // Fallback for when Lenis is not available
+        const targetRect = target.getBoundingClientRect();
+        const currentScrollY =
+          window.pageYOffset || document.documentElement.scrollTop;
+        const targetY = targetRect.top + currentScrollY - navbarHeight;
+        window.scrollTo({ top: targetY, behavior: "smooth" });
+      }
+
+      // Update URL hash
+      try {
+        history.pushState(null, "", `#${id}`);
+      } catch {
+        // Ignore history errors
+      }
+    });
   };
 
   return (
@@ -141,6 +192,7 @@ const Navbar = ({ isLoaded }) => {
             >
               <a
                 href="#about"
+                onClick={(e) => handleNavClick(e, "about")}
                 className="text-white no-underline text-[1.1em] nav-link"
               >
                 关于
@@ -151,7 +203,8 @@ const Navbar = ({ isLoaded }) => {
               style={{ transitionDelay: isMenuOpen ? "0.1s" : "0.1s" }}
             >
               <a
-                href="#blog"
+                href="#core-services"
+                onClick={(e) => handleNavClick(e, "core-services")}
                 className="text-white no-underline text-[1.1em] nav-link"
               >
                 核心服务
@@ -162,7 +215,8 @@ const Navbar = ({ isLoaded }) => {
               style={{ transitionDelay: isMenuOpen ? "0s" : "0.2s" }}
             >
               <a
-                href="#services"
+                href="#service-process"
+                onClick={(e) => handleNavClick(e, "service-process")}
                 className="text-white no-underline text-[1.1em] nav-link"
               >
                 服务流程
@@ -184,7 +238,8 @@ const Navbar = ({ isLoaded }) => {
               style={{ transitionDelay: isMenuOpen ? "0s" : "0.2s" }}
             >
               <a
-                href="#contact"
+                href="#channel-layout"
+                onClick={(e) => handleNavClick(e, "channel-layout")}
                 className="text-white no-underline text-[1.1em] nav-link"
               >
                 渠道布局
@@ -195,7 +250,8 @@ const Navbar = ({ isLoaded }) => {
               style={{ transitionDelay: isMenuOpen ? "0.1s" : "0.1s" }}
             >
               <a
-                href="#contact-info"
+                href="#team-introduction"
+                onClick={(e) => handleNavClick(e, "team-introduction")}
                 className="text-white no-underline text-[1.1em] nav-link"
               >
                 团队介绍
@@ -206,7 +262,8 @@ const Navbar = ({ isLoaded }) => {
               style={{ transitionDelay: isMenuOpen ? "0.2s" : "0s" }}
             >
               <a
-                href="#contact-us"
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "contact")}
                 className="text-white no-underline text-[1.1em] nav-link"
               >
                 联系

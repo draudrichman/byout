@@ -304,7 +304,7 @@ const CoreServices = () => {
   }, []);
 
   return (
-    <main className={`relative ${isPreviewVisible ? "preview-visible" : ""}`}>
+    <main id="core-services" className={`relative ${isPreviewVisible ? "preview-visible" : ""}`}>
       {/* Column Layout: Left 1/3 Content + Right 2/3 Gallery */}
       <section className="w-full h-screen lg:h-screen flex flex-col lg:flex-row">
         {/* Left Column - Core Services Content (1/3) */}

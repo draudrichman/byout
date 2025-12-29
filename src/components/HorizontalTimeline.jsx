@@ -558,7 +558,8 @@ const HorizontalTimeline = memo(() => {
     }, []);
 
     return (
-        <section 
+        <section
+            id='service-process' 
             ref={sectionRef}
             className="timeline relative w-full h-screen bg-black overflow-hidden"
         >
