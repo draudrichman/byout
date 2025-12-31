@@ -100,7 +100,7 @@ const ValuePropositionSecond = () => {
   return (
     <section
       ref={containerRef}
-      className="mb-12 sm:mb-16 md:mb-20 mx-auto px-6"
+      className="mx-auto px-6"
       style={{
         width: "80vw",
         height: "85vh",

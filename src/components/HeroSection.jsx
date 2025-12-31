@@ -73,7 +73,7 @@ const HeroSection = memo(() => {
 
     // Create timeline for smooth vertical slide animation
     const baseScrollDistance = window.innerHeight * 2; // Base scroll for transition
-    const pauseDistance = window.innerHeight * 1.5; // Fixed pause distance (not proportional)
+    const pauseDistance = window.innerHeight * 1; // Fixed pause distance (not proportional)
     const scrollDistance = baseScrollDistance + pauseDistance; // Total scroll distance
 
     const scrollTrigger = ScrollTrigger.create({
