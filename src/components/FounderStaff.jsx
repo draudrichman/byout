@@ -81,7 +81,11 @@ const FounderStaff = () => {
     return () => ctx.revert();
   }, []);
   return (
-    <section ref={teamSectionRef} id="team-introduction" className="py-24 px-12">
+    <section
+      ref={teamSectionRef}
+      id="team-introduction"
+      className="py-24 px-12"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <div className="mb-10 team-heading">
@@ -104,7 +108,7 @@ const FounderStaff = () => {
           <h3 className="text-3xl font-light mb-12 pb-4 border-b border-gray-800">
             <span className="text-gray-600">FOUNDERS / 创始人</span>
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-20 lg:gap-38">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
             {[
               {
                 name: "JASON CHENG  成金海",
@@ -124,30 +128,98 @@ const FounderStaff = () => {
                 role: "全球渠道拓展专家",
                 img: "/founders/founder3.webp",
               },
+              {
+                name: "Finn Guan 管海峰",
+                title: "Co-Founder & CMO",
+                role: "渠道战略专家",
+                img: "/founders/founder5.jpg",
+              },
+              {
+                name: "刘宇 Yukim",
+                title: "Co-Founder & CMO",
+                role: "渠道战略专家",
+                img: "/founders/founder4.jpg",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
+              {
+                name: "John Doe",
+                title: "Co-Founder & CMO",
+                role: "全球渠道拓展专家",
+                img: "/founders/plceholder.png",
+              },
             ].map((founder, index) => (
-              <div key={index} className="founder-card group">
+              <div key={index} className="founder-card group p-3">
                 <div
-                  className="relative overflow-hidden aspect-[3/4] mb-6 rounded-lg"
+                  className="relative overflow-hidden aspect-[3/4] mb-4 rounded-lg bg-cover bg-center"
                   style={{
                     backgroundImage: `url(${founder.img})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
                   }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                  {/* <div className="absolute inset-0 flex items-center justify-center"></div> */}
-                  {/* <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                    <p className="text-sm text-gray-300 leading-relaxed">
-                      Leading innovation and strategic vision for global market
-                      expansion.
-                    </p>
-                  </div> */}
                 </div>
-                <h4 className="text-2xl font-light text-gray-400 mb-2">
+                <h4 className="text-lg md:text-base font-light text-gray-400 mb-1">
                   {founder.name}
                 </h4>
-                {/* <p className="text-sm text-gray-400 mb-1">{founder.title}</p> */}
-                <p className="text-md text-gray-400">
+                <p className="text-sm text-gray-400 leading-tight">
                   {founder.role.split(" ").map((line, i, arr) => (
                     <span key={i}>
                       {line}
@@ -196,7 +268,11 @@ const FounderStaff = () => {
                   A GROUP OF EXTRAORDINARY PARTNERS HAVE GATHERED HERE.
                 </h2>
                 <p className="text-xl md:text-3xl lg:text-5xl text-gray-400 leading-snug break-words max-w-full">
-                  这里汇聚了<br/>一群不甘平庸的<br/>伙伴。
+                  这里汇聚了
+                  <br />
+                  一群不甘平庸的
+                  <br />
+                  伙伴。
                 </p>
               </div>
 

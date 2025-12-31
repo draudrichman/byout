@@ -1,13 +1,24 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import ShinyText from "./ui/shiny-text";
 
 const logos = Array.from({ length: 64 }, (_, i) => `/s/s${i + 1}.svg`);
+const moreLogos = Array.from({ length: 68 }, (_, i) => `/s/new/sn${i + 1}.jpg`);
+logos.push(...moreLogos);
 
 export default function BrandLogosSection() {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const hasAnimatedRef = useRef(false);
+  const [page, setPage] = useState(0);
+  const pageSize = 36; // 6 x 6 grid
+
+  // chunk logos into pages of 36 (last page may be shorter)
+  const pages = [];
+  for (let i = 0; i < logos.length; i += pageSize) {
+    pages.push(logos.slice(i, i + pageSize));
+  }
+  const currentLogos = pages[page] || [];
   // const cols = 8; // no longer needed after batching tweens
 
   // Calculate responsive spacing: equivalent to clamp(50px, 6vw, 80px)
@@ -53,64 +64,32 @@ export default function BrandLogosSection() {
               observer.unobserve(el);
             }
 
-            // Animate logos into 8x8 grid with responsive spacing (single batched tween)
-            const spacing = getResponsiveSpacing();
+            // Animate current page logos with a simple fade/scale stagger
             const logoNodeList =
               containerRef.current?.querySelectorAll(".logo-item");
             if (!logoNodeList || !logoNodeList.length) return;
 
             const logosArr = gsap.utils.toArray(logoNodeList);
-            const colsLocal = 8;
-
-            // Initial state: spiral
-            gsap.set(logosArr, {
-              x: (i) => {
-                const angle = (i / logos.length) * Math.PI * 4; // 2 revolutions
-                const radius = 500;
-                return Math.cos(angle) * radius;
-              },
-              y: (i) => {
-                const angle = (i / logos.length) * Math.PI * 4;
-                const radius = 500;
-                return Math.sin(angle) * radius;
-              },
-              scale: prefersReduced ? 1 : 0,
-              rotation: prefersReduced ? 0 : () => Math.random() * 360,
-              opacity: prefersReduced ? 1 : 0,
-              willChange: "transform, opacity",
-              force3D: true,
-            });
-
-            const gridX = (i) => ((i % colsLocal) - 3.5) * spacing;
-            const gridY = (i) => (Math.floor(i / colsLocal) - 3.5) * spacing;
-
             if (prefersReduced) {
-              // No animation: jump to final grid positions and clear will-change
               gsap.set(logosArr, {
-                x: gridX,
-                y: gridY,
-                scale: 1,
-                rotation: 0,
                 opacity: 1,
+                scale: 1,
                 clearProps: "willChange",
-                force3D: true,
               });
             } else {
-              gsap.to(logosArr, {
-                x: gridX,
-                y: gridY,
-                scale: 1,
-                rotation: 0,
-                opacity: 1,
-                duration: 1.5,
-                ease: "power3.out",
-                stagger: { each: 0.03, from: 0 },
-                force3D: true,
-                overwrite: "auto",
-                onComplete: () => {
-                  gsap.set(logosArr, { clearProps: "willChange" });
-                },
-              });
+              gsap.fromTo(
+                logosArr,
+                { y: 30, opacity: 0, scale: 0.9 },
+                {
+                  y: 0,
+                  opacity: 1,
+                  scale: 1,
+                  duration: 0.8,
+                  ease: "power3.out",
+                  stagger: 0.03,
+                  overwrite: "auto",
+                }
+              );
             }
           }
         },
@@ -130,6 +109,41 @@ export default function BrandLogosSection() {
 
     return () => ctx.revert();
   }, []);
+
+  // Rotate pages every 5 seconds
+  useEffect(() => {
+    if (!pages.length) return;
+    const id = setInterval(() => {
+      setPage((p) => (p + 1) % pages.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [pages.length]);
+
+  // Animate logos on page change
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const logoNodeList = containerRef.current?.querySelectorAll(".logo-item");
+    if (!logoNodeList || !logoNodeList.length) return;
+    const logosArr = gsap.utils.toArray(logoNodeList);
+    if (prefersReduced) {
+      gsap.set(logosArr, { opacity: 1, scale: 1, clearProps: "willChange" });
+    } else {
+      gsap.fromTo(
+        logosArr,
+        { y: 20, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          stagger: 0.02,
+        }
+      );
+    }
+  }, [page]);
 
   return (
     <div
@@ -160,8 +174,8 @@ export default function BrandLogosSection() {
           <div className="md:w-1/2 w-full">
             {/* Mobile grid: shown on small screens, logos appear under the text */}
             <div className="block md:hidden">
-              <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
-                {logos.map((url, idx) => (
+              <div className="grid grid-cols-4 lg:grid-cols-6 gap-3">
+                {currentLogos.map((url, idx) => (
                   <div
                     key={idx}
                     className="w-full flex items-center justify-center p-1"
@@ -190,23 +204,21 @@ export default function BrandLogosSection() {
               <div
                 ref={containerRef}
                 style={{
-                  perspective: "1000px",
-                  transformStyle: "preserve-3d",
-                  position: "relative",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(6, 1fr)",
+                  gap: "clamp(8px, 2vw, 28px)",
+                  alignItems: "center",
+                  justifyItems: "center",
                   width: "clamp(480px, 80%, 720px)",
                   height: "clamp(480px, 80%, 720px)",
                 }}
-                className="relative"
+                className=""
               >
-                {logos.map((url, index) => (
+                {currentLogos.map((url, index) => (
                   <div
                     key={index}
-                    className="logo-item absolute transition-none"
-                    style={{
-                      left: "50%",
-                      top: "50%",
-                      transformStyle: "preserve-3d",
-                    }}
+                    className="logo-item transition-none"
+                    style={{ transformStyle: "preserve-3d" }}
                   >
                     <div
                       style={{
