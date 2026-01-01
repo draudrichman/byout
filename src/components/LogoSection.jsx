@@ -4,8 +4,8 @@ import BrandLogosSection from "./BrandLogoSection";
 const LogoSection = () => {
   return (
     <>
-      <BigLogo />
       <BrandLogosSection />
+      <BigLogo />
     </>
   );
 };

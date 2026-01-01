@@ -6,15 +6,14 @@ const logos = Array.from({ length: 64 }, (_, i) => `/s/s${i + 1}.svg`);
 const moreLogos = Array.from({ length: 68 }, (_, i) => `/s/new/sn${i + 1}.jpg`);
 const allLogos = [...logos, ...moreLogos];
 
-// Create 4 rows with different logo sets
+// Create 3 rows with different logo sets
 const createRows = () => {
   const shuffled = [...allLogos].sort(() => Math.random() - 0.5);
-  const rowSize = Math.ceil(shuffled.length / 4);
+  const rowSize = Math.ceil(shuffled.length / 3);
   return [
     shuffled.slice(0, rowSize),
     shuffled.slice(rowSize, rowSize * 2),
-    shuffled.slice(rowSize * 2, rowSize * 3),
-    shuffled.slice(rowSize * 3),
+    shuffled.slice(rowSize * 2),
   ];
 };
 
@@ -180,10 +179,7 @@ export default function BrandLogosSection() {
         <MarqueeRow logos={rows[1]} direction="right" speed={35} delay={0.5} />
 
         {/* Row 3 - Left to Right, Slow */}
-        <MarqueeRow logos={rows[2]} direction="left" speed={30} delay={1} />
-
-        {/* Row 4 - Right to Left, Medium-Fast */}
-        <MarqueeRow logos={rows[3]} direction="right" speed={45} delay={1.5} />
+        <MarqueeRow logos={rows[2]} direction="left" speed={40} delay={1} />
       </div>
     </div>
   );
