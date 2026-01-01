@@ -1,5 +1,328 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+
+const foundersData = [
+  {
+    name: "JASON CHENG  成金海",
+    title: "Co-Founder & CTO",
+    role: "MDL实验室创办人 前BY年轻化创新集团CEO 全球品牌年轻态买点论开创者",
+    img: "/founders/founder2.jpg",
+  },
+  {
+    name: "VINCE TREY  崔巽燊",
+    title: "Co-Founder & CEO",
+    role: "全球化创意美学设计专家 品牌出海战略架构师",
+    img: "/founders/founder.png",
+  },
+  {
+    name: "CALVIN LU",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/founder3.webp",
+  },
+  {
+    name: "Finn Guan 管海峰",
+    title: "Co-Founder & CMO",
+    role: "渠道战略专家",
+    img: "/founders/founder5.jpg",
+  },
+  {
+    name: "刘宇 Yukim",
+    title: "Co-Founder & CMO",
+    role: "渠道战略专家",
+    img: "/founders/founder4.jpg",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+  {
+    name: "John Doe",
+    title: "Co-Founder & CMO",
+    role: "全球渠道拓展专家",
+    img: "/founders/plceholder.png",
+  },
+];
+
+const FoundersMarquee = () => {
+  const containerRef = useRef(null);
+  const marqueeRef = useRef(null);
+  const animationRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartX = useRef(0);
+  const dragCurrentX = useRef(0);
+  const scrollPosition = useRef(0);
+
+  useEffect(() => {
+    if (!marqueeRef.current) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
+
+    const marquee = marqueeRef.current;
+    const firstSet = marquee.querySelector(".marquee-set");
+    if (!firstSet) return;
+
+    const cardWidth = 320; // Approximate width of card + gap
+    const totalWidth = cardWidth * foundersData.length;
+
+    // Auto-scroll animation
+    const startAnimation = () => {
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+
+      const currentX = gsap.getProperty(marquee, "x");
+      const remainingDistance = totalWidth + currentX;
+      const duration = remainingDistance / 30; // 30px per second
+
+      animationRef.current = gsap.to(marquee, {
+        x: -totalWidth,
+        duration: duration,
+        ease: "none",
+        repeat: -1,
+        modifiers: {
+          x: (x) => {
+            const numX = parseFloat(x);
+            return `${numX % totalWidth}px`;
+          },
+        },
+      });
+    };
+
+    startAnimation();
+
+    return () => {
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+    };
+  }, []);
+
+  // Handle drag start
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    dragStartX.current = e.clientX;
+    dragCurrentX.current = gsap.getProperty(marqueeRef.current, "x");
+
+    // Pause animation
+    if (animationRef.current) {
+      animationRef.current.pause();
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    dragStartX.current = e.touches[0].clientX;
+    dragCurrentX.current = gsap.getProperty(marqueeRef.current, "x");
+
+    // Pause animation
+    if (animationRef.current) {
+      animationRef.current.pause();
+    }
+  };
+
+  // Handle drag move
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - dragStartX.current;
+    const newX = dragCurrentX.current + deltaX;
+
+    gsap.set(marqueeRef.current, { x: newX });
+    scrollPosition.current = newX;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const deltaX = e.touches[0].clientX - dragStartX.current;
+    const newX = dragCurrentX.current + deltaX;
+
+    gsap.set(marqueeRef.current, { x: newX });
+    scrollPosition.current = newX;
+  };
+
+  // Handle drag end
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    // Resume animation from current position
+    const cardWidth = 320;
+    const totalWidth = cardWidth * foundersData.length;
+    const currentX = gsap.getProperty(marqueeRef.current, "x");
+
+    // Normalize position
+    let normalizedX = currentX % totalWidth;
+    if (normalizedX > 0) normalizedX -= totalWidth;
+
+    gsap.set(marqueeRef.current, { x: normalizedX });
+
+    const remainingDistance = totalWidth + normalizedX;
+    const duration = remainingDistance / 30;
+
+    if (animationRef.current) {
+      animationRef.current.kill();
+    }
+
+    animationRef.current = gsap.to(marqueeRef.current, {
+      x: -totalWidth,
+      duration: duration,
+      ease: "none",
+      repeat: -1,
+      modifiers: {
+        x: (x) => {
+          const numX = parseFloat(x);
+          return `${numX % totalWidth}px`;
+        },
+      },
+    });
+  };
+
+  // Duplicate founders for seamless loop
+  const duplicatedFounders = [
+    ...foundersData,
+    ...foundersData,
+    ...foundersData,
+  ];
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleDragEnd}
+      onMouseLeave={handleDragEnd}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleDragEnd}
+    >
+      <div ref={marqueeRef} className="flex gap-6">
+        {/* First set */}
+        <div className="marquee-set flex gap-6 shrink-0">
+          {duplicatedFounders.map((founder, index) => (
+            <div
+              key={`set1-${index}`}
+              className="founder-card group shrink-0 w-72 pointer-events-none"
+            >
+              <div
+                className="relative overflow-hidden aspect-[3/4] mb-4 rounded-lg bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${founder.img})`,
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+              </div>
+              <h4 className="text-lg font-light text-gray-400 mb-1">
+                {founder.name}
+              </h4>
+              <p className="text-sm text-gray-400 leading-tight">
+                {founder.role.split(" ").map((line, i, arr) => (
+                  <span key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+              </p>
+            </div>
+          ))}
+        </div>
+        {/* Second set for seamless loop */}
+        <div className="marquee-set flex gap-6 shrink-0">
+          {duplicatedFounders.map((founder, index) => (
+            <div
+              key={`set2-${index}`}
+              className="founder-card group shrink-0 w-72 pointer-events-none"
+            >
+              <div
+                className="relative overflow-hidden aspect-[3/4] mb-4 rounded-lg bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${founder.img})`,
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+              </div>
+              <h4 className="text-lg font-light text-gray-400 mb-1">
+                {founder.name}
+              </h4>
+              <p className="text-sm text-gray-400 leading-tight">
+                {founder.role.split(" ").map((line, i, arr) => (
+                  <span key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Drag hint */}
+      <div className="absolute bottom-4 right-4 text-gray-500 text-sm pointer-events-none">
+        ← Drag to explore →
+      </div>
+    </div>
+  );
+};
 
 const FounderStaff = () => {
   const teamSectionRef = useRef(null);
@@ -108,128 +431,7 @@ const FounderStaff = () => {
           <h3 className="text-3xl font-light mb-12 pb-4 border-b border-gray-800">
             <span className="text-gray-600">FOUNDERS / 创始人</span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-            {[
-              {
-                name: "JASON CHENG  成金海",
-                title: "Co-Founder & CTO",
-                role: "MDL实验室创办人 前BY年轻化创新集团CEO 全球品牌年轻态买点论开创者",
-                img: "/founders/founder2.jpg",
-              },
-              {
-                name: "VINCE TREY  崔巽燊",
-                title: "Co-Founder & CEO",
-                role: "全球化创意美学设计专家 品牌出海战略架构师",
-                img: "/founders/founder.png",
-              },
-              {
-                name: "CALVIN LU",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/founder3.webp",
-              },
-              {
-                name: "Finn Guan 管海峰",
-                title: "Co-Founder & CMO",
-                role: "渠道战略专家",
-                img: "/founders/founder5.jpg",
-              },
-              {
-                name: "刘宇 Yukim",
-                title: "Co-Founder & CMO",
-                role: "渠道战略专家",
-                img: "/founders/founder4.jpg",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-              {
-                name: "John Doe",
-                title: "Co-Founder & CMO",
-                role: "全球渠道拓展专家",
-                img: "/founders/plceholder.png",
-              },
-            ].map((founder, index) => (
-              <div key={index} className="founder-card group p-3">
-                <div
-                  className="relative overflow-hidden aspect-[3/4] mb-4 rounded-lg bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${founder.img})`,
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                </div>
-                <h4 className="text-lg md:text-base font-light text-gray-400 mb-1">
-                  {founder.name}
-                </h4>
-                <p className="text-sm text-gray-400 leading-tight">
-                  {founder.role.split(" ").map((line, i, arr) => (
-                    <span key={i}>
-                      {line}
-                      {i < arr.length - 1 && <br />}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ))}
-          </div>
+          <FoundersMarquee />
         </div>
 
         {/* Team Grid */}
