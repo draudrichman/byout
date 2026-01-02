@@ -2,18 +2,37 @@ import { memo, useState, useEffect } from "react";
 import { useLenis } from "@studio-freight/react-lenis";
 import { Leva } from "leva";
 import Navbar from "../components/ui/Navbar";
-import Hero from "../components/HeroSection";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Prism from "../components/PrismOptimized";
-// Lazy import sections to control mounting timing
-import LogoSection from "../components/LogoSection";
-import CompanyIntroduction from "../components/CompanyIntroductionNew";
-import CoreServices from "../components/CoreServices";
-import HorizontalTimeline from "../components/HorizontalTimeline";
-import ExperienceShowcase from "../components/ExperienceShowcase";
-import FounderStaff from "../components/FounderStaff";
-import GlobalPresence from "../components/GlobalPresence";
-import ContactForm from "../components/ContactForm";
+
+// Import Mobile and Desktop variants for each section
+// Using the same component for both initially - will be replaced with mobile-specific versions later
+import HeroDesktop from "../components/HeroSection";
+import HeroMobile from "../components/HeroSection";
+
+import LogoSectionDesktop from "../components/LogoSection";
+import LogoSectionMobile from "../components/LogoSection";
+
+import CompanyIntroductionDesktop from "../components/CompanyIntroductionNew";
+import CompanyIntroductionMobile from "../components/CompanyIntroductionNew";
+
+import CoreServicesDesktop from "../components/CoreServices";
+import CoreServicesMobile from "../components/CoreServices";
+
+import HorizontalTimelineDesktop from "../components/HorizontalTimeline";
+import HorizontalTimelineMobile from "../components/HorizontalTimeline";
+
+import ExperienceShowcaseDesktop from "../components/ExperienceShowcase";
+import ExperienceShowcaseMobile from "../components/ExperienceShowcase";
+
+import FounderStaffDesktop from "../components/FounderStaff";
+import FounderStaffMobile from "../components/FounderStaff";
+
+import GlobalPresenceDesktop from "../components/GlobalPresence";
+import GlobalPresenceMobile from "../components/GlobalPresence";
+
+import ContactFormDesktop from "../components/ContactForm";
+import ContactFormMobile from "../components/ContactForm";
 
 const HomePage = memo(({ isLoaded }) => {
   const [mountedSections, setMountedSections] = useState(0);
@@ -95,80 +114,162 @@ const HomePage = memo(({ isLoaded }) => {
       {/* Navigation */}
       <Navbar isLoaded={isLoaded} />
 
-      {/* Above-the-fold: render immediately */}
-      <Hero key="landing" isLoaded={isLoaded} />
+      {/* ========== DESKTOP VERSION ========== */}
+      <div className="hidden md:block">
+        {/* Above-the-fold: render immediately */}
+        <HeroDesktop key="landing-desktop" isLoaded={isLoaded} />
 
-      {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
-          This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
-          so Prism is not visible until the user scrolls into this area. */}
-      {mountedSections >= 1 && (
-        <div className="home-mother relative">
-          <div
-            className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
-            style={{ zIndex: 10 }}
-          >
-            <Prism
-              showFPS={false}
-              fpsPosition="top-left"
-              height={2}
-              baseWidth={2}
-              animationType="rotate"
-            />
+        {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
+            This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
+            so Prism is not visible until the user scrolls into this area. */}
+        {mountedSections >= 1 && (
+          <div className="home-mother relative">
+            <div
+              className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
+              style={{ zIndex: 10 }}
+            >
+              {/* <Prism
+                showFPS={false}
+                fpsPosition="top-left"
+                height={2}
+                baseWidth={2}
+                animationType="rotate"
+              /> */}
+            </div>
+
+            <div className="relative z-10">
+              {mountedSections >= 1 && (
+                <ErrorBoundary>
+                  <div className="spacer h-[100vh]" />
+                  <div className="spacer h-[100vh]" />
+                  <LogoSectionDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 2 && (
+                <ErrorBoundary>
+                  <CompanyIntroductionDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 3 && (
+                <ErrorBoundary>
+                  <CoreServicesDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 4 && (
+                <ErrorBoundary>
+                  <HorizontalTimelineDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 5 && (
+                <ErrorBoundary>
+                  <ExperienceShowcaseDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 6 && (
+                <ErrorBoundary>
+                  <FounderStaffDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 7 && (
+                <ErrorBoundary>
+                  <GlobalPresenceDesktop />
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 8 && (
+                <ErrorBoundary>
+                  <ContactFormDesktop />
+                </ErrorBoundary>
+              )}
+            </div>
           </div>
+        )}
+      </div>
 
-          <div className="relative z-10">
-            {mountedSections >= 1 && (
-              <ErrorBoundary>
-                <div className="spacer h-[100vh]" />
-                <div className="spacer h-[100vh]" />
-                <LogoSection />
-              </ErrorBoundary>
-            )}
+      {/* ========== MOBILE VERSION ========== */}
+      <div className="block md:hidden">
+        {/* Above-the-fold: render immediately */}
+        {/* <HeroMobile key="landing-mobile" isLoaded={isLoaded} /> */}
 
-            {mountedSections >= 2 && (
-              <ErrorBoundary>
-                <CompanyIntroduction />
-              </ErrorBoundary>
-            )}
+        {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
+            This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
+            so Prism is not visible until the user scrolls into this area. */}
+        {mountedSections >= 1 && (
+          <div className="home-mother relative">
+            <div
+              className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
+              style={{ zIndex: 10 }}
+            >
+              {/* Prism shader for mobile - can be commented out if needed */}
+              {/* <Prism
+                showFPS={false}
+                fpsPosition="top-left"
+                height={2}
+                baseWidth={2}
+                animationType="rotate"
+              /> */}
+            </div>
 
-            {mountedSections >= 3 && (
-              <ErrorBoundary>
-                <CoreServices />
-              </ErrorBoundary>
-            )}
+            <div className="relative z-10">
+              {mountedSections >= 1 && (
+                <ErrorBoundary>
+                  <div className="spacer h-[100vh]" />
+                  <div className="spacer h-[100vh]" />
+                  {/* <LogoSectionMobile /> */}
+                </ErrorBoundary>
+              )}
 
-            {mountedSections >= 4 && (
-              <ErrorBoundary>
-                <HorizontalTimeline />
-              </ErrorBoundary>
-            )}
+              {mountedSections >= 2 && (
+                <ErrorBoundary>
+                  {/* <CompanyIntroductionMobile /> */}
+                </ErrorBoundary>
+              )}
 
-            {mountedSections >= 5 && (
-              <ErrorBoundary>
-                <ExperienceShowcase />
-              </ErrorBoundary>
-            )}
+              {mountedSections >= 3 && (
+                <ErrorBoundary>
+                  {/* <CoreServicesMobile /> */}
+                </ErrorBoundary>
+              )}
 
-            {mountedSections >= 6 && (
-              <ErrorBoundary>
-                <FounderStaff />
-              </ErrorBoundary>
-            )}
+              {mountedSections >= 4 && (
+                <ErrorBoundary>
+                  {/* <HorizontalTimelineMobile /> */}
+                </ErrorBoundary>
+              )}
 
-            {mountedSections >= 7 && (
-              <ErrorBoundary>
-                <GlobalPresence />
-              </ErrorBoundary>
-            )}
+              {mountedSections >= 5 && (
+                <ErrorBoundary>
+                  {/* <ExperienceShowcaseMobile /> */}
+                </ErrorBoundary>
+              )}
 
-            {mountedSections >= 8 && (
-              <ErrorBoundary>
-                <ContactForm />
-              </ErrorBoundary>
-            )}
+              {mountedSections >= 6 && (
+                <ErrorBoundary>
+                  {/* <FounderStaffMobile /> */}
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 7 && (
+                <ErrorBoundary>
+                  {/* <GlobalPresenceMobile /> */}
+                </ErrorBoundary>
+              )}
+
+              {mountedSections >= 8 && (
+                <ErrorBoundary>
+                  <ContactFormMobile />
+                </ErrorBoundary>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 });

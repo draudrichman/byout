@@ -118,7 +118,7 @@ const ValuePropositionSecond = () => {
             >
               核心宣言
             </h3>
-            <div className="space-y-6">
+            <div className="flex flex-col justify-between flex-1">
               {bullets.map((b, i) => (
                 <div
                   key={i}
