@@ -8,7 +8,7 @@ import PageTransition from "./components/PageTransition";
 
 // ========== TOGGLE LOADING PAGE ==========
 // Set to false to disable the loading page entirely
-const SHOW_LOADING_PAGE = false;
+const SHOW_LOADING_PAGE = true;
 // =========================================
 
 // Pages
