@@ -131,12 +131,12 @@ const HomePage = memo(({ isLoaded }) => {
       {/* <Leva hidden /> */}
 
       {/* Navigation */}
-      <Navbar isLoaded={isLoaded} />
+      {/* <Navbar isLoaded={isLoaded} /> */}
 
       {/* ========== DESKTOP VERSION ========== */}
       <div className="hidden md:block">
         {/* Above-the-fold: render immediately */}
-        {/* <HeroDesktop key="landing-desktop" isLoaded={isLoaded} /> */}
+        <HeroDesktop key="landing-desktop" isLoaded={isLoaded} />
 
         {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
@@ -214,7 +214,7 @@ const HomePage = memo(({ isLoaded }) => {
       {/* ========== MOBILE VERSION ========== */}
       <div className="block md:hidden">
         {/* Above-the-fold: render immediately */}
-        {/* <HeroMobile key="landing-mobile" isLoaded={isLoaded} /> */}
+        <HeroMobile key="landing-mobile" isLoaded={isLoaded} />
 
         {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
