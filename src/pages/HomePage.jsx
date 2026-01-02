@@ -35,20 +35,39 @@ import ContactFormDesktop from "../components/ContactForm";
 import ContactFormMobile from "../components/ContactForm";
 
 const HomePage = memo(({ isLoaded }) => {
-  const [mountedSections, setMountedSections] = useState(0);
+  const [mountedDesktopSections, setMountedDesktopSections] = useState(0);
+  const [mountedMobileSections, setMountedMobileSections] = useState(0);
   const lenis = useLenis();
 
-  // Progressively mount sections over 6.5 seconds to distribute load
+  // ========== DESKTOP TIMERS ==========
+  // Progressively mount desktop sections to distribute load
   useEffect(() => {
     const timers = [
-      setTimeout(() => setMountedSections(1), 100), // LogoSection immediately
-      setTimeout(() => setMountedSections(2), 1500), // CompanyIntro at 1.5s
-      setTimeout(() => setMountedSections(3), 2500), // CoreServices at 2.5s
-      setTimeout(() => setMountedSections(4), 3500), // Timeline at 3.5s
-      setTimeout(() => setMountedSections(5), 4500), // Experience at 4.5s
-      setTimeout(() => setMountedSections(6), 5500), // FounderStaff at 5.5s
-      setTimeout(() => setMountedSections(7), 6500), // GlobalPresence at 6.5s
-      setTimeout(() => setMountedSections(8), 7500), // ContactForm at 7.5s
+      setTimeout(() => setMountedDesktopSections(1), 100), // LogoSection immediately
+      setTimeout(() => setMountedDesktopSections(2), 1500), // CompanyIntro at 1.5s
+      setTimeout(() => setMountedDesktopSections(3), 2500), // CoreServices at 2.5s
+      setTimeout(() => setMountedDesktopSections(4), 3500), // Timeline at 3.5s
+      setTimeout(() => setMountedDesktopSections(5), 4500), // Experience at 4.5s
+      setTimeout(() => setMountedDesktopSections(6), 5500), // FounderStaff at 5.5s
+      setTimeout(() => setMountedDesktopSections(7), 6500), // GlobalPresence at 6.5s
+      setTimeout(() => setMountedDesktopSections(8), 7500), // ContactForm at 7.5s
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  // ========== MOBILE TIMERS ==========
+  // Progressively mount mobile sections (can be configured differently from desktop)
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => setMountedMobileSections(1), 100), // LogoSection immediately
+      setTimeout(() => setMountedMobileSections(2), 200), // CompanyIntro at 1.5s
+      setTimeout(() => setMountedMobileSections(3), 300), // CoreServices at 2.5s
+      setTimeout(() => setMountedMobileSections(4), 400), // Timeline at 3.5s
+      setTimeout(() => setMountedMobileSections(5), 500), // Experience at 4.5s
+      setTimeout(() => setMountedMobileSections(6), 600), // FounderStaff at 5.5s
+      setTimeout(() => setMountedMobileSections(7), 700), // GlobalPresence at 6.5s
+      setTimeout(() => setMountedMobileSections(8), 800), // ContactForm at 7.5s
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -63,9 +82,9 @@ const HomePage = memo(({ isLoaded }) => {
     if (savedScrollPosition) {
       const scrollY = parseFloat(savedScrollPosition);
 
-      // Wait for CoreServices section to mount (mountedSections >= 4)
+      // Wait for CoreServices section to mount (mountedDesktopSections >= 4)
       // and add a small delay to ensure DOM is ready
-      if (mountedSections >= 4) {
+      if (mountedDesktopSections >= 4) {
         // Use Lenis instance if available for better integration, otherwise fallback to window.scrollTo
         const restoreScroll = () => {
           if (lenis) {
@@ -100,7 +119,7 @@ const HomePage = memo(({ isLoaded }) => {
         return () => timers.forEach(clearTimeout);
       }
     }
-  }, [mountedSections, lenis]);
+  }, [mountedDesktopSections, lenis]);
 
   // Prism background is provided by the mother container below;
   // it intentionally uses no hooks to control visibility —
@@ -117,12 +136,12 @@ const HomePage = memo(({ isLoaded }) => {
       {/* ========== DESKTOP VERSION ========== */}
       <div className="hidden md:block">
         {/* Above-the-fold: render immediately */}
-        <HeroDesktop key="landing-desktop" isLoaded={isLoaded} />
+        {/* <HeroDesktop key="landing-desktop" isLoaded={isLoaded} /> */}
 
         {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
             so Prism is not visible until the user scrolls into this area. */}
-        {mountedSections >= 1 && (
+        {mountedDesktopSections >= 1 && (
           <div className="home-mother relative">
             <div
               className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
@@ -138,7 +157,7 @@ const HomePage = memo(({ isLoaded }) => {
             </div>
 
             <div className="relative z-10">
-              {mountedSections >= 1 && (
+              {mountedDesktopSections >= 1 && (
                 <ErrorBoundary>
                   <div className="spacer h-[100vh]" />
                   <div className="spacer h-[100vh]" />
@@ -146,43 +165,43 @@ const HomePage = memo(({ isLoaded }) => {
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 2 && (
+              {mountedDesktopSections >= 2 && (
                 <ErrorBoundary>
                   <CompanyIntroductionDesktop />
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 3 && (
+              {mountedDesktopSections >= 3 && (
                 <ErrorBoundary>
                   <CoreServicesDesktop />
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 4 && (
+              {mountedDesktopSections >= 4 && (
                 <ErrorBoundary>
                   <HorizontalTimelineDesktop />
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 5 && (
+              {mountedDesktopSections >= 5 && (
                 <ErrorBoundary>
                   <ExperienceShowcaseDesktop />
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 6 && (
+              {mountedDesktopSections >= 6 && (
                 <ErrorBoundary>
                   <FounderStaffDesktop />
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 7 && (
+              {mountedDesktopSections >= 7 && (
                 <ErrorBoundary>
                   <GlobalPresenceDesktop />
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 8 && (
+              {mountedDesktopSections >= 8 && (
                 <ErrorBoundary>
                   <ContactFormDesktop />
                 </ErrorBoundary>
@@ -200,7 +219,7 @@ const HomePage = memo(({ isLoaded }) => {
         {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
             so Prism is not visible until the user scrolls into this area. */}
-        {mountedSections >= 1 && (
+        {mountedMobileSections >= 1 && (
           <div className="home-mother relative">
             <div
               className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
@@ -217,51 +236,41 @@ const HomePage = memo(({ isLoaded }) => {
             </div>
 
             <div className="relative z-10">
-              {mountedSections >= 1 && (
-                <ErrorBoundary>
-                  <div className="spacer h-[100vh]" />
-                  <div className="spacer h-[100vh]" />
-                  {/* <LogoSectionMobile /> */}
-                </ErrorBoundary>
+              {mountedMobileSections >= 1 && (
+                <ErrorBoundary>{/* <LogoSectionMobile /> */}</ErrorBoundary>
               )}
 
-              {mountedSections >= 2 && (
+              {mountedMobileSections >= 2 && (
                 <ErrorBoundary>
                   {/* <CompanyIntroductionMobile /> */}
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 3 && (
-                <ErrorBoundary>
-                  {/* <CoreServicesMobile /> */}
-                </ErrorBoundary>
+              {mountedMobileSections >= 3 && (
+                <ErrorBoundary>{/* <CoreServicesMobile /> */}</ErrorBoundary>
               )}
 
-              {mountedSections >= 4 && (
+              {mountedMobileSections >= 4 && (
                 <ErrorBoundary>
                   {/* <HorizontalTimelineMobile /> */}
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 5 && (
+              {mountedMobileSections >= 5 && (
                 <ErrorBoundary>
                   {/* <ExperienceShowcaseMobile /> */}
                 </ErrorBoundary>
               )}
 
-              {mountedSections >= 6 && (
-                <ErrorBoundary>
-                  {/* <FounderStaffMobile /> */}
-                </ErrorBoundary>
+              {mountedMobileSections >= 6 && (
+                <ErrorBoundary>{/* <FounderStaffMobile /> */}</ErrorBoundary>
               )}
 
-              {mountedSections >= 7 && (
-                <ErrorBoundary>
-                  {/* <GlobalPresenceMobile /> */}
-                </ErrorBoundary>
+              {mountedMobileSections >= 7 && (
+                <ErrorBoundary>{/* <GlobalPresenceMobile /> */}</ErrorBoundary>
               )}
 
-              {mountedSections >= 8 && (
+              {mountedMobileSections >= 8 && (
                 <ErrorBoundary>
                   <ContactFormMobile />
                 </ErrorBoundary>

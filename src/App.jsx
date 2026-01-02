@@ -6,6 +6,11 @@ import LoadingPage from "./components/LoadingPage";
 import Prism from "./components/PrismOptimized";
 import PageTransition from "./components/PageTransition";
 
+// ========== TOGGLE LOADING PAGE ==========
+// Set to false to disable the loading page entirely
+const SHOW_LOADING_PAGE = false;
+// =========================================
+
 // Pages
 import HomePage from "./pages/HomePage";
 import TechPage from "./pages/TechPage";
@@ -158,7 +163,11 @@ AppContent.displayName = "AppContent";
 const App = memo(() => {
   // Check if loading page has been shown in this session
   const hasShownLoading = sessionStorage.getItem("hasShownLoading") === "true";
-  const [isLoading, setIsLoading] = useState(!hasShownLoading);
+
+  // Only show loading if SHOW_LOADING_PAGE is true AND it hasn't been shown yet
+  const [isLoading, setIsLoading] = useState(
+    SHOW_LOADING_PAGE && !hasShownLoading
+  );
   const [mountPhase, setMountPhase] = useState(0);
 
   // Progressively mount components to distribute load over 8 seconds
@@ -169,7 +178,10 @@ const App = memo(() => {
 
     // Progressive mounting schedule|
     const timers = [
-      setTimeout(() => setMountPhase(1), hasShownLoading ? 0 : 1500), // Skip delay if already shown
+      setTimeout(
+        () => setMountPhase(1),
+        hasShownLoading || !SHOW_LOADING_PAGE ? 0 : 1500
+      ), // Skip delay if already shown or loading disabled
     ];
 
     return () => timers.forEach(clearTimeout);
