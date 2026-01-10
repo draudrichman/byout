@@ -1,9 +1,14 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useRef } from "react";
 import { useLenis } from "@studio-freight/react-lenis";
 import { Leva } from "leva";
 import Navbar from "../components/ui/Navbar";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Prism from "../components/PrismOptimized";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Import Mobile and Desktop variants for each section
 // Using the same component for both initially - will be replaced with mobile-specific versions later
@@ -38,6 +43,7 @@ const HomePage = memo(({ isLoaded }) => {
   const [mountedDesktopSections, setMountedDesktopSections] = useState(0);
   const [mountedMobileSections, setMountedMobileSections] = useState(0);
   const lenis = useLenis();
+  const videoRef = useRef(null);
 
   // ========== DESKTOP TIMERS ==========
   // Progressively mount desktop sections to distribute load
@@ -121,17 +127,45 @@ const HomePage = memo(({ isLoaded }) => {
     }
   }, [mountedDesktopSections, lenis]);
 
-  // Prism background is provided by the mother container below;
-  // it intentionally uses no hooks to control visibility —
-  // placing Prism inside the container keeps it out of view until
-  // the user scrolls past the Stats section into this container.
+  // Set up scroll-scrubbing video animation
+  useGSAP(() => {
+    if (videoRef.current && mountedDesktopSections >= 1) {
+      videoRef.current.onloadedmetadata = () => {
+        if (videoRef.current) {
+          // Pause the video to prevent auto-play
+          videoRef.current.pause();
+
+          const video = videoRef.current;
+          const videoDuration = video.duration;
+
+          // Create a ScrollTrigger that updates on scroll
+          ScrollTrigger.create({
+            trigger: ".home-mother",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+              // Calculate scroll progress in pixels
+              const scrollProgress = self.progress * self.end;
+              // Loop every 5000px
+              const loopProgress = (scrollProgress % 4000) / 4000;
+              // Set video time based on loop progress
+              video.currentTime = loopProgress * videoDuration;
+            },
+          });
+        }
+      };
+    }
+  }, [mountedDesktopSections]);
+
+  // Video background replaces the Prism shader;
+  // it scrubs forward as the user scrolls down, looping every 1000px.
 
   return (
     <div className="App">
       {/* <Leva hidden /> */}
 
       {/* Navigation */}
-      {/* <Navbar isLoaded={isLoaded} /> */}
+      <Navbar isLoaded={isLoaded} />
 
       {/* ========== DESKTOP VERSION ========== */}
       <div className="hidden md:block">
@@ -147,6 +181,7 @@ const HomePage = memo(({ isLoaded }) => {
               className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
               style={{ zIndex: 10 }}
             >
+              {/* Prism shader - commented out and replaced with video */}
               {/* <Prism
                 showFPS={false}
                 fpsPosition="top-left"
@@ -154,6 +189,16 @@ const HomePage = memo(({ isLoaded }) => {
                 baseWidth={2}
                 animationType="rotate"
               /> */}
+
+              {/* Full-screen background video that scrubs with scroll */}
+              <video
+                ref={videoRef}
+                muted
+                playsInline
+                preload="auto"
+                src="/scrubvideo/output.mp4"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
 
             <div className="relative z-10">
