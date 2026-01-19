@@ -738,3 +738,22 @@ html::-webkit-scrollbar-thumb:hover {
 .animate-shine {
   animation: shine 5s linear infinite;
 }
+
+/* Marquee animations for BrandLogoSection - GPU accelerated */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0) translateZ(0);
+  }
+  to {
+    transform: translateX(-50%) translateZ(0);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%) translateZ(0);
+  }
+  to {
+    transform: translateX(0) translateZ(0);
+  }
+}

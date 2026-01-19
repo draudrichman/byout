@@ -82,7 +82,7 @@ const HomePage = memo(({ isLoaded }) => {
   // Restore scroll position when returning from other pages
   useEffect(() => {
     const savedScrollPosition = sessionStorage.getItem(
-      "homePageScrollPosition"
+      "homePageScrollPosition",
     );
 
     if (savedScrollPosition) {
@@ -138,18 +138,25 @@ const HomePage = memo(({ isLoaded }) => {
           const video = videoRef.current;
           const videoDuration = video.duration;
 
-          // Create a ScrollTrigger that updates on scroll
+          // Use quickTo for better performance - updates are batched by GSAP
+          const setVideoTime = gsap.quickTo(video, "currentTime", {
+            duration: 0.1,
+            ease: "none",
+          });
+
+          // Create a ScrollTrigger with optimized scrubbing
           ScrollTrigger.create({
             trigger: ".home-mother",
             start: "top top",
             end: "bottom bottom",
+            scrub: 0.5, // Smooth scrubbing with minimal lag
             onUpdate: (self) => {
               // Calculate scroll progress in pixels
               const scrollProgress = self.progress * self.end;
-              // Loop every 5000px
+              // Loop every 4000px
               const loopProgress = (scrollProgress % 4000) / 4000;
-              // Set video time based on loop progress
-              video.currentTime = loopProgress * videoDuration;
+              // Use quickTo for optimized updates
+              setVideoTime(loopProgress * videoDuration);
             },
           });
         }

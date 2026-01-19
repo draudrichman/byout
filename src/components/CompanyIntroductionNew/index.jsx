@@ -24,7 +24,7 @@ const CompanyIntroduction = memo(() => {
       if (!container) return;
 
       const panels = gsap.utils.toArray(
-        container.querySelectorAll(".snap-panel")
+        container.querySelectorAll(".snap-panel"),
       );
       if (!panels.length) return;
 
@@ -35,10 +35,10 @@ const CompanyIntroduction = memo(() => {
       const philosophyPanel = panels[3];
       if (philosophyPanel) {
         const dividerContainer = philosophyPanel.querySelector(
-          ".philosophy-divider-container"
+          ".philosophy-divider-container",
         );
         const sectionsContainer = philosophyPanel.querySelector(
-          ".philosophy-sections-container"
+          ".philosophy-sections-container",
         );
 
         if (dividerContainer && sectionsContainer) {
@@ -75,10 +75,10 @@ const CompanyIntroduction = memo(() => {
         if (index === 2) {
           // CompanyDescription to Philosophy
           const dividerContainer = next.querySelector(
-            ".philosophy-divider-container"
+            ".philosophy-divider-container",
           );
           const sectionsContainer = next.querySelector(
-            ".philosophy-sections-container"
+            ".philosophy-sections-container",
           );
 
           if (dividerContainer && sectionsContainer) {
@@ -94,7 +94,7 @@ const CompanyIntroduction = memo(() => {
                   duration: 0.3,
                   ease: "power2.out",
                 },
-                "-=0.1"
+                "-=0.1",
               )
               .to(
                 sectionsContainer,
@@ -105,13 +105,13 @@ const CompanyIntroduction = memo(() => {
                   duration: 0.4,
                   ease: "power2.out",
                 },
-                "-=0.2"
+                "-=0.2",
               );
           } else {
             tl.to(panel, { autoAlpha: 0 }).fromTo(
               next,
               { autoAlpha: 0 },
-              { autoAlpha: 1 }
+              { autoAlpha: 1 },
             );
           }
         } else {
@@ -119,7 +119,7 @@ const CompanyIntroduction = memo(() => {
           tl.to(panel, { autoAlpha: 0 }).fromTo(
             next,
             { autoAlpha: 0 },
-            { autoAlpha: 1 }
+            { autoAlpha: 1 },
           );
         }
       });
@@ -127,22 +127,23 @@ const CompanyIntroduction = memo(() => {
       // Small buffer at the end to avoid abrupt finish
       tl.to({}, { duration: 0.3 });
 
-      ScrollTrigger.create({
+      const scrollTrigger = ScrollTrigger.create({
         animation: tl,
         trigger: container,
         start: "top top",
         end: () => "+=" + panels.length * window.innerHeight * 2,
-        // Smooth the scrubbing for less snappy feel
-        scrub: 0.8,
+        // Optimized scrub value for better performance and responsiveness
+        scrub: 0.5,
         pin: true,
-        anticipatePin: 2,
+        anticipatePin: 1,
       });
 
       return () => {
-        ScrollTrigger.getAll().forEach((t) => t.kill());
+        // Only kill this specific ScrollTrigger, not all of them
+        scrollTrigger.kill();
       };
     },
-    { scope: contentRef }
+    { scope: contentRef },
   );
 
   return (

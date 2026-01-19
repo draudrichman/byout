@@ -24,7 +24,7 @@ const MarqueeRow = ({ logos, direction = "left", speed = 40, delay = 0 }) => {
     if (!rowRef.current) return;
 
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReduced) return;
 
@@ -122,14 +122,14 @@ export default function BrandLogosSection() {
                     ease: "power3.out",
                     stagger: 0.2,
                     delay: 0.1,
-                  }
+                  },
                 );
               }
               observer.unobserve(el);
             }
           }
         },
-        { threshold: 0.1, rootMargin: "100px 0px" }
+        { threshold: 0.1, rootMargin: "100px 0px" },
       );
 
       if (sectionRef.current) {
