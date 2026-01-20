@@ -198,14 +198,14 @@ const HomePage = memo(({ isLoaded }) => {
               /> */}
 
               {/* Full-screen background video that scrubs with scroll */}
-              <video
+              {/* <video
                 ref={videoRef}
                 muted
                 playsInline
                 preload="auto"
                 src="/scrubvideo/output.mp4"
                 className="absolute inset-0 w-full h-full object-cover"
-              />
+              /> */}
             </div>
 
             <div className="relative z-10">
