@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Import Mobile and Desktop variants for each section
 // Using the same component for both initially - will be replaced with mobile-specific versions later
 import HeroDesktop from "../components/HeroSection";
-import HeroMobile from "../components/HeroSection";
+import HeroMobile from "../components/HeroSectionMobile";
 
 import LogoSectionDesktop from "../components/LogoSection";
 import LogoSectionMobile from "../components/LogoSection";
@@ -40,10 +40,28 @@ import ContactFormDesktop from "../components/ContactForm";
 import ContactFormMobile from "../components/ContactForm";
 
 const HomePage = memo(({ isLoaded }) => {
+  // Detect if device is mobile based on screen width
+  const [isMobile, setIsMobile] = useState(() => {
+    // Initialize based on window width (768px is Tailwind's md breakpoint)
+    return window.innerWidth < 768;
+  });
+
   const [mountedDesktopSections, setMountedDesktopSections] = useState(0);
   const [mountedMobileSections, setMountedMobileSections] = useState(0);
   const lenis = useLenis();
   const videoRef = useRef(null);
+
+  // Listen for screen size changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+
+    const handleChange = (e) => {
+      setIsMobile(!e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   // ========== DESKTOP TIMERS ==========
   // Progressively mount desktop sections to distribute load
@@ -175,21 +193,22 @@ const HomePage = memo(({ isLoaded }) => {
       <Navbar isLoaded={isLoaded} />
 
       {/* ========== DESKTOP VERSION ========== */}
-      <div className="hidden md:block">
-        {/* Above-the-fold: render immediately */}
-        <HeroDesktop key="landing-desktop" isLoaded={isLoaded} />
+      {!isMobile && (
+        <div>
+          {/* Above-the-fold: render immediately */}
+          {/* <HeroDesktop key="landing-desktop" isLoaded={isLoaded} /> */}
 
-        {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
+          {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
             so Prism is not visible until the user scrolls into this area. */}
-        {mountedDesktopSections >= 1 && (
-          <div className="home-mother relative">
-            <div
-              className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
-              style={{ zIndex: 10 }}
-            >
-              {/* Prism shader - commented out and replaced with video */}
-              {/* <Prism
+          {mountedDesktopSections >= 1 && (
+            <div className="home-mother relative">
+              <div
+                className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
+                style={{ zIndex: 10 }}
+              >
+                {/* Prism shader - commented out and replaced with video */}
+                {/* <Prism
                 showFPS={false}
                 fpsPosition="top-left"
                 height={2}
@@ -197,8 +216,8 @@ const HomePage = memo(({ isLoaded }) => {
                 animationType="rotate"
               /> */}
 
-              {/* Full-screen background video that scrubs with scroll */}
-              {/* <video
+                {/* Full-screen background video that scrubs with scroll */}
+                {/* <video
                 ref={videoRef}
                 muted
                 playsInline
@@ -206,131 +225,134 @@ const HomePage = memo(({ isLoaded }) => {
                 src="/scrubvideo/output.mp4"
                 className="absolute inset-0 w-full h-full object-cover"
               /> */}
+              </div>
+
+              <div className="relative z-10">
+                {mountedDesktopSections >= 1 && (
+                  <ErrorBoundary>
+                    <div className="spacer h-[100vh]" />
+                    <div className="spacer h-[100vh]" />
+                    <LogoSectionDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 2 && (
+                  <ErrorBoundary>
+                    <CompanyIntroductionDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 3 && (
+                  <ErrorBoundary>
+                    <CoreServicesDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 4 && (
+                  <ErrorBoundary>
+                    <HorizontalTimelineDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 5 && (
+                  <ErrorBoundary>
+                    <ExperienceShowcaseDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 6 && (
+                  <ErrorBoundary>
+                    <FounderStaffDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 7 && (
+                  <ErrorBoundary>
+                    <GlobalPresenceDesktop />
+                  </ErrorBoundary>
+                )}
+
+                {mountedDesktopSections >= 8 && (
+                  <ErrorBoundary>
+                    <ContactFormDesktop />
+                  </ErrorBoundary>
+                )}
+              </div>
             </div>
-
-            <div className="relative z-10">
-              {mountedDesktopSections >= 1 && (
-                <ErrorBoundary>
-                  <div className="spacer h-[100vh]" />
-                  <div className="spacer h-[100vh]" />
-                  <LogoSectionDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 2 && (
-                <ErrorBoundary>
-                  <CompanyIntroductionDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 3 && (
-                <ErrorBoundary>
-                  <CoreServicesDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 4 && (
-                <ErrorBoundary>
-                  <HorizontalTimelineDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 5 && (
-                <ErrorBoundary>
-                  <ExperienceShowcaseDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 6 && (
-                <ErrorBoundary>
-                  <FounderStaffDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 7 && (
-                <ErrorBoundary>
-                  <GlobalPresenceDesktop />
-                </ErrorBoundary>
-              )}
-
-              {mountedDesktopSections >= 8 && (
-                <ErrorBoundary>
-                  <ContactFormDesktop />
-                </ErrorBoundary>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* ========== MOBILE VERSION ========== */}
-      <div className="block md:hidden">
-        {/* Above-the-fold: render immediately */}
-        <HeroMobile key="landing-mobile" isLoaded={isLoaded} />
+      {isMobile && (
+        <div>
+          {/* Above-the-fold: render immediately */}
+          <HeroMobile key="landing-mobile" isLoaded={isLoaded} />
 
-        {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
+          {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
             so Prism is not visible until the user scrolls into this area. */}
-        {mountedMobileSections >= 1 && (
-          <div className="home-mother relative">
-            <div
-              className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
-              style={{ zIndex: 10 }}
-            >
-              {/* Prism shader for mobile - can be commented out if needed */}
-              {/* <Prism
+          {mountedMobileSections >= 1 && (
+            <div className="home-mother relative">
+              <div
+                className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
+                style={{ zIndex: 10 }}
+              >
+                {/* Prism shader for mobile - can be commented out if needed */}
+                {/* <Prism
                 showFPS={false}
                 fpsPosition="top-left"
                 height={2}
                 baseWidth={2}
                 animationType="rotate"
               /> */}
+              </div>
+
+              <div className="relative z-10">
+                {mountedMobileSections >= 1 && (
+                  <ErrorBoundary>{/* <LogoSectionMobile /> */}</ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 2 && (
+                  <ErrorBoundary>
+                    {/* <CompanyIntroductionMobile /> */}
+                  </ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 3 && (
+                  <ErrorBoundary>{/* <CoreServicesMobile /> */}</ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 4 && (
+                  <ErrorBoundary>
+                    {/* <HorizontalTimelineMobile /> */}
+                  </ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 5 && (
+                  <ErrorBoundary>
+                    {/* <ExperienceShowcaseMobile /> */}
+                  </ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 6 && (
+                  <ErrorBoundary>{/* <FounderStaffMobile /> */}</ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 7 && (
+                  <ErrorBoundary>
+                    {/* <GlobalPresenceMobile /> */}
+                  </ErrorBoundary>
+                )}
+
+                {mountedMobileSections >= 8 && (
+                  <ErrorBoundary>{/* <ContactFormMobile /> */}</ErrorBoundary>
+                )}
+              </div>
             </div>
-
-            <div className="relative z-10">
-              {mountedMobileSections >= 1 && (
-                <ErrorBoundary>{/* <LogoSectionMobile /> */}</ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 2 && (
-                <ErrorBoundary>
-                  {/* <CompanyIntroductionMobile /> */}
-                </ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 3 && (
-                <ErrorBoundary>{/* <CoreServicesMobile /> */}</ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 4 && (
-                <ErrorBoundary>
-                  {/* <HorizontalTimelineMobile /> */}
-                </ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 5 && (
-                <ErrorBoundary>
-                  {/* <ExperienceShowcaseMobile /> */}
-                </ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 6 && (
-                <ErrorBoundary>{/* <FounderStaffMobile /> */}</ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 7 && (
-                <ErrorBoundary>{/* <GlobalPresenceMobile /> */}</ErrorBoundary>
-              )}
-
-              {mountedMobileSections >= 8 && (
-                <ErrorBoundary>
-                  <ContactFormMobile />
-                </ErrorBoundary>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 });
