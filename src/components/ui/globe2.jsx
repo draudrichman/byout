@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import landData from "../../assets/ne_110m_land.json";
 
 const RADAR_LOCATIONS = [
   { name: "China", lng: 104.1954, lat: 35.8617, color: "#DDDDDD" },
@@ -24,7 +25,7 @@ export default function RotatingEarth({
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d", { willReadFrequently: true });
     if (!context) return;
 
     // Set up responsive dimensions
@@ -32,7 +33,8 @@ export default function RotatingEarth({
     const containerHeight = height;
     const radius = Math.min(containerWidth, containerHeight) / 2.5;
 
-    const dpr = window.devicePixelRatio || 1;
+    // Cap DPR at 2 for better performance on high-DPI displays
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = containerWidth * dpr;
     canvas.height = containerHeight * dpr;
     canvas.style.width = `${containerWidth}px`;
@@ -110,28 +112,25 @@ export default function RotatingEarth({
       const [[minLng, minLat], [maxLng, maxLat]] = bounds;
 
       const stepSize = dotSpacing * 0.08;
-      let pointsGenerated = 0;
 
       for (let lng = minLng; lng <= maxLng; lng += stepSize) {
         for (let lat = minLat; lat <= maxLat; lat += stepSize) {
           const point = [lng, lat];
           if (pointInFeature(point, feature)) {
             dots.push(point);
-            pointsGenerated++;
           }
         }
       }
 
-      console.log(
-        `[v0] Generated ${pointsGenerated} points for land feature:`,
-        feature.properties?.featurecla || "Land"
-      );
       return dots;
     };
 
     const allDots = [];
     let landFeatures;
     let radarAnimationTime = 0;
+
+    // Cache graticule since it doesn't change
+    const graticule = d3.geoGraticule();
 
     const render = () => {
       // Clear canvas
@@ -141,6 +140,7 @@ export default function RotatingEarth({
       const scaleFactor = currentScale / radius;
 
       // Draw ocean (globe background)
+      context.save();
       context.globalAlpha = 0;
       context.beginPath();
       context.arc(
@@ -148,25 +148,25 @@ export default function RotatingEarth({
         containerHeight / 2,
         currentScale,
         0,
-        2 * Math.PI
+        2 * Math.PI,
       );
-      //   context.fillStyle = "#000000";
       context.fill();
       context.globalAlpha = 1;
       context.strokeStyle = "#83878d";
       context.lineWidth = 2 * scaleFactor;
       context.stroke();
+      context.restore();
 
       if (landFeatures) {
-        // Draw graticule
-        const graticule = d3.geoGraticule();
+        // Draw graticule (cached)
+        context.save();
         context.beginPath();
         path(graticule());
         context.strokeStyle = "#83878d";
         context.lineWidth = 1 * scaleFactor;
         context.globalAlpha = 0.25;
         context.stroke();
-        context.globalAlpha = 1;
+        context.restore();
 
         // Draw land outlines
         context.beginPath();
@@ -221,7 +221,7 @@ export default function RotatingEarth({
               projected[1],
               6 * scaleFactor,
               0,
-              2 * Math.PI
+              2 * Math.PI,
             );
             context.fillStyle = location.color;
             context.fill();
@@ -237,7 +237,7 @@ export default function RotatingEarth({
               projected[1],
               expandingRadius,
               0,
-              2 * Math.PI
+              2 * Math.PI,
             );
             context.strokeStyle = location.color;
             context.lineWidth = 2.5 * scaleFactor;
@@ -253,7 +253,7 @@ export default function RotatingEarth({
               projected[1],
               30 * scaleFactor,
               0,
-              2 * Math.PI
+              2 * Math.PI,
             );
             context.strokeStyle = location.color;
             context.lineWidth = 2 * scaleFactor;
@@ -265,31 +265,53 @@ export default function RotatingEarth({
       }
     };
 
-    const loadWorldData = async () => {
+    const loadWorldData = () => {
       try {
         setIsLoading(true);
 
-        const response = await fetch(
-          "https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json"
-        );
-        if (!response.ok) throw new Error("Failed to load land data");
+        // Use imported data instead of fetching
+        landFeatures = landData;
 
-        landFeatures = await response.json();
+        // Defer expensive dot generation to idle time to prevent blocking
+        const generateDotsAsync = () => {
+          let featureIndex = 0;
+          let totalDots = 0;
 
-        // Generate dots for all land features
-        let totalDots = 0;
-        landFeatures.features.forEach((feature) => {
-          const dots = generateDotsInPolygon(feature, 16);
-          dots.forEach(([lng, lat]) => {
-            allDots.push({ lng, lat, visible: true });
-            totalDots++;
-          });
-        });
+          const processNextFeature = (deadline) => {
+            // Process features in batches during idle time
+            while (
+              featureIndex < landFeatures.features.length &&
+              (deadline.timeRemaining() > 0 || deadline.didTimeout)
+            ) {
+              const feature = landFeatures.features[featureIndex];
+              const dots = generateDotsInPolygon(feature, 16);
 
-        console.log(
-          `[v0] Total dots generated: ${totalDots} across ${landFeatures.features.length} land features`
-        );
+              dots.forEach(([lng, lat]) => {
+                allDots.push({ lng, lat, visible: true });
+                totalDots++;
+              });
 
+              featureIndex++;
+            }
+
+            if (featureIndex < landFeatures.features.length) {
+              // More features to process
+              requestIdleCallback(processNextFeature, { timeout: 100 });
+            } else {
+              // All done
+              console.log(
+                `[Globe] Generated ${totalDots} dots across ${landFeatures.features.length} features`,
+              );
+            }
+          };
+
+          requestIdleCallback(processNextFeature, { timeout: 100 });
+        };
+
+        // Start async dot generation
+        generateDotsAsync();
+
+        // Render immediately (dots will appear as they're generated)
         render();
         setIsLoading(false);
       } catch (err) {
@@ -339,7 +361,7 @@ export default function RotatingEarth({
         if (normalizedRegionLng < -180) normalizedRegionLng += 360;
 
         const lngDiff = Math.abs(
-          ((normalizedRotation - normalizedRegionLng + 180) % 360) - 180
+          ((normalizedRotation - normalizedRegionLng + 180) % 360) - 180,
         );
         const latDiff = Math.abs(rotation[1] - region.lat);
         const distance = Math.sqrt(lngDiff * lngDiff + latDiff * latDiff);
