@@ -2,6 +2,7 @@ import { memo, useState, useEffect, useRef } from "react";
 import { useLenis } from "@studio-freight/react-lenis";
 import { Leva } from "leva";
 import Navbar from "../components/ui/Navbar";
+import NavbarMobile from "../components/ui/NavbarMobile";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Prism from "../components/PrismOptimized";
 import { useGSAP } from "@gsap/react";
@@ -189,8 +190,11 @@ const HomePage = memo(({ isLoaded }) => {
     <div className="App">
       {/* <Leva hidden /> */}
 
-      {/* Navigation */}
-      <Navbar isLoaded={isLoaded} />
+      {/* Navigation - Desktop */}
+      {!isMobile && <Navbar isLoaded={isLoaded} />}
+
+      {/* Navigation - Mobile */}
+      {isMobile && <NavbarMobile isLoaded={isLoaded} />}
 
       {/* ========== DESKTOP VERSION ========== */}
       {!isMobile && (
@@ -322,9 +326,7 @@ const HomePage = memo(({ isLoaded }) => {
                 )}
 
                 {mountedMobileSections >= 3 && (
-                  <ErrorBoundary>
-                    {/* <CoreServicesMobile /> */}
-                  </ErrorBoundary>
+                  <ErrorBoundary>{/* <CoreServicesMobile /> */}</ErrorBoundary>
                 )}
 
                 {mountedMobileSections >= 4 && (
