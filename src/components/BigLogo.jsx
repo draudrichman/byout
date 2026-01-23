@@ -34,7 +34,7 @@ export default function BigLogo() {
     hasAnimatedRef.current = true;
 
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -54,7 +54,7 @@ export default function BigLogo() {
               stagger: 0.16,
               delay: 0.1,
               overwrite: "auto",
-            }
+            },
           );
         }
       }
@@ -136,9 +136,9 @@ export default function BigLogo() {
       {/* Main container: column on mobile, row on large screens */}
       <div className="w-full max-w-7xl mx-auto px-6 flex flex-col lg:flex-row lg:justify-between lg:items-start">
         {/* --- Text Content (Left on desktop, Top on mobile) --- */}
-        <div className="lg:w-1/2 lg:pr-12 mb-10 mt-10 lg:mb-0 lg:mt-0">
+        <div className="lg:w-1/2 lg:pr-12 mb-10 mt-10 lg:mb-0 lg:mt-0 text-center lg:text-left">
           {/* Main Heading: "HONOR GROWTH" */}
-          {/* <h1 class="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold text-[#3F0F6B] tracking-tight leading-none">
+          {/* <h1 class="fade-item opacity-0 text-center lg:text-left text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold text-[#efe8e8a4] tracking-tight leading-none">
             HONOR GROWTH
           </h1> */}
           <ShinyText
@@ -206,7 +206,7 @@ export default function BigLogo() {
                           parent.classList.add(
                             "text-sm",
                             "font-bold",
-                            "text-gray-800"
+                            "text-gray-800",
                           );
                         }
                       }}

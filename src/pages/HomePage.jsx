@@ -287,7 +287,7 @@ const HomePage = memo(({ isLoaded }) => {
       {isMobile && (
         <div>
           {/* Above-the-fold: render immediately */}
-          <HeroMobile key="landing-mobile" isLoaded={isLoaded} />
+          {/* <HeroMobile key="landing-mobile" isLoaded={isLoaded} /> */}
 
           {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,
@@ -310,7 +310,9 @@ const HomePage = memo(({ isLoaded }) => {
 
               <div className="relative z-10">
                 {mountedMobileSections >= 1 && (
-                  <ErrorBoundary>{/* <LogoSectionMobile /> */}</ErrorBoundary>
+                  <ErrorBoundary>
+                    <LogoSectionMobile />
+                  </ErrorBoundary>
                 )}
 
                 {mountedMobileSections >= 2 && (
@@ -320,7 +322,9 @@ const HomePage = memo(({ isLoaded }) => {
                 )}
 
                 {mountedMobileSections >= 3 && (
-                  <ErrorBoundary>{/* <CoreServicesMobile /> */}</ErrorBoundary>
+                  <ErrorBoundary>
+                    {/* <CoreServicesMobile /> */}
+                  </ErrorBoundary>
                 )}
 
                 {mountedMobileSections >= 4 && (
@@ -336,17 +340,21 @@ const HomePage = memo(({ isLoaded }) => {
                 )}
 
                 {mountedMobileSections >= 6 && (
-                  <ErrorBoundary>{/* <FounderStaffMobile /> */}</ErrorBoundary>
+                  <ErrorBoundary>
+                    <FounderStaffMobile />
+                  </ErrorBoundary>
                 )}
 
                 {mountedMobileSections >= 7 && (
                   <ErrorBoundary>
-                    {/* <GlobalPresenceMobile /> */}
+                    <GlobalPresenceMobile />
                   </ErrorBoundary>
                 )}
 
                 {mountedMobileSections >= 8 && (
-                  <ErrorBoundary>{/* <ContactFormMobile /> */}</ErrorBoundary>
+                  <ErrorBoundary>
+                    <ContactFormMobile />
+                  </ErrorBoundary>
                 )}
               </div>
             </div>

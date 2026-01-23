@@ -113,7 +113,7 @@ const FoundersMarquee = () => {
     if (!marqueeRef.current) return;
 
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReduced) return;
 
@@ -121,7 +121,16 @@ const FoundersMarquee = () => {
     const firstSet = marquee.querySelector(".marquee-set");
     if (!firstSet) return;
 
-    const cardWidth = 320; // Approximate width of card + gap
+    // Calculate card width based on screen size
+    const getCardWidth = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) return 320; // lg: w-72 (288px) + gap (24px)
+      if (width >= 768) return 280; // md: w-64 (256px) + gap (24px)
+      if (width >= 640) return 248; // sm: w-56 (224px) + gap (24px)
+      return 216; // mobile: w-48 (192px) + gap (24px)
+    };
+
+    const cardWidth = getCardWidth();
     const totalWidth = cardWidth * foundersData.length;
 
     // Auto-scroll animation
@@ -205,7 +214,14 @@ const FoundersMarquee = () => {
     setIsDragging(false);
 
     // Resume animation from current position
-    const cardWidth = 320;
+    const getCardWidth = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) return 320;
+      if (width >= 768) return 280;
+      if (width >= 640) return 248;
+      return 216;
+    };
+    const cardWidth = getCardWidth();
     const totalWidth = cardWidth * foundersData.length;
     const currentX = gsap.getProperty(marqueeRef.current, "x");
 
@@ -261,7 +277,7 @@ const FoundersMarquee = () => {
           {duplicatedFounders.map((founder, index) => (
             <div
               key={`set1-${index}`}
-              className="founder-card group shrink-0 w-72 pointer-events-none"
+              className="founder-card group shrink-0 w-48 sm:w-56 md:w-64 lg:w-72 pointer-events-none"
             >
               <div
                 className="relative overflow-hidden aspect-[3/4] mb-4 rounded-lg bg-cover bg-center"
@@ -290,7 +306,7 @@ const FoundersMarquee = () => {
           {duplicatedFounders.map((founder, index) => (
             <div
               key={`set2-${index}`}
-              className="founder-card group shrink-0 w-72 pointer-events-none"
+              className="founder-card group shrink-0 w-48 sm:w-56 md:w-64 lg:w-72 pointer-events-none"
             >
               <div
                 className="relative overflow-hidden aspect-[3/4] mb-4 rounded-lg bg-cover bg-center"
@@ -317,9 +333,9 @@ const FoundersMarquee = () => {
       </div>
 
       {/* Drag hint */}
-      <div className="absolute bottom-4 right-4 text-gray-500 text-sm pointer-events-none">
+      {/* <div className="absolute bottom-4 right-4 text-gray-500 text-sm pointer-events-none">
         ← Drag to explore →
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -351,7 +367,7 @@ const FounderStaff = () => {
             end: "bottom 60%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
 
       gsap.fromTo(
@@ -378,7 +394,7 @@ const FounderStaff = () => {
             end: "bottom 40%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
 
       gsap.fromTo(
@@ -397,7 +413,7 @@ const FounderStaff = () => {
             start: "top 85%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     });
 
@@ -407,11 +423,11 @@ const FounderStaff = () => {
     <section
       ref={teamSectionRef}
       id="team-introduction"
-      className="py-24 px-12"
+      className="py-24 px-0"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-full mx-auto">
         {/* Section Heading */}
-        <div className="mb-10 team-heading">
+        <div className="mb-10 team-heading px-12">
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
               MEET OUR
@@ -428,7 +444,7 @@ const FounderStaff = () => {
 
         {/* Founders */}
         <div ref={foundersRef} className="mb-32">
-          <h3 className="text-3xl font-light mb-12 pb-4 border-b border-gray-800">
+          <h3 className="px-12 text-3xl font-light mb-12 pb-4 border-b border-gray-800">
             <span className="text-gray-600">FOUNDERS / 创始人</span>
           </h3>
           <FoundersMarquee />
@@ -460,7 +476,7 @@ const FounderStaff = () => {
           </div>
         </div> */}
 
-        <div ref={teamGridRef} className="py-24">
+        <div ref={teamGridRef} className="py-24 px-12">
           <div className="max-w-7xl mx-auto">
             {/* Two-column layout for medium screens and up */}
             <div className="flex flex-col md:flex-row h-full items-stretch">
