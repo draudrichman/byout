@@ -295,7 +295,7 @@ const HomePage = memo(({ isLoaded }) => {
           {mountedMobileSections >= 1 && (
             <div className="home-mother relative">
               <div
-                className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-black"
+                className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-zinc-900"
                 style={{ zIndex: 10 }}
               >
                 {/* Prism shader for mobile - can be commented out if needed */}
