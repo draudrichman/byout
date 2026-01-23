@@ -287,7 +287,7 @@ const HomePage = memo(({ isLoaded }) => {
       {isMobile && (
         <div>
           {/* Above-the-fold: render immediately */}
-          {/* <HeroMobile key="landing-mobile" isLoaded={isLoaded} /> */}
+          <HeroMobile key="landing-mobile" isLoaded={isLoaded} />
 
           {/* Mother container: Prism sits inside and serves as background for all sections below Hero.
             This uses no hooks to toggle visibility — the container appears after Hero in the DOM,

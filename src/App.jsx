@@ -72,7 +72,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             // More than 50ms is significant
             console.warn(
               `⚠️ Long task detected: ${entry.duration.toFixed(2)}ms`,
-              entry.name
+              entry.name,
             );
           }
         }
@@ -125,14 +125,14 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             gestureOrientation: "vertical",
             smoothWheel: true,
             wheelMultiplier: 1,
-            touchMultiplier: 2,
+            touchMultiplier: 0.8, // Reduced from 2 to make touch scrolling slower
             normalizeWheel: true,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             infinite: false,
             autoResize: true,
             syncTouch: true,
-            syncTouchLerp: 0.075,
-            touchInertiaMultiplier: 35,
+            syncTouchLerp: 0.15, // Increased from 0.075 for more controlled touch scrolling
+            touchInertiaMultiplier: 15, // Reduced from 35 to decrease scroll momentum on touch
             releaseInertia: true,
             breakpoint: 0,
             disabled: false,
@@ -166,7 +166,7 @@ const App = memo(() => {
 
   // Only show loading if SHOW_LOADING_PAGE is true AND it hasn't been shown yet
   const [isLoading, setIsLoading] = useState(
-    SHOW_LOADING_PAGE && !hasShownLoading
+    SHOW_LOADING_PAGE && !hasShownLoading,
   );
   const [mountPhase, setMountPhase] = useState(0);
 
@@ -180,7 +180,7 @@ const App = memo(() => {
     const timers = [
       setTimeout(
         () => setMountPhase(1),
-        hasShownLoading || !SHOW_LOADING_PAGE ? 0 : 1500
+        hasShownLoading || !SHOW_LOADING_PAGE ? 0 : 1500,
       ), // Skip delay if already shown or loading disabled
     ];
 
