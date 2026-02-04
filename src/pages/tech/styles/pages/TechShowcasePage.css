@@ -576,6 +576,50 @@
   background: #03f4d3;
 }
 
+
+/* Main overview button - Triple size with shifting icon */
+.nav-btn-main {
+  font-size: 2.25rem; /* 3x the original 0.75rem */
+  padding: 24px 0; /* 3x the original 8px */
+  letter-spacing: 3px; /* 3x the original 1px */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn-main .text {
+  font-size: 2.25rem;
+}
+
+.nav-btn-main .shift-icon {
+  width: 24px;
+  height: 24px;
+  animation: shiftRight 1.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.nav-btn-main:hover .shift-icon {
+  animation-play-state: paused;
+  transform: translateX(8px);
+}
+
+@keyframes shiftRight {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 0.7;
+  }
+}
+
+.nav-btn-main:after {
+  height: 2px; /* Thicker underline for larger button */
+}
+
+
 /* 品类详情页面 - 在页面区域内显示，不是全屏覆盖 */
 .detail-page {
   width: 100%;
@@ -1027,6 +1071,21 @@
     padding: 0 0.5rem;
   }
 
+  .nav-btn-main {
+    font-size: 1.5rem; /* Scaled down for mobile but still 3x relative size */
+    padding: 16px 0;
+    gap: 8px;
+  }
+
+  .nav-btn-main .text {
+    font-size: 1.5rem;
+  }
+
+  .nav-btn-main .shift-icon {
+    width: 18px;
+    height: 18px;
+  }
+
   .category-navigation {
     padding: 20px 0 15px 0;
   }
@@ -1135,6 +1194,21 @@
 
   .nav-btn .text {
     padding: 0 0.4rem;
+  }
+
+  .nav-btn-main {
+    font-size: 1.35rem; /* Slightly smaller for very small screens */
+    padding: 14px 0;
+    gap: 6px;
+  }
+
+  .nav-btn-main .text {
+    font-size: 1.35rem;
+  }
+
+  .nav-btn-main .shift-icon {
+    width: 16px;
+    height: 16px;
   }
 
   .category-navigation {

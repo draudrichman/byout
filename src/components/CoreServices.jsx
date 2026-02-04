@@ -426,7 +426,7 @@ const CoreServices = () => {
                         className="tracking-[0.2em] whitespace-nowrap font-jhenghei font-medium"
                         style={{ fontSize: "clamp(1rem, 3vw, 2.5rem)" }}
                       >
-                        品牌策划
+                        品牌前策
                       </div>
                       <div
                         className="font-bnkgothl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-100 mb-4"

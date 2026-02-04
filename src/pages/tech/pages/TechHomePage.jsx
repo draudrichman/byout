@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { hphCategories, pefCategories } from "../config/techCategories.js";
-import { fastSin, fastCos, fastSqrt } from "../utils/simpleMath.js";
+import { fastSqrt } from "../utils/simpleMath.js";
 import {
   acquireConnection,
   releaseConnection,
   initializeCommonPools,
 } from "../utils/simplePool.js";
 import {
-  getCachedColor,
   getPooledRandom,
   getCachedTime,
   getParticleColor,
@@ -686,10 +685,13 @@ const TechSection = memo(() => {
           <div className="category-nav-content">
             <div className="category-buttons">
               <button
-                className={`nav-btn ${!hphShowCategory ? "active" : ""}`}
+                className={`nav-btn nav-btn-main ${!hphShowCategory ? "active" : ""}`}
                 onClick={handleMainPageClick}
               >
-                <span className="text">The Mine</span>
+                <span className="text">技术总览</span>
+                <svg className="shift-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
               </button>
               {hphCategories.map((category) => (
                 <button
@@ -712,10 +714,13 @@ const TechSection = memo(() => {
           <div className="category-nav-content">
             <div className="category-buttons">
               <button
-                className={`nav-btn ${!pefShowCategory ? "active" : ""}`}
+                className={`nav-btn nav-btn-main ${!pefShowCategory ? "active" : ""}`}
                 onClick={handleMainPageClick}
               >
-                <span className="text">The Mine</span>
+                <span className="text">技术总览</span>
+                <svg className="shift-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
               </button>
               {pefCategories.map((category) => (
                 <button
