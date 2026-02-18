@@ -18,6 +18,7 @@ export default function ContactForm() {
     wechatId: "",
     otherContacts: "",
   });
+  const [file, setFile] = useState(null); // ← new state for the file
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("idle");
 
@@ -42,12 +43,11 @@ export default function ContactForm() {
         }
       );
 
-      // Animation adjusted to target the inner content for better control
       gsap.fromTo(
         ".form-content-child",
         {
           opacity: 0,
-          x: -30, // Animating the left side title/text
+          x: -30,
         },
         {
           opacity: 1,
@@ -63,13 +63,11 @@ export default function ContactForm() {
         }
       );
 
-      // The original stagger animation for form fields might be removed or adjusted.
-      // For simplicity, let's keep the stagger but only for the form fields on the right.
       gsap.fromTo(
         ".form-field",
         {
           opacity: 0,
-          x: 30, // Animating the form fields from the right
+          x: 30,
         },
         {
           opacity: 1,
@@ -89,31 +87,73 @@ export default function ContactForm() {
     return () => ctx.revert();
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+
+    if (name === "attachment") {
+      // File input handling
+      if (files && files.length > 0) {
+        setFile(files[0]); // single file – change to Array.from(files) if you want multiple
+      } else {
+        setFile(null);
+      }
+    } else {
+      // Text, select, textarea fields
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
     try {
-      // Simulating network delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const formDataToSend = new FormData();
 
-      console.log("Form submitted:", formData);
-
-      setSubmitStatus("success");
-      setFormData({
-        name: "",
-        company: "",
-        position: "",
-        weAre: "品牌方",
-        website: "",
-        attachmentIntro: "",
-        inquiry: "",
-        wechatId: "",
-        otherContacts: "",
+      // Append all text fields
+      Object.keys(formData).forEach((key) => {
+        formDataToSend.append(key, formData[key]);
       });
 
-      setTimeout(() => setSubmitStatus("idle"), 3000);
+      // Append file if selected
+      if (file) {
+        formDataToSend.append("attachment", file);
+      }
+
+      // For local dev: http://localhost:5000/api/contact
+      // For production: https://yourdomain.com/api/contact  (update when deploying)
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        body: formDataToSend,
+        // Do NOT set 'Content-Type' – browser handles multipart/form-data automatically
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSubmitStatus("success");
+        // Reset form
+        setFormData({
+          name: "",
+          company: "",
+          position: "",
+          weAre: "品牌方",
+          website: "",
+          attachmentIntro: "",
+          inquiry: "",
+          wechatId: "",
+          otherContacts: "",
+        });
+        setFile(null);
+        setTimeout(() => setSubmitStatus("idle"), 4000);
+      } else {
+        setSubmitStatus("error");
+        console.error("Server response:", data);
+      }
     } catch (error) {
       console.error("Submission error:", error);
       setSubmitStatus("error");
@@ -122,34 +162,19 @@ export default function ContactForm() {
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   return (
     <section ref={formRef} id="contact" className="py-24 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
-        {" "}
-        {/* Increased max-width for better column layout */}
         <div className="contact-form-container">
-          {/* Main container for the two columns. Use 'lg:flex' to activate flex on large screens and above. */}
-          {/* Use 'lg:items-start' to align content to the top. */}
-          {/* 'lg:space-x-16' adds horizontal space between columns on large screens. */}
           <div className="flex flex-col lg:flex-row lg:space-x-16">
-            {/* Column 1: Title on the Left */}
+            {/* Left column - Title */}
             <div className="mb-16 text-center lg:text-left lg:w-1/3 form-content-child">
-              {" "}
-              {/* lg:w-1/3 allocates one-third width */}
               <h2 className="text-6xl md:text-7xl font-light mb-6">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
                   <span className="tracking-[0.053em]">GET IN</span> TOUCH
                 </span>
               </h2>
               <p className="text-xl text-gray-400">联系我们 | CONTACT US</p>
-              {/* Optional: Add contact details or other info here for the left column */}
               <div className="mt-8">
                 <p className="text-lg text-gray-500">
                   We look forward to hearing from you.
@@ -157,17 +182,12 @@ export default function ContactForm() {
               </div>
             </div>
 
-            {/* Column 2: Form on the Right */}
+            {/* Right column - Form */}
             <div className="lg:w-2/3 form-content-child">
-              {" "}
-              {/* lg:w-2/3 allocates two-thirds width */}
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Name Field */}
+                {/* Name */}
                 <div className="form-field">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm mb-2 text-gray-300"
-                  >
+                  <label htmlFor="name" className="block text-sm mb-2 text-gray-300">
                     Name 姓名 <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -182,14 +202,10 @@ export default function ContactForm() {
                   />
                 </div>
 
-                {/* Group Company/Position on one row for better desktop layout */}
+                {/* Company + Position */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Company Field */}
                   <div className="form-field">
-                    <label
-                      htmlFor="company"
-                      className="block text-sm mb-2 text-gray-300"
-                    >
+                    <label htmlFor="company" className="block text-sm mb-2 text-gray-300">
                       Company 公司 <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -203,12 +219,8 @@ export default function ContactForm() {
                       placeholder="Company name"
                     />
                   </div>
-                  {/* Position Field */}
                   <div className="form-field">
-                    <label
-                      htmlFor="position"
-                      className="block text-sm mb-2 text-gray-300"
-                    >
+                    <label htmlFor="position" className="block text-sm mb-2 text-gray-300">
                       Position 职位 <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -224,14 +236,10 @@ export default function ContactForm() {
                   </div>
                 </div>
 
-                {/* Group We Are/Website on one row */}
+                {/* We Are + Website */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* We are Field */}
                   <div className="form-field">
-                    <label
-                      htmlFor="weAre"
-                      className="block text-sm mb-2 text-gray-300"
-                    >
+                    <label htmlFor="weAre" className="block text-sm mb-2 text-gray-300">
                       We are 我们是 <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -253,12 +261,8 @@ export default function ContactForm() {
                       <option value="其他">其他</option>
                     </select>
                   </div>
-                  {/* Website Field */}
                   <div className="form-field">
-                    <label
-                      htmlFor="website"
-                      className="block text-sm mb-2 text-gray-300"
-                    >
+                    <label htmlFor="website" className="block text-sm mb-2 text-gray-300">
                       Website 官网
                     </label>
                     <input
@@ -273,34 +277,33 @@ export default function ContactForm() {
                   </div>
                 </div>
 
-                {/* Attachment Intro Field */}
+                {/* File Attachment */}
                 <div className="form-field">
-                  <label
-                    htmlFor="attachment"
-                    className="block text-sm mb-2 text-gray-300"
-                  >
+                  <label htmlFor="attachment" className="block text-sm mb-2 text-gray-300">
                     Attachment 附件
                   </label>
                   <input
                     type="file"
                     id="attachment"
                     name="attachment"
-                    onChange={(e) => handleChange(e, e.target.files)}
+                    onChange={handleChange}           // ← fixed: now uses the unified handler
                     className="w-full cursor-pointer bg-transparent border border-gray-700 hover:bg-gray-900 rounded px-4 py-3 text-white focus:border-gray-500 focus:outline-none transition-colors"
                     accept=".pdf,.doc,.docx,.jpg,.png"
-                    multiple
+                    // multiple   ← commented out – enable if you want multiple files later
                   />
                   <p className="text-xs text-gray-400 mt-1">
                     Upload files (PDF, DOC, DOCX, JPG, PNG)
                   </p>
+                  {file && (
+                    <p className="text-sm text-gray-300 mt-2">
+                      Selected: {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                    </p>
+                  )}
                 </div>
 
-                {/* Inquiry Field */}
+                {/* Inquiry */}
                 <div className="form-field">
-                  <label
-                    htmlFor="inquiry"
-                    className="block text-sm mb-2 text-gray-300"
-                  >
+                  <label htmlFor="inquiry" className="block text-sm mb-2 text-gray-300">
                     Inquiry 需求 <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -315,14 +318,10 @@ export default function ContactForm() {
                   />
                 </div>
 
-                {/* Group Wechat ID/Other Contacts on one row */}
+                {/* WeChat ID + Other Contacts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Wechat ID Field */}
                   <div className="form-field">
-                    <label
-                      htmlFor="wechatId"
-                      className="block text-sm mb-2 text-gray-300"
-                    >
+                    <label htmlFor="wechatId" className="block text-sm mb-2 text-gray-300">
                       Wechat ID 微信号
                     </label>
                     <input
@@ -335,12 +334,8 @@ export default function ContactForm() {
                       placeholder="Your WeChat ID"
                     />
                   </div>
-                  {/* Other Contacts Field */}
                   <div className="form-field">
-                    <label
-                      htmlFor="otherContacts"
-                      className="block text-sm mb-2 text-gray-300"
-                    >
+                    <label htmlFor="otherContacts" className="block text-sm mb-2 text-gray-300">
                       Other Contacts 其他联系方式
                     </label>
                     <input
@@ -373,7 +368,7 @@ export default function ContactForm() {
                   </button>
                 </div>
 
-                {/* Submission Status Messages */}
+                {/* Status Messages */}
                 {submitStatus === "success" && (
                   <div className="text-center py-4 px-6 bg-green-900/20 border border-green-600 rounded text-green-400">
                     Thank you! Your message has been sent successfully.
