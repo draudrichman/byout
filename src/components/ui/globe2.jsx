@@ -18,6 +18,7 @@ export default function RotatingEarth({
   className = "",
 }) {
   const canvasRef = useRef(null);
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -314,6 +315,7 @@ export default function RotatingEarth({
         // Render immediately (dots will appear as they're generated)
         render();
         setIsLoading(false);
+      // eslint-disable-next-line no-unused-vars
       } catch (err) {
         setError("Failed to load land map data");
         setIsLoading(false);

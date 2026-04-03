@@ -1,6 +1,8 @@
 import React, { Suspense, useState, useEffect, memo, useRef } from "react";
 import { AuroraBackground } from "./ui/aurora-background";
-import RotatingEarth from "./ui/globe2";
+
+// Code-split the globe — its JS chunk + d3 + JSON won't load until we mount it
+const RotatingEarth = React.lazy(() => import("./ui/globe2"));
 import Odometer from "react-odometerjs";
 import { BorderBeam } from "./ui/border-beam";
 import { gsap } from "gsap";
@@ -14,8 +16,12 @@ const HeroSection = memo(() => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isUserHovering, setIsUserHovering] = useState(false);
-  // Load globe immediately on first paint
-  const [shouldLoadGlobe] = useState(true);
+  // Delay globe mount until after the navbar animation has finished (~1500ms)
+  const [shouldLoadGlobe, setShouldLoadGlobe] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShouldLoadGlobe(true), 19000);
+    return () => clearTimeout(timer);
+  }, []);
   const [currentSlide, setCurrentSlide] = useState(0); // 0 = hero, 1 = stats
   const timeoutRef = useRef(null);
   const contentContainerRef = useRef(null);
@@ -627,22 +633,17 @@ const HeroSection = memo(() => {
         >
           {/* Globe Background Section - Fixed position, always visible */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <div className="w-full h-full flex items-end justify-center pb-[0%]">
-              {shouldLoadGlobe ? (
-                <Suspense
-                  fallback={
-                    <div className="flex items-center justify-center text-white">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                      Loading Globe...
-                    </div>
-                  }
-                >
+            <div
+              className="w-full h-full flex items-end justify-center pb-[0%]"
+              style={{
+                opacity: shouldLoadGlobe ? 1 : 0,
+                transition: "opacity 1.2s ease-in",
+              }}
+            >
+              {shouldLoadGlobe && (
+                <Suspense fallback={null}>
                   <RotatingEarth width={1650} height={1650} />
                 </Suspense>
-              ) : (
-                <div className="flex items-center justify-center text-transparent">
-                  {/* Empty placeholder during initial load */}
-                </div>
               )}
             </div>
           </div>
