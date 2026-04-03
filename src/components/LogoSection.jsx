@@ -6,6 +6,7 @@ const LogoSection = () => {
     <>
       <BrandLogosSection />
       <BigLogo />
+      <div className="spacer h-[80vh]" />
     </>
   );
 };

@@ -348,29 +348,6 @@ const FounderStaff = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".founder-card",
-        {
-          opacity: 0,
-          y: 100,
-          scale: 0.8,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: foundersRef.current,
-            start: "top 80%",
-            end: "bottom 60%",
-            toggleActions: "play none none reverse",
-          },
-        },
-      );
-
-      gsap.fromTo(
         ".team-member",
         {
           opacity: 0,
