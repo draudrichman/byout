@@ -122,9 +122,12 @@ export default function ContactForm() {
         formDataToSend.append("attachment", file);
       }
 
-      // For local dev: http://localhost:5000/api/contact
-      // For production: https://yourdomain.com/api/contact  (update when deploying)
-      const response = await fetch("http://localhost:5000/api/contact", {
+      // Switch between production VPS and local dev automatically
+      const API_BASE_URL = import.meta.env.PROD 
+        ? "http://193.134.210.26:5000" 
+        : "http://localhost:5000";
+      
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: "POST",
         body: formDataToSend,
         // Do NOT set 'Content-Type' – browser handles multipart/form-data automatically
