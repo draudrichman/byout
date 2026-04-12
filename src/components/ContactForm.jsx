@@ -124,7 +124,7 @@ export default function ContactForm() {
 
       // Switch between production VPS and local dev automatically
       const API_BASE_URL = import.meta.env.PROD 
-        ? "http://193.134.210.26:5000" 
+        ? "https://193.134.210.26:5000" 
         : "http://localhost:5000";
       
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
