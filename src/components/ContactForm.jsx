@@ -89,11 +89,9 @@ export default function ContactForm() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
     if (name === "attachment") {
-      // File input handling
       if (files && files.length > 0) {
-        setFile(files[0]); // single file – change to Array.from(files) if you want multiple
+        setFile(files[0]);
       } else {
         setFile(null);
       }

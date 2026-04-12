@@ -1,4 +1,4 @@
-name: Deploy React App
+name: Deploy Full Stack App
 
 on:
   push:
@@ -18,26 +18,43 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install and Build
+      - name: Install and Build Frontend
         run: |
           npm install
           npm run build
 
       - name: Deploy to VPS
         run: |
-          # 1. Create the .ssh directory and set permissions
+          # 1. Setup SSH
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-
-          # 2. Populate the private key file
           echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-          # 3. Add the VPS to known_hosts to prevent "Host key verification failed"
           ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-          # 4. Copy the build files using standard SCP
-          # -P: Port
-          # -i: Identity file (key)
-          # -r: Recursive (for folders)
+          # 2. Make sure the backend directory exists on the server
+          ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} "mkdir -p /var/www/byout-backend"
+
+          # 3. Deploy Frontend (dist folder)
           scp -P ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa -r dist/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/var/www/byout
+          
+          # 4. Deploy Backend (server folder)
+          scp -P ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa -r server/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/var/www/byout-backend
+
+          # 5. SSH in to configure backend and restart PM2
+          ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /var/www/byout-backend
+            
+            # Inject the .env variables securely
+            echo "${{ secrets.BACKEND_ENV }}" > .env
+            
+            # Install backend dependencies
+            npm install
+            
+            # Start or restart the PM2 process
+            pm2 restart byout-api || pm2 start index.js --name "byout-api"
+            
+            # Save the PM2 list so it auto-starts on server reboots
+            pm2 save
+            pm2 startup | tail -n 1 | bash
+          EOF

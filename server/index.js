@@ -42,7 +42,7 @@ app.post("/api/contact", upload.single("attachment"), async (req, res) => {
     const brevoPayload = {
       sender: {
         name: "Website Contact Form",
-        email: "ch.elevateco@gmail.com", // Use default for this test – we'll change to your domain later
+        email: "form@xn--prsm-6pa.com", // Use default for this test – we'll change to your domain later
       },
       to: [
         {
@@ -65,16 +65,21 @@ app.post("/api/contact", upload.single("attachment"), async (req, res) => {
         <p><strong>Attachment Intro:</strong> ${attachmentIntro || "None"}</p>
         <p><strong>WeChat ID:</strong> ${wechatId || "Not provided"}</p>
         <p><strong>Other Contacts:</strong> ${otherContacts || "Not provided"}</p>
-        <h3>Inquiry / Demand:</h3>
-        <p>${inquiry.replace(/\n/g, "<br>")}</p>
-        ${file ? `<p><strong>Attachment:</strong> ${file.originalname} (${(file.size / 1024).toFixed(2)} KB)</p>` : ""}
+        
+        <h3 style="margin-top: 20px;">Inquiry / Demand:</h3>
+        <p style="white-space: pre-wrap;">${inquiry}</p>
+
+        ${file ? `
+        <hr>
+        <p><strong>Attachment:</strong> ${file.originalname} 
+        (${(file.size / 1024).toFixed(1)} KB)</p>` : ""}
       `,
-      templateId: 1, // ← your template ID
     };
 
     // If there's a file, add it as base64 attachment
+    // If there's a file, add it as base64 attachment
     if (file) {
-      brevoPayload.attachments = [
+      brevoPayload.attachment = [
         {
           name: file.originalname,
           content: file.buffer.toString("base64"),
@@ -82,7 +87,7 @@ app.post("/api/contact", upload.single("attachment"), async (req, res) => {
       ];
     }
 
-    const response = await axios.post(
+    await axios.post(
       "https://api.brevo.com/v3/smtp/email",
       brevoPayload,
       {
@@ -94,7 +99,7 @@ app.post("/api/contact", upload.single("attachment"), async (req, res) => {
       },
     );
 
-    console.log("Brevo response:", response.data);
+
     res
       .status(200)
       .json({ success: true, message: "Message sent successfully" });
