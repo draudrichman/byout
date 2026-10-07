@@ -2,26 +2,26 @@
 
 @font-face {
   font-family: 'Chinese-Font';
-  src: url('/Fonts/MFYueHei_Noncommercial-Regular.otf') format('opentype');
+  src: url('/Fonts/MFYueHei_Noncommercial-Regular.woff2') format('woff2');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'NewXDigitaltfbHollow';
-  src: url('/Fonts/NewXDigitaltfbHollow.ttf') format('truetype');
+  src: url('/Fonts/NewXDigitaltfbHollow.woff2') format('woff2');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'SciFi-Font';
-  src: url('/Fonts/Ethnocentric Rg.otf') format('opentype');
+  src: url('/Fonts/Ethnocentric%20Rg.woff2') format('woff2');
   font-display: swap;
 }
 
 /* Geniso font */
 @font-face {
   font-family: 'Geniso-Font';
-  src: url('/Fonts/GENISO.ttf') format('truetype');
+  src: url('/Fonts/GENISO.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -30,7 +30,7 @@
 /* Microsoft JhengHei local embed */
 @font-face {
   font-family: 'MicrosoftJhengHei-Local';
-  src: url('/Fonts/microsoft-jhenghei.ttf') format('truetype');
+  src: url('/Fonts/microsoft-jhenghei.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -38,7 +38,7 @@
 
 @font-face {
   font-family: 'Songti-TC-Bold';
-  src: url('/Fonts/SongtiTCBold.ttf') format('truetype');
+  src: url('/Fonts/SongtiTCBold.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -46,7 +46,7 @@
 
 @font-face {
   font-family: 'BNKGOTHL';
-  src: url('/Fonts/BNKGOTHL.TTF') format('truetype');
+  src: url('/Fonts/BNKGOTHL.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

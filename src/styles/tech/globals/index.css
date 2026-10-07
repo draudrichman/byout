@@ -5,7 +5,7 @@
 /* 站酷庆科黄油体字体 - Web字体版本 */
 @font-face {
   font-family: 'zcoolqingkehuangyouti';
-  src: url('/fonts/站酷庆科黄油体.ttf') format('truetype');
+  src: url('/Fonts/站酷庆科黄油体.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap; /* 优化字体加载性能 */
