@@ -16,13 +16,13 @@ const HeroSection = memo(() => {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(null); // Start with empty state
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isUserHovering, setIsUserHovering] = useState(false);
-  // Delay globe mount until after the navbar animation has finished
-  // 19s on first load (full loading animation plays), 5s on refresh/revisit
+  // Delay globe mount until after the navbar animation has finished:
+  // ~5s after the loader clears on first load (loader takes ~6s), 6s on revisit
   const [shouldLoadGlobe, setShouldLoadGlobe] = useState(false);
   useEffect(() => {
     const hasShownLoading =
       sessionStorage.getItem("hasShownLoading") === "true";
-    const globeDelay = hasShownLoading ? 6000 : 19000;
+    const globeDelay = hasShownLoading ? 6000 : 11000;
     const timer = setTimeout(() => setShouldLoadGlobe(true), globeDelay);
     return () => clearTimeout(timer);
   }, []);

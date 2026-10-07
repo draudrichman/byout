@@ -344,8 +344,29 @@ const HudConnector = ({
       scrollTimeout = setTimeout(handleScroll, 16);
     };
 
-    // Start animation frame tracking for smooth position updates
-    startAnimationFrameTracking();
+    // Track positions every frame only while the connector's start element
+    // is near the viewport and the tab is visible. Each frame reads layout,
+    // so running it offscreen costs a forced layout per frame for nothing.
+    const resolveElement = (element) =>
+      typeof element === "string" ? document.querySelector(element) : element?.current;
+    let nearViewport = true;
+    const updateTracking = () => {
+      if (nearViewport && !document.hidden) startAnimationFrameTracking();
+      else stopAnimationFrameTracking();
+    };
+    const trackedEl = resolveElement(elements.from) || svgRef.current;
+    const visibilityObserver = trackedEl
+      ? new IntersectionObserver(
+          ([entry]) => {
+            nearViewport = entry.isIntersecting;
+            updateTracking();
+          },
+          { rootMargin: "200px" },
+        )
+      : null;
+    if (visibilityObserver) visibilityObserver.observe(trackedEl);
+    document.addEventListener("visibilitychange", updateTracking);
+    updateTracking();
 
     window.addEventListener("resize", debouncedResize);
     window.addEventListener("scroll", debouncedScroll, { passive: true });
@@ -408,6 +429,8 @@ const HudConnector = ({
       window.removeEventListener("scroll", debouncedScroll);
       resizeObserver.disconnect();
       mutationObserver.disconnect();
+      visibilityObserver?.disconnect();
+      document.removeEventListener("visibilitychange", updateTracking);
       stopAnimationFrameTracking();
     };
   }, [

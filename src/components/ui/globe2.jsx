@@ -26,7 +26,9 @@ export default function RotatingEarth({
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    const context = canvas.getContext("2d", { willReadFrequently: true });
+    // No willReadFrequently: nothing reads pixels back, and that flag forces
+    // a CPU-backed canvas, which is much slower to redraw every frame.
+    const context = canvas.getContext("2d");
     if (!context) return;
 
     // Set up responsive dimensions
@@ -418,8 +420,27 @@ export default function RotatingEarth({
 
     let currentRegionIndex = getCurrentFocusRegion();
 
-    // Auto-rotation timer
+    // Auto-rotation timer, paused while the globe is offscreen or the tab is
+    // hidden. Rotation is time-based, so it resumes where it would have been.
     const rotationTimer = d3.timer(rotate);
+    let running = true;
+    let onScreen = true;
+    const updateRunning = () => {
+      const shouldRun = onScreen && !document.hidden;
+      if (shouldRun === running) return;
+      running = shouldRun;
+      if (shouldRun) rotationTimer.restart(rotate);
+      else rotationTimer.stop();
+    };
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        updateRunning();
+      },
+      { rootMargin: "100px" },
+    );
+    visibilityObserver.observe(canvas);
+    document.addEventListener("visibilitychange", updateRunning);
 
     const handleMouseDown = (event) => {
       autoRotate = false;
@@ -470,6 +491,8 @@ export default function RotatingEarth({
     // Cleanup
     return () => {
       rotationTimer.stop();
+      visibilityObserver.disconnect();
+      document.removeEventListener("visibilitychange", updateRunning);
       canvas.removeEventListener("mousedown", handleMouseDown);
       // canvas.removeEventListener("wheel", handleWheel)
     };

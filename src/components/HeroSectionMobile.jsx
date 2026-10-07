@@ -1,5 +1,6 @@
-import React, { Suspense, useState, useEffect, memo, useRef } from "react";
-import RotatingEarth from "./ui/globe2";
+import React, { Suspense, lazy, useState, useEffect, memo, useRef } from "react";
+// Lazy so d3 and the land data stay out of the main bundle.
+const RotatingEarth = lazy(() => import("./ui/globe2"));
 import Odometer from "react-odometerjs";
 import { BorderBeam } from "./ui/border-beam";
 
@@ -375,14 +376,7 @@ const HeroSection = memo(() => {
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-0">
         <div className="w-full h-full flex items-end justify-center pb-[0%]">
           {shouldLoadGlobe ? (
-            <Suspense
-              fallback={
-                <div className="flex items-center justify-center text-white">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
-                  Loading Globe...
-                </div>
-              }
-            >
+            <Suspense fallback={null}>
               <RotatingEarth width={500} height={500} />
             </Suspense>
           ) : (
