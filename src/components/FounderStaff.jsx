@@ -6,13 +6,13 @@ const foundersData = [
     name: "JASON CHENG  成金海",
     title: "Co-Founder & CTO",
     role: "MDL实验室创办人 前BY年轻化创新集团CEO 全球品牌年轻态买点论开创者",
-    img: "/founders/founder2.jpg",
+    img: "/founders/founder2.webp",
   },
   {
     name: "VINCE TREY  崔巽燊",
     title: "Co-Founder & CEO",
     role: "全球化创意美学设计专家 品牌出海战略架构师",
-    img: "/founders/founder.png",
+    img: "/founders/founder.webp",
   },
   {
     name: "CALVIN LU",

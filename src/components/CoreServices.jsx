@@ -114,7 +114,7 @@ const serviceData = [
     name: "Brand Development",
     description: "Comprehensive brand strategy and identity development",
     image: "",
-    bigImage: "/core/image1b.png",
+    bigImage: "/core/image1b.webp",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:
@@ -124,7 +124,7 @@ const serviceData = [
     name: "Technology",
     description: "Cutting-edge technology solutions and digital transformation",
     image: "/core/2b.png",
-    bigImage: "/core/image2b.png",
+    bigImage: "/core/image2b.webp",
     location:
       "And if it rains, a closed car at four. And we shall play a game of chess, pressing lidless eyes and waiting for a knock upon the door.",
     material:

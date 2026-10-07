@@ -14,7 +14,7 @@ const AwardsAndBrands = () => {
           <div className="bg-white/50 p-6 backdrop-blur-sm border border-white/40 flex-1 flex items-center">
             <div className="relative overflow-hidden w-full">
               <img
-                src="/Logos/Awards.png"
+                src="/Logos/Awards.webp"
                 alt="Design Awards and Recognition including Red Dot Award, iF Design Award, Great Wall Awards, and more"
                 className="w-full h-auto object-contain grayscale contrast-150 brightness-110 hover:grayscale-0 hover:contrast-100 hover:brightness-100 hover:scale-105 transition-all duration-500"
                 onError={(e) => {
@@ -34,7 +34,7 @@ const AwardsAndBrands = () => {
           <div className="bg-white/50 p-6 backdrop-blur-sm border border-white/20 flex-1 flex items-center">
             <div className="relative overflow-hidden w-full">
               <img
-                src="/Logos/Brands.png"
+                src="/Logos/Brands.webp"
                 alt="Brand Partners including Philips, KFC, Haier, Nescafé, and many other leading brands"
                 className="w-full h-auto object-contain grayscale contrast-150 brightness-110 hover:grayscale-0 hover:contrast-100 hover:brightness-100 hover:scale-105 transition-all duration-500"
                 onError={(e) => {

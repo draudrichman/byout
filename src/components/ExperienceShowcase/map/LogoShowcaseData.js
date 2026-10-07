@@ -48,7 +48,7 @@ export const logosByCountry = {
       title: "Filgo",
     },
     {
-      src: "/Logos/Canada/GiantTiger.jpeg",
+      src: "/Logos/Canada/GiantTiger.webp",
       title: "Giant Tiger",
     },
     {
@@ -138,7 +138,7 @@ export const logosByCountry = {
       title: "Mitsuwa",
     },
     {
-      src: "/Logos/US/Kroger.png",
+      src: "/Logos/US/Kroger.webp",
       title: "Kroger",
     },
     {
@@ -150,7 +150,7 @@ export const logosByCountry = {
       title: "99 Ranch Market",
     },
     {
-      src: "/Logos/US/Walgreens.jpg",
+      src: "/Logos/US/Walgreens.webp",
       title: "Walgreens",
     },
   ],
@@ -166,15 +166,15 @@ export const logosByCountry = {
       title: "Sam's Club",
     },
     {
-      src: "/Logos/China/Aldi.png",
+      src: "/Logos/China/Aldi.webp",
       title: "Aldi",
     },
     {
-      src: "/Logos/China/Costco.png",
+      src: "/Logos/China/Costco.webp",
       title: "Costco",
     },
     {
-      src: "/Logos/China/Yonghui.png",
+      src: "/Logos/China/Yonghui.webp",
       title: "Yonghui Superstores",
     },
   ],
