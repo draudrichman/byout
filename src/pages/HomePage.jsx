@@ -1,9 +1,11 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, lazy, Suspense } from "react";
 import { useLenis } from "@studio-freight/react-lenis";
 import Navbar from "../components/ui/Navbar";
 import NavbarMobile from "../components/ui/NavbarMobile";
 import ErrorBoundary from "../components/ErrorBoundary";
 import useProgressiveMount from "../hooks/useProgressiveMount";
+// Below the fold, so it loads in its own chunk.
+const HomePlatformSection = lazy(() => import("../v2/components/HomePlatformSection"));
 import Prism from "../components/PrismOptimized";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -170,9 +172,17 @@ const HomePage = memo(({ isLoaded }) => {
                 )}
 
                 {mountedSections >= 3 && (
-                  <ErrorBoundary>
-                    <CoreServicesDesktop />
-                  </ErrorBoundary>
+                  <>
+                    {/* V2: English cross-market platform section (copy in src/v2/content/home.js) */}
+                    <ErrorBoundary>
+                      <Suspense fallback={null}>
+                        <HomePlatformSection />
+                      </Suspense>
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                      <CoreServicesDesktop />
+                    </ErrorBoundary>
+                  </>
                 )}
 
                 {mountedSections >= 4 && (
@@ -245,6 +255,9 @@ const HomePage = memo(({ isLoaded }) => {
                 {mountedSections >= 2 && (
                   <ErrorBoundary>
                     {/* <CompanyIntroductionMobile /> */}
+                    <Suspense fallback={null}>
+                      <HomePlatformSection />
+                    </Suspense>
                   </ErrorBoundary>
                 )}
 
