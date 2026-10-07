@@ -6,12 +6,14 @@ import path from 'path'
 import { analyzer } from 'vite-bundle-analyzer';
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     tailwindcss(),
-    analyzer(),
-  ],
+    // Bundle report only on demand: `npm run analyze`. Running it on every
+    // build starts a server that keeps `vite build` from ever exiting.
+    mode === 'analyze' && analyzer(),
+  ].filter(Boolean),
   resolve: {
     alias: {
       '~': path.resolve(__dirname, 'src/retail-channel/gsapcountries-main/app'),
@@ -79,4 +81,4 @@ export default defineConfig({
       overlay: false, // Disable error overlay for better performance
     },
   },
-})
+}))
