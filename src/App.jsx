@@ -170,7 +170,8 @@ const App = memo(() => {
   );
   const [mountPhase, setMountPhase] = useState(0);
 
-  // Progressively mount components to distribute load over 8 seconds
+  // Mount the app just after the loader's first paint so the loader starts
+  // smoothly; the homepage then mounts its sections progressively.
   useEffect(() => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
@@ -180,7 +181,7 @@ const App = memo(() => {
     const timers = [
       setTimeout(
         () => setMountPhase(1),
-        hasShownLoading || !SHOW_LOADING_PAGE ? 0 : 1500,
+        hasShownLoading || !SHOW_LOADING_PAGE ? 0 : 100,
       ), // Skip delay if already shown or loading disabled
     ];
 

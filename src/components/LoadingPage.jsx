@@ -11,8 +11,7 @@ const LoadingPage = ({ onComplete }) => {
   const [displayProgress, setDisplayProgress] = useState(0);
   const [canComplete, setCanComplete] = useState(false);
 
-  const MINIMUM_DURATION = 11000; // 11 seconds minimum
-  const TRANSITION_DURATION = 2500; // 2.5 seconds for transition
+  const MINIMUM_DURATION = 3000; // counter runs 0 → 100% over 3s, then the warp transition plays
 
   const { isComplete: resourcesComplete } = useResourceLoader();
 
@@ -29,12 +28,13 @@ const LoadingPage = ({ onComplete }) => {
   useEffect(() => {
     const startTime = Date.now();
 
-    // Define pause points and their durations
+    // Pause points, sized as a share of MINIMUM_DURATION so the counter keeps
+    // the same rhythm whatever the duration.
     const pausePoints = [
-      { percent: 20, pauseDuration: 800 },
-      { percent: 45, pauseDuration: 700 },
-      { percent: 69, pauseDuration: 600 },
-      { percent: 91, pauseDuration: 500 },
+      { percent: 20, pauseDuration: MINIMUM_DURATION * 0.073 },
+      { percent: 45, pauseDuration: MINIMUM_DURATION * 0.064 },
+      { percent: 69, pauseDuration: MINIMUM_DURATION * 0.055 },
+      { percent: 91, pauseDuration: MINIMUM_DURATION * 0.045 },
     ];
 
     const totalPauseDuration = pausePoints.reduce(
@@ -325,15 +325,19 @@ const LoadingPage = ({ onComplete }) => {
         this.spaceTravel.ctx.lineTo(x2, y2);
         this.spaceTravel.ctx.stroke();
 
-        // Glow effect at high speeds
+        // Glow at high speeds: a soft halo plus a bright core. Two plain
+        // arcs instead of shadowBlur, which re-blurs every star every frame.
         if (speedRatio > 0.3) {
-          this.spaceTravel.ctx.shadowBlur = speedRatio * 20;
-          this.spaceTravel.ctx.shadowColor = color;
-          this.spaceTravel.ctx.beginPath();
-          this.spaceTravel.ctx.arc(x, y, speedRatio * 2, 0, Math.PI * 2);
-          this.spaceTravel.ctx.fillStyle = color;
-          this.spaceTravel.ctx.fill();
-          this.spaceTravel.ctx.shadowBlur = 0;
+          const ctx = this.spaceTravel.ctx;
+          ctx.fillStyle = color;
+          ctx.globalAlpha = 0.25;
+          ctx.beginPath();
+          ctx.arc(x, y, speedRatio * 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.beginPath();
+          ctx.arc(x, y, speedRatio * 2, 0, Math.PI * 2);
+          ctx.fill();
         }
 
         if (

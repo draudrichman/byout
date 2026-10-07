@@ -43,11 +43,6 @@ const useResourceLoader = () => {
 
   const loadResources = useCallback(async () => {
     try {
-      // Phase 0: Delay resource loading to prevent initial lag
-      setLoadingPhase("Initializing...");
-      setLoadingProgress(5);
-      await wait(3000); // Wait 3 seconds before starting heavy operations
-
       // Phase 1: allow underlying app to mount this tick
       setLoadingPhase("Preparing...");
       setLoadingProgress(10);
