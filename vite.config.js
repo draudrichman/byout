@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-animation': ['gsap', 'framer-motion'],
+          'vendor-animation': ['gsap', 'motion/react'],
           'vendor-lenis': ['@studio-freight/react-lenis'],
         }
       }

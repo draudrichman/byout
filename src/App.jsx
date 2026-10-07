@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, memo, lazy, Suspense } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import LoadingPage from "./components/LoadingPage";
 // import Prism from "./components/PrismaBackground.jsx";
