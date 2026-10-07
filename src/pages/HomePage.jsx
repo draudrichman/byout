@@ -1,6 +1,5 @@
 import { memo, useState, useEffect } from "react";
 import { useLenis } from "@studio-freight/react-lenis";
-import { Leva } from "leva";
 import Navbar from "../components/ui/Navbar";
 import NavbarMobile from "../components/ui/NavbarMobile";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -123,7 +122,6 @@ const HomePage = memo(({ isLoaded }) => {
 
   return (
     <div className="App">
-      {/* <Leva hidden /> */}
 
       {/* Navigation - Desktop */}
       {!isMobile && <Navbar isLoaded={isLoaded} />}

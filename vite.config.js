@@ -26,7 +26,6 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-animation': ['gsap', 'framer-motion'],
           'vendor-lenis': ['@studio-freight/react-lenis'],
         }
@@ -53,7 +52,6 @@ export default defineConfig(({ mode }) => ({
     // Additional optimizations
     cssCodeSplit: true,
     sourcemap: false, // Disable sourcemaps in production for smaller bundle
-    target: 'es2015', // Target modern browsers for better optimization
   },
   // Optimize dependencies
   optimizeDeps: {
@@ -62,10 +60,6 @@ export default defineConfig(({ mode }) => ({
       'react-dom', 
       'gsap', 
       '@studio-freight/react-lenis',
-      '@react-three/fiber',
-      '@react-three/drei',
-      'three',
-      'three-globe'
     ],
     exclude: [], // Don't exclude anything - let Vite handle it
   },

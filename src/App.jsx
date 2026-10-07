@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import LoadingPage from "./components/LoadingPage";
@@ -11,11 +11,14 @@ import PageTransition from "./components/PageTransition";
 const SHOW_LOADING_PAGE = true;
 // =========================================
 
-// Pages
+// Pages. Only the homepage ships in the main bundle; the others (and their
+// global CSS) load when someone visits them.
 import HomePage from "./pages/HomePage";
-import TechPage from "./pages/TechPage";
-import RetailChannelPage from "./pages/RetailChannelPage";
-import BrandDevPage from "./pages/branddev/BrandDevPage";
+const TechPage = lazy(() => import("./pages/TechPage"));
+const RetailChannelPage = lazy(() => import("./pages/RetailChannelPage"));
+const BrandDevPage = lazy(() => import("./pages/branddev/BrandDevPage"));
+
+const PageFallback = () => <div className="min-h-screen bg-black" />;
 
 // eslint-disable-next-line no-unused-vars
 const AppContent = memo(({ isLoaded, mountPhase }) => {
@@ -111,7 +114,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
           ></div>
           <AnimatePresence mode="wait">
             <PageTransition key={currentPath}>
-              {getCurrentPage()}
+              <Suspense fallback={<PageFallback />}>{getCurrentPage()}</Suspense>
             </PageTransition>
           </AnimatePresence>
         </div>
@@ -148,7 +151,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
           <div className="relative z-10">
             <AnimatePresence mode="wait">
               <PageTransition key={currentPath}>
-                {getCurrentPage()}
+                <Suspense fallback={<PageFallback />}>{getCurrentPage()}</Suspense>
               </PageTransition>
             </AnimatePresence>
           </div>
