@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, memo, lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { modulePages } from "./v2/content";
 import { AnimatePresence } from "motion/react";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import LoadingPage from "./components/LoadingPage";
@@ -17,47 +19,41 @@ import HomePage from "./pages/HomePage";
 const TechPage = lazy(() => import("./pages/TechPage"));
 const RetailChannelPage = lazy(() => import("./pages/RetailChannelPage"));
 const BrandDevPage = lazy(() => import("./pages/branddev/BrandDevPage"));
+// V2 module pages (/market-expansion, /supply-chain, ...). Their copy lives in
+// src/v2/content; see src/v2/content/README.md.
+const ModulePage = lazy(() => import("./v2/pages/ModulePage"));
+const ContactPage = lazy(() => import("./v2/pages/ContactPage"));
 
 const PageFallback = () => <div className="min-h-screen bg-black" />;
 
 // eslint-disable-next-line no-unused-vars
 const AppContent = memo(({ isLoaded, mountPhase }) => {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const location = useLocation();
+  const currentPath = location.pathname;
   const fluidBgRef = useRef(null);
 
-  // Update path on navigation
-  useEffect(() => {
-    const handleLocationChange = () => {
-      setCurrentPath(window.location.pathname);
-    };
+  // Transitions run when the top-level section changes (/tech -> /), not on
+  // navigation inside a section (/tech -> /tech/hph), which would remount it.
+  const transitionKey = "/" + (currentPath.split("/")[1] || "");
 
-    // Listen for popstate (back/forward buttons)
-    window.addEventListener("popstate", handleLocationChange);
-
-    return () => {
-      window.removeEventListener("popstate", handleLocationChange);
-    };
-  }, []);
-
-  // Determine which page to render based on current path
-  const getCurrentPage = () => {
-    if (currentPath.startsWith("/tech")) {
-      return <TechPage />;
-    } else if (
-      currentPath === "/branddev" ||
-      currentPath.startsWith("/branddev")
-    ) {
-      return <BrandDevPage />;
-    } else if (currentPath === "/retail" || currentPath.startsWith("/retail")) {
-      return <RetailChannelPage />;
-    } else {
-      return <HomePage isLoaded={isLoaded} />;
-    }
-  };
+  const getCurrentPage = () => (
+    <Routes location={location}>
+      <Route path="/tech/*" element={<TechPage />} />
+      <Route path="/branddev/*" element={<BrandDevPage />} />
+      {/* /retail-network is a V2 page; the original /retail page stays */}
+      <Route path="/retail" element={<RetailChannelPage />} />
+      {modulePages.map((page) => (
+        <Route key={page.slug} path={`/${page.slug}`} element={<ModulePage slug={page.slug} />} />
+      ))}
+      <Route path="/contact" element={<ContactPage />} />
+      {/* Anything else falls back to the homepage, as before */}
+      <Route path="*" element={<HomePage isLoaded={isLoaded} />} />
+    </Routes>
+  );
 
   // Disable smooth scroll on Tech and Retail pages
   const isSpecialPage =
-    currentPath.startsWith("/tech") || currentPath.startsWith("/retail");
+    currentPath.startsWith("/tech") || currentPath === "/retail";
 
   // Performance monitoring (optional - disable if too noisy)
   useEffect(() => {
@@ -113,7 +109,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
             }}
           ></div>
           <AnimatePresence mode="wait">
-            <PageTransition key={currentPath}>
+            <PageTransition key={transitionKey}>
               <Suspense fallback={<PageFallback />}>{getCurrentPage()}</Suspense>
             </PageTransition>
           </AnimatePresence>
@@ -150,7 +146,7 @@ const AppContent = memo(({ isLoaded, mountPhase }) => {
         >
           <div className="relative z-10">
             <AnimatePresence mode="wait">
-              <PageTransition key={currentPath}>
+              <PageTransition key={transitionKey}>
                 <Suspense fallback={<PageFallback />}>{getCurrentPage()}</Suspense>
               </PageTransition>
             </AnimatePresence>
@@ -204,7 +200,7 @@ const App = memo(() => {
   };
 
   return (
-    <>
+    <BrowserRouter>
       {/* Progressive rendering based on mount phase */}
       {mountPhase >= 1 && (
         <AppContent isLoaded={!isLoading} mountPhase={mountPhase} />
@@ -215,7 +211,7 @@ const App = memo(() => {
           <LoadingPage onComplete={handleLoadingComplete} />
         </div>
       )}
-    </>
+    </BrowserRouter>
   );
 });
 

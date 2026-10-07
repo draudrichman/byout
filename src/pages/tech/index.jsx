@@ -109,13 +109,13 @@ function TechRoutes() {
         <Routes>
           {/* 首页路由 - 现在包含了技术展示内容 */}
           {/* HPH技术详情页路由 */}
-          <Route path="/tech/hph" element={<HPHDetailPage />} />
+          <Route path="hph" element={<HPHDetailPage />} />
 
           {/* PEF技术详情页路由 */}
-          <Route path="/tech/pef" element={<PEFDetailPage />} />
+          <Route path="pef" element={<PEFDetailPage />} />
 
           {/* 保留/tech路由以便向后兼容 */}
-          <Route path="/tech" element={<TechHomePage />} />
+          <Route index element={<TechHomePage />} />
 
           {/* 404页面处理 - 重定向到主页 */}
           {/* <Route path="*" element={<HomePage />} /> */}
