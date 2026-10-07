@@ -11,15 +11,12 @@ import PhilosophySections from "./PhilosophySections";
 import ValueProposition from "./ValueProposition";
 import ClosingStatement from "./ClosingStatement";
 import ValuePropositionSecond from "./ValuePropositionSecond";
-import ParticleBackground from "../ParticleBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const CompanyIntroduction = memo(() => {
   const contentRef = useRef(null);
   const pinRef = useRef(null);
-  const particleBgRef = useRef(null);
-  const particleRef = useRef(null); // imperative handle → { triggerMorph }
 
   useGSAP(
     () => {
@@ -123,12 +120,6 @@ const CompanyIntroduction = memo(() => {
 
       const sectionEnd = () => "+=" + panels.length * window.innerHeight * 2;
 
-      // ── Track active panel and morph on each transition ──────────────────
-      // Each panel occupies an equal slice of the total timeline progress.
-      // We watch tl.progress() and fire triggerMorph() whenever the integer
-      // panel index changes.
-      let lastPanelIndex = -1;
-
       const scrollTrigger = ScrollTrigger.create({
         animation: tl,
         trigger: container,
@@ -137,44 +128,7 @@ const CompanyIntroduction = memo(() => {
         scrub: 0.5,
         pin: true,
         anticipatePin: 1,
-        onUpdate: (self) => {
-          // Map scroll progress → panel index (0 … panels.length-1)
-          const rawIndex = Math.floor(self.progress * panels.length);
-          const panelIndex = Math.min(rawIndex, panels.length - 1);
-
-          if (panelIndex !== lastPanelIndex) {
-            lastPanelIndex = panelIndex;
-            // Trigger a morph in the particle background
-            particleRef.current?.triggerMorph?.();
-          }
-        },
       });
-
-      // ── Fixed particle background: fade in/out with the section ──────────
-      const bg = particleBgRef.current;
-      if (bg) {
-        gsap.set(bg, { opacity: 0 });
-
-        const bgST = ScrollTrigger.create({
-          trigger: container,
-          start: "top bottom",
-          end: sectionEnd,
-          onEnter: () =>
-            gsap.to(bg, { opacity: 1, duration: 0.6, ease: "power2.out" }),
-          onLeave: () =>
-            gsap.to(bg, { opacity: 0, duration: 0.6, ease: "power2.in" }),
-          onEnterBack: () =>
-            gsap.to(bg, { opacity: 1, duration: 0.4, ease: "power2.out" }),
-          onLeaveBack: () =>
-            gsap.to(bg, { opacity: 0, duration: 0.4, ease: "power2.in" }),
-        });
-
-        return () => {
-          scrollTrigger.kill();
-          bgST.kill();
-          gsap.set(bg, { opacity: 0 });
-        };
-      }
 
       return () => {
         scrollTrigger.kill();
@@ -185,25 +139,6 @@ const CompanyIntroduction = memo(() => {
 
   return (
     <>
-      {/* Fixed particle background — visible only while this section is active */}
-      <div
-        ref={particleBgRef}
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: "none",
-          opacity: 0,
-        }}
-      >
-        <ParticleBackground
-          ref={particleRef}
-          showUI={false}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
-
-      {/* Section content sits above the fixed bg */}
       <div
         id="about"
         ref={contentRef}
