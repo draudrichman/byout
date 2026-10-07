@@ -13,6 +13,7 @@ const HeroSection = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0); // 0 = hero, 1 = stats
   const timeoutRef = useRef(null);
   const heroSectionRef = useRef(null);
+  const rootRef = useRef(null);
   const statsSectionRef = useRef(null);
   const [stats, setStats] = useState([
     {
@@ -371,13 +372,14 @@ const HeroSection = memo(() => {
   };
 
   return (
-    <div className="relative w-screen overflow-x-hidden bg-zinc-900">
+    <div ref={rootRef} className="relative w-screen overflow-x-hidden bg-zinc-900">
       {/* Globe Background Section - Fixed position, always visible */}
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-0">
         <div className="w-full h-full flex items-end justify-center pb-[0%]">
           {shouldLoadGlobe ? (
             <Suspense fallback={null}>
-              <RotatingEarth width={500} height={500} />
+              {/* The globe layer is position: fixed, so pause it by the hero's visibility. */}
+              <RotatingEarth width={500} height={500} visibilityRef={rootRef} />
             </Suspense>
           ) : (
             <div className="flex items-center justify-center text-transparent">

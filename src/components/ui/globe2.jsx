@@ -16,6 +16,9 @@ export default function RotatingEarth({
   width = 800,
   height = 600,
   className = "",
+  // Element whose visibility decides whether the globe animates. Defaults
+  // to the canvas; pass a section ref when the canvas is position: fixed.
+  visibilityRef = null,
 }) {
   const canvasRef = useRef(null);
   // eslint-disable-next-line no-unused-vars
@@ -377,7 +380,13 @@ export default function RotatingEarth({
       return distances[0].index;
     };
 
-    const rotate = () => {
+    // The globe turns once every 18 s, so 30 fps looks the same as 60 and
+    // halves the cost of redrawing every land shape each frame.
+    const FRAME_MS = 1000 / 30;
+    let lastFrame = -Infinity;
+    const rotate = (elapsedMs) => {
+      if (elapsedMs - lastFrame < FRAME_MS) return;
+      lastFrame = elapsedMs;
       if (autoRotate) {
         const elapsed = Date.now() - startTime;
         const cycleProgress =
@@ -413,7 +422,7 @@ export default function RotatingEarth({
           (nextRegion.lat - currentRegion.lat) * easedProgress;
 
         projection.rotate(rotation);
-        radarAnimationTime += 16; // Increment by ~16ms per frame
+        radarAnimationTime += FRAME_MS; // advance by one frame of real time
         render();
       }
     };
@@ -429,7 +438,10 @@ export default function RotatingEarth({
       const shouldRun = onScreen && !document.hidden;
       if (shouldRun === running) return;
       running = shouldRun;
-      if (shouldRun) rotationTimer.restart(rotate);
+      if (shouldRun) {
+        lastFrame = -Infinity; // d3.timer restarts its clock at 0
+        rotationTimer.restart(rotate);
+      }
       else rotationTimer.stop();
     };
     const visibilityObserver = new IntersectionObserver(
@@ -439,7 +451,7 @@ export default function RotatingEarth({
       },
       { rootMargin: "100px" },
     );
-    visibilityObserver.observe(canvas);
+    visibilityObserver.observe(visibilityRef?.current || canvas);
     document.addEventListener("visibilitychange", updateRunning);
 
     const handleMouseDown = (event) => {
@@ -496,7 +508,7 @@ export default function RotatingEarth({
       canvas.removeEventListener("mousedown", handleMouseDown);
       // canvas.removeEventListener("wheel", handleWheel)
     };
-  }, [width, height]);
+  }, [width, height, visibilityRef]);
 
   if (error) {
     return (
